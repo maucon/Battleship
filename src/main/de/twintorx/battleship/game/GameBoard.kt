@@ -24,7 +24,8 @@ class GameBoard(
                         " ${if (cell) "${Color.RED}x" else "${Color.GREEN} "}${Color.RESET} "
                     }}│" add div
         }
-        return (table.remLast() add " $space└${"───┴" * len}───┘"
+        table.removeLast()
+        return (table add " $space└${"───┴" * len}───┘"
                 add "   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
                 .joinToString("\n")
     }
@@ -35,10 +36,5 @@ private operator fun String.times(i: Int): String = this.repeat(i)
 
 private infix fun ArrayList<String>.add(element: String): ArrayList<String> {
     add(element)
-    return this
-}
-
-private fun ArrayList<String>.remLast(): ArrayList<String> {
-    removeLast()
     return this
 }
