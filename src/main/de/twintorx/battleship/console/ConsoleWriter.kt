@@ -11,9 +11,13 @@ enum class Color(
     YELLOW("\u001B[33m"),
     CYAN("\u001B[36m"),
     PURPLE("\u001B[35m"),
-    BLACK("\u001B[30m"),
+    BLACK("\u001B[30m");
+
+    override fun toString(): String {
+        return ansi
+    }
 }
 
 fun print(message: Any, color: Color = Color.RESET) {
-    println(color.ansi + message + Color.RESET.ansi)
+    println("" + color + message + Color.RESET)
 }
