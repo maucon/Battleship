@@ -1,4 +1,4 @@
-package main.de.twintorx.console
+package main.de.twintorx.battleship.console
 
 enum class Color(
         val ansi: String

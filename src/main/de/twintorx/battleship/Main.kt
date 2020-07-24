@@ -1,8 +1,8 @@
-package main.de.twintorx
+package main.de.twintorx.battleship
 
-import main.de.twintorx.console.Color
-import main.de.twintorx.console.print
-import main.de.twintorx.game.GameBoard
+import main.de.twintorx.battleship.console.Color
+import main.de.twintorx.battleship.console.print
+import main.de.twintorx.battleship.game.GameBoard
 
 fun main() {
     Color.values().forEach {
@@ -15,6 +15,6 @@ fun main() {
         gameBoard.hit(it, (0..9).random())
         gameBoard.hit(it, (0..9).random())
     }
-    
+
     print(gameBoard)
 }

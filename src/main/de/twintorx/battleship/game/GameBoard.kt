@@ -1,6 +1,6 @@
-package main.de.twintorx.game
+package main.de.twintorx.battleship.game
 
-import main.de.twintorx.console.Color
+import main.de.twintorx.battleship.console.Color
 
 class GameBoard(
         val size: Int = 10
