@@ -11,7 +11,7 @@ fun main() {
     gameBoard.addShip(Ship("2", 3), arrayListOf(Point(4, 3), Point(4, 2), Point(4, 1)))
 
     (0 until gameBoard.size).forEach {
-        (0..2).forEach { _ -> gameBoard.hit(it, (0 until gameBoard.size).random()) }
+        (0..5).forEach { _ -> gameBoard.hit(it, (0 until gameBoard.size).random()) }
     }
     print(gameBoard)
 }

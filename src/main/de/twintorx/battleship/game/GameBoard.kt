@@ -11,7 +11,8 @@ class GameBoard(
     fun addShip(ship: Ship, coordinates: ArrayList<Point>) {
         shipCoordinates[ship] = coordinates
         coordinates.forEach {
-            setGridCell(it.x, it.y, Cell.SHIP)
+            grid[it.x, it.y] = Cell.SHIP
+
         }
     }
 
@@ -22,13 +23,13 @@ class GameBoard(
             val removePoint = value.firstOrNull { point ->
                 point.x == x && point.y == y
             } ?: continue
-            shipCoordinates[key]!!.remove(removePoint)
-            if (shipCoordinates[key]!!.size <= 0) {
+
+            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.size <= 0) {
                 shipCoordinates.remove(key)
+                //TODO: announce ship sunk
             }
             break
         }
-        println(shipCoordinates)
     }
 
 }

@@ -1,13 +1,9 @@
 package main.de.twintorx.battleship.game
 
-class Ship(
+data class Ship(
         val name: String,
         val length: Int
-) {
-    private var health: Int = length
-
-    fun hit() = --health
-}
+)
 
 fun getStandardShipSet(): Collection<Ship> {
     val list = arrayListOf<Ship>()

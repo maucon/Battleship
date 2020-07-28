@@ -1,22 +1,18 @@
 package main.de.twintorx.battleship.game
 
 import main.de.twintorx.battleship.console.Color
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class TrackBoard(
         private val size: Int
 ) {
-    private val grid: Array<Array<Cell>> = Array(size) { Array(size) { Cell.EMPTY } }
+    protected val grid: Grid = Grid(size)
 
     open fun hit(x: Int, y: Int) {
         //TODO: check if shot hit other players ships
-        setGridCell(x, y, if (getGridCell(x, y) == Cell.SHIP) Cell.HIT else Cell.FIRED)
+        grid[x, y] = if (grid[x, y] == Cell.SHIP) Cell.HIT else Cell.FIRED
     }
-
-    protected fun setGridCell(x: Int, y: Int, cell: Cell) {
-        grid[size - y - 1][x] = cell
-    }
-
-    protected fun getGridCell(x: Int, y: Int): Cell = grid[size - y - 1][x]
 
     override fun toString(): String {
         val len = size - 1
@@ -24,7 +20,7 @@ open class TrackBoard(
         val space = " " * sizeLength
         val table = arrayListOf(" $space┌${"───┬" * len}───┐")
         val div = " $space├${"───┼" * len}───┤"
-        grid.withIndex().forEach {
+        grid.values.withIndex().forEach {
             val index = size - it.index
             table add "${" " * (sizeLength - index.toString().length)}$index │" +
                     "${it.value.joinToString("│") { cell ->
@@ -35,6 +31,18 @@ open class TrackBoard(
         return (table add " $space└${"───┴" * len}───┘"
                 add "   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
                 .joinToString("\n")
+    }
+}
+
+class Grid(
+        private val size: Int
+) {
+    val values: Array<Array<Cell>> = Array(size) { Array(size) { Cell.EMPTY } }
+
+    operator fun get(x: Int, y: Int) = values[size - y - 1][x]
+
+    operator fun set(x: Int, y: Int, value: Cell) {
+        values[size - y - 1][x] = value
     }
 }
 
