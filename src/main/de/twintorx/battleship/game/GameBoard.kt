@@ -23,6 +23,8 @@ class GameBoard(
         if (ship.size != coordinates.size) return true
 
         coordinates.forEach { point ->
+            if (point.x !in (0 until size)) return true
+            if (point.y !in (0 until size)) return true
             if (grid[point.x, point.y] == Cell.SHIP) return true
         }
 

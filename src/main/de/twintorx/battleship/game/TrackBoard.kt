@@ -1,7 +1,7 @@
 package main.de.twintorx.battleship.game
 
 open class TrackBoard(
-        private val size: Int = 10
+        val size: Int = 10
 ) {
     protected val grid: Grid = Grid(size)
 
