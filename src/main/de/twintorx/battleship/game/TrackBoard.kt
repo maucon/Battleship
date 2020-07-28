@@ -5,7 +5,7 @@ import main.de.twintorx.battleship.console.Color
 open class TrackBoard(
         private val size: Int
 ) {
-    protected val grid: Array<Array<Cell>> = Array(size) { Array(size) { Cell.EMPTY } }
+    private val grid: Array<Array<Cell>> = Array(size) { Array(size) { Cell.EMPTY } }
 
     open fun hit(x: Int, y: Int) {
         //TODO: check if shot hit other players ships

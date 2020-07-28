@@ -15,4 +15,20 @@ class GameBoard(
         }
     }
 
+    override fun hit(x: Int, y: Int) {
+        super.hit(x, y)
+
+        for ((key, value) in shipCoordinates) {
+            val removePoint = value.firstOrNull { point ->
+                point.x == x && point.y == y
+            } ?: continue
+            shipCoordinates[key]!!.remove(removePoint)
+            if (shipCoordinates[key]!!.size <= 0) {
+                shipCoordinates.remove(key)
+            }
+            break
+        }
+        println(shipCoordinates)
+    }
+
 }

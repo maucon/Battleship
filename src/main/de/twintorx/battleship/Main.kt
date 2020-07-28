@@ -13,6 +13,5 @@ fun main() {
     (0 until gameBoard.size).forEach {
         (0..2).forEach { _ -> gameBoard.hit(it, (0 until gameBoard.size).random()) }
     }
-
     print(gameBoard)
 }
