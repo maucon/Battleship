@@ -1,6 +1,6 @@
 package main.de.twintorx.battleship.game
 
-data class Ship(
+class Ship(
         val name: String,
         val length: Int
 )

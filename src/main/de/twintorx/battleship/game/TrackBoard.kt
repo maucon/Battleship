@@ -1,15 +1,21 @@
 package main.de.twintorx.battleship.game
 
-import main.de.twintorx.battleship.console.Color
-
 open class TrackBoard(
-        private val size: Int
+        private val size: Int = 10
 ) {
     protected val grid: Grid = Grid(size)
 
-    open fun hit(x: Int, y: Int) {
-        //TODO: check if shot hit other players ships
-        grid[x, y] = if (grid[x, y] == Cell.SHIP) Cell.HIT else Cell.FIRED
+    open fun hit(x: Int, y: Int): Move {
+        // can't hit already hit cells
+        if (grid[x, y] == Cell.HIT_SHIP || grid[x, y] == Cell.HIT_NOTHING) return Move.INVALID
+
+        if (grid[x, y] == Cell.SHIP) {
+            grid[x, y] = Cell.HIT_SHIP
+            return Move.HIT
+        }
+
+        grid[x, y] = Cell.HIT_NOTHING
+        return Move.NO_HIT
     }
 
     override fun toString(): String {
@@ -33,27 +39,6 @@ open class TrackBoard(
                 add "   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
                 .joinToString("\n")
     }
-}
-
-class Grid(
-        private val size: Int
-) {
-    val values: Array<Array<Cell>> = Array(size) { Array(size) { Cell.EMPTY } }
-
-    operator fun get(x: Int, y: Int) = values[size - y - 1][x]
-
-    operator fun set(x: Int, y: Int, value: Cell) {
-        values[size - y - 1][x] = value
-    }
-}
-
-enum class Cell(
-        val value: String
-) {
-    EMPTY(" "),
-    HIT("${Color.GREEN}o${Color.RESET}"),
-    FIRED("${Color.RED}x${Color.RESET}"),
-    SHIP("░")
 }
 
 // ---------------- Extensions and Overloading ----------------

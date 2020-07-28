@@ -3,7 +3,7 @@ package main.de.twintorx.battleship.game
 import java.awt.Point
 
 class GameBoard(
-        val size: Int = 10
+        size: Int = 10
 ) : TrackBoard(size) {
 
     private var shipCoordinates = mutableMapOf<Ship, ArrayList<Point>>()
@@ -16,20 +16,23 @@ class GameBoard(
         }
     }
 
-    override fun hit(x: Int, y: Int) {
-        super.hit(x, y)
+    override fun hit(x: Int, y: Int): Move {
+        if (super.hit(x, y) == Move.INVALID) return Move.INVALID
 
         for ((key, value) in shipCoordinates) {
             val removePoint = value.firstOrNull { point ->
                 point.x == x && point.y == y
             } ?: continue
 
-            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.size <= 0) {
+            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.isEmpty()) {
                 shipCoordinates.remove(key)
-                //TODO: announce ship sunk
+
+                return if (shipCoordinates.isEmpty()) Move.GAME_OVER else Move.SUNK
             }
-            break
+            return Move.HIT
         }
+
+        return Move.NO_HIT
     }
 
 }
