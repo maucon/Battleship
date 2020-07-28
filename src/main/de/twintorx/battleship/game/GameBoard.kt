@@ -10,9 +10,9 @@ class GameBoard(
 
     fun addShip(ship: Ship, coordinates: ArrayList<Point>) {
         shipCoordinates[ship] = coordinates
+
         coordinates.forEach {
             grid[it.x, it.y] = Cell.SHIP
-
         }
     }
 

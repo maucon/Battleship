@@ -1,8 +1,6 @@
 package main.de.twintorx.battleship.game
 
 import main.de.twintorx.battleship.console.Color
-import java.util.*
-import kotlin.collections.ArrayList
 
 open class TrackBoard(
         private val size: Int
@@ -20,13 +18,16 @@ open class TrackBoard(
         val space = " " * sizeLength
         val table = arrayListOf(" $space┌${"───┬" * len}───┐")
         val div = " $space├${"───┼" * len}───┤"
+
         grid.values.withIndex().forEach {
             val index = size - it.index
+
             table add "${" " * (sizeLength - index.toString().length)}$index │" +
                     "${it.value.joinToString("│") { cell ->
                         " ${cell.value} "
                     }}│" add div
         }
+
         table.removeLast()
         return (table add " $space└${"───┴" * len}───┘"
                 add "   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")

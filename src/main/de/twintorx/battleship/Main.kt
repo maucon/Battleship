@@ -6,7 +6,7 @@ import main.de.twintorx.battleship.game.Ship
 import java.awt.Point
 
 fun main() {
-    val gameBoard = GameBoard(10)
+    val gameBoard = GameBoard()
     gameBoard.addShip(Ship("1", 3), arrayListOf(Point(0, 0), Point(1, 0), Point(2, 0)))
     gameBoard.addShip(Ship("2", 3), arrayListOf(Point(4, 3), Point(4, 2), Point(4, 1)))
 
