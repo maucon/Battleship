@@ -10,7 +10,8 @@ class Ship(
 }
 
 fun getStandardShipSet(): Collection<Ship> {
-    val list = arrayListOf(Ship("Carrier", 5))
+    val list = arrayListOf<Ship>()
+    list add Ship("Carrier", 5) * 1
     list add Ship("Battleship", 4) * 2
     list add Ship("Cruiser", 3) * 3
     list add Ship("Submarine", 3) * 4
