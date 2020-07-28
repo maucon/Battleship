@@ -6,9 +6,9 @@ class GameBoard(
         size: Int = 10
 ) : TrackBoard(size) {
 
-    private var shipCoordinates = mutableMapOf<Ship, ArrayList<Point>>()
+    private var shipCoordinates = mutableMapOf<Ship, HashSet<Point>>()
 
-    fun addShip(ship: Ship, coordinates: ArrayList<Point>) {
+    fun addShip(ship: Ship, coordinates: HashSet<Point>) {
         shipCoordinates[ship] = coordinates
 
         coordinates.forEach {
