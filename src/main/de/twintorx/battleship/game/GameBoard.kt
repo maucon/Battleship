@@ -32,8 +32,8 @@ class GameBoard(
         return coordinates.map { it.x }.distinct().size + coordinates.map { it.y }.distinct().size != ship.size + 1
     }
 
-    override fun hit(x: Int, y: Int): Move {
-        if (super.hit(x, y) == Move.INVALID) return Move.INVALID
+    fun hit(x: Int, y: Int): Move {
+        if (!mark(x, y, if (grid[x, y] == Cell.SHIP) Cell.HIT_SHIP else Cell.HIT_NOTHING)) return Move.INVALID
 
         for ((key, value) in shipCoordinates) {
             val removePoint = value.firstOrNull { point ->
@@ -50,5 +50,4 @@ class GameBoard(
 
         return Move.NO_HIT
     }
-
 }

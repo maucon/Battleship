@@ -5,17 +5,16 @@ open class TrackBoard(
 ) {
     protected val grid: Grid = Grid(size)
 
-    open fun hit(x: Int, y: Int): Move {
-        // can't hit already hit cells
-        if (grid[x, y] == Cell.HIT_SHIP || grid[x, y] == Cell.HIT_NOTHING) return Move.INVALID
+    fun mark(x: Int, y: Int, cell: Cell): Boolean {
+        //fail when mark as water or ship or cell is already marked
+        if (cell == Cell.WATER
+                || cell == Cell.SHIP
+                || grid[x, y] == Cell.HIT_NOTHING
+                || grid[x, y] == Cell.HIT_SHIP)
+            return false
 
-        if (grid[x, y] == Cell.SHIP) {
-            grid[x, y] = Cell.HIT_SHIP
-            return Move.HIT
-        }
-
-        grid[x, y] = Cell.HIT_NOTHING
-        return Move.NO_HIT
+        grid[x, y] = cell
+        return true
     }
 
     override fun toString(): String {
