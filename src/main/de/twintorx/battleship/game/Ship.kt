@@ -2,7 +2,7 @@ package main.de.twintorx.battleship.game
 
 class Ship(
         val name: String,
-        val length: Int
+        val size: Int
 )
 
 fun getStandardShipSet(): Collection<Ship> {
@@ -22,7 +22,7 @@ private operator fun Ship.times(i: Int): Collection<Ship> {
     val list = ArrayList<Ship>()
 
     (1..i).forEach { _ ->
-        list.add(Ship(this.name, this.length))
+        list.add(Ship(this.name, this.size))
     }
 
     return list

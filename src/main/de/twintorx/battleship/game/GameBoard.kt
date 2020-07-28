@@ -8,12 +8,26 @@ class GameBoard(
 
     private var shipCoordinates = mutableMapOf<Ship, HashSet<Point>>()
 
-    fun addShip(ship: Ship, coordinates: HashSet<Point>) {
-        shipCoordinates[ship] = coordinates
+    fun addShip(ship: Ship, coordinates: HashSet<Point>): Boolean {
+        if (invalidShipCoordinates(ship, coordinates)) return false
 
+        shipCoordinates[ship] = coordinates
         coordinates.forEach {
             grid[it.x, it.y] = Cell.SHIP
         }
+
+        return true
+    }
+
+    private fun invalidShipCoordinates(ship: Ship, coordinates: HashSet<Point>): Boolean {
+        if (ship.size != coordinates.size) return true
+
+        coordinates.forEach { point ->
+            if (grid[point.x, point.y] == Cell.SHIP) return true
+        }
+
+        // count of distinct x and y values must be ship size + 1
+        return coordinates.map { it.x }.distinct().size + coordinates.map { it.y }.distinct().size != ship.size + 1
     }
 
     override fun hit(x: Int, y: Int): Move {

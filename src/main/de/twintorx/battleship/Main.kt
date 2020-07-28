@@ -10,9 +10,10 @@ fun main() {
     val gameBoard = GameBoard(size)
     val trackBoard = TrackBoard(size)
 
-    gameBoard.addShip(Ship("meddl", 4), hashSetOf(Point(0, 1), Point(0, 2), Point(0, 3), Point(0, 4)))
-    gameBoard.addShip(Ship("medd2", 2), hashSetOf(Point(5, 7), Point(5, 8)))
-    gameBoard.addShip(Ship("medd3", 3), hashSetOf(Point(4, 2), Point(5, 2), Point(6, 2)))
+    println(gameBoard.addShip(Ship("meddl", 4), hashSetOf(Point(0, 1), Point(0, 2), Point(0, 3), Point(0, 4))))
+    println(gameBoard.addShip(Ship("medd2", 2), hashSetOf(Point(5, 7), Point(5, 8))))
+    println(gameBoard.addShip(Ship("medd3", 3), hashSetOf(Point(4, 2), Point(5, 2), Point(6, 2))))
+    println(gameBoard.addShip(Ship("medd4", 2), hashSetOf(Point(1, 1), Point(1, 1))))
 
     println("$gameBoard\n\nTracking:\n$trackBoard")
 
