@@ -64,7 +64,12 @@ internal class GameTest {
         // player 2 turn hitting: 2 4
         Assertions.assertEquals(Move.GAME_OVER, player1GameBoard.hit(2, 4)) // hit and sunk and won
         Assertions.assertTrue(player2TrackBoard.mark(2, 4, Cell.HIT_SHIP))
+
         //player 2 won
+        println(player1GameBoard)
+        println(player1TrackBoard)
+        println(player2GameBoard)
+        println(player2TrackBoard)
     }
 
 }
