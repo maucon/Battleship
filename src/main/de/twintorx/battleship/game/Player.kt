@@ -27,4 +27,8 @@ class Player {
     private fun update() {
         // TODO implement
     }
+
+    private fun triggerNotTurnWaiting(){
+        // TODO implement
+    }
 }

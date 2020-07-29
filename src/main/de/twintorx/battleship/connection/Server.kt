@@ -17,22 +17,26 @@ class Server() {
     private var running = true
 
     init {
-        println("Server running on port ${server.localPort}")
+        println("[Server] Server running on port ${server.localPort}")
+    }
+
+    private fun OutputStream.write(message:String){
+        this.write("$message\n".toByteArray())
     }
 
     fun start() {
-        println("Waiting for another client to connect")
         val host = server.accept().also {
-            println("Client connected as host: ${it.inetAddress.hostAddress}")
+            println("[Server] Client connected as host: ${it.inetAddress.hostAddress}")
         }
         clientSockets[true] = Triple(host, Scanner(host.getInputStream()), host.getOutputStream())
-        println("Waiting for another player to connect...")
+        clientSockets[true]!!.third.write("1")
+        println("[Server] Waiting for another player to connect...")
         val client2 = server.accept().also {
-            println("Client connected as second player: ${it.inetAddress.hostAddress}")
+            println("[Server] Client connected as second player: ${it.inetAddress.hostAddress}")
         }
         clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()), client2.getOutputStream())
-        println("[Server] Starting the game")
-        clientSockets.values.map { it.third }.forEach { it.write(1) }
+        clientSockets[false]!!.third.write("1")
+        println("[Server] Starting preparation")
         prepare()
         startLoop()
         println("[Server] Game finished!")
@@ -40,23 +44,28 @@ class Server() {
 
     private fun prepare() = runBlocking {
         val answer1 = GlobalScope.launch {
-            clientSockets[true]!!.second.next()
+            println(clientSockets[true]!!.second.nextLine())
         }
         val answer2 = GlobalScope.launch {
-            clientSockets[false]!!.second.next()
+            println(clientSockets[false]!!.second.nextLine())
         }
+
         answer1.join()
         answer2.join()
     }
 
     private fun startLoop() = GlobalScope.launch {
         var turn = Random.nextBoolean()
+        println("[Server] Starting the game")
+        for ((key, value) in clientSockets) {
+            value.third.write(if (key == turn) "1" else "0")
+        }
         while (running) {
             val attack = clientSockets[turn]!!.second.nextLine()
-            clientSockets[!turn]!!.third.write(attack.toByteArray())
+            clientSockets[!turn]!!.third.write(attack.toByteArray().toString()) // TODO implement this in client
 
             val response = clientSockets[!turn]!!.second.nextLine().toInt()
-            clientSockets[turn]!!.third.write(response)
+            clientSockets[turn]!!.third.write(response.toString())
 
             when (Move.values()[response]) {
                 Move.NO_HIT -> turn = !turn
