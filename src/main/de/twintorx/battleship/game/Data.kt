@@ -19,24 +19,12 @@ enum class Color(
     }
 }
 
-class Grid(
-        private val size: Int
-) {
-    val values: Array<Array<Cell>> = Array(size) { Array(size) { Cell.WATER } }
-
-    operator fun get(x: Int, y: Int) = values[size - y - 1][x]
-
-    operator fun set(x: Int, y: Int, value: Cell) {
-        values[size - y - 1][x] = value
-    }
-}
-
 enum class Cell(
         val value: String
 ) {
     WATER(" "),
-    HIT_SHIP("${Color.GREEN}o${Color.RESET}"),
-    HIT_NOTHING("${Color.RED}x${Color.RESET}"),
+    HIT_SHIP("${Color.RED}o${Color.RESET}"),
+    HIT_NOTHING("x"),
     SHIP("░")
 }
 

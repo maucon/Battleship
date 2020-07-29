@@ -16,7 +16,7 @@ internal class TrackBoardTest {
     }
 
     @Test
-    fun testHit() {
+    fun testMark() {
         Assertions.assertTrue(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP))
@@ -27,7 +27,7 @@ internal class TrackBoardTest {
     fun testToString() {
         trackBoard.mark(1, 1, Cell.HIT_NOTHING)
         trackBoard.mark(4, 4, Cell.HIT_NOTHING)
-        Assertions.assertEquals("  ┌───┬───┬───┬───┬───┐\n5 │   │   │   │   │ \u001B[31mx\u001B[0m │\n  ├───┼───┼───┼───┼───┤\n4 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n3 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n2 │   │ \u001B[31mx\u001B[0m │   │   │   │\n  ├───┼───┼───┼───┼───┤\n1 │   │   │   │   │   │\n  └───┴───┴───┴───┴───┘\n    A   B   C   D   E"
+        Assertions.assertEquals("  ┌───┬───┬───┬───┬───┐\n5 │   │   │   │   │ x │\n  ├───┼───┼───┼───┼───┤\n4 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n3 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n2 │   │ x │   │   │   │\n  ├───┼───┼───┼───┼───┤\n1 │   │   │   │   │   │\n  └───┴───┴───┴───┴───┘\n    A   B   C   D   E"
                 , trackBoard.toString())
     }
 }
