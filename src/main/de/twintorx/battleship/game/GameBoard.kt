@@ -1,40 +1,53 @@
 package main.de.twintorx.battleship.game
 
-import main.de.twintorx.battleship.console.Color
+import java.awt.Point
 
 class GameBoard(
-        val size: Int = 10
-) {
-    private val grid: Array<Array<Boolean>> = Array(size) { Array(size) { false } }
+        size: Int = 10
+) : TrackBoard(size) {
 
-    fun hit(x: Int, y: Int) {
-        grid[size - y - 1][x] = true
-    }
+    private var shipCoordinates = mutableMapOf<Ship, HashSet<Point>>()
 
-    override fun toString(): String {
-        val len = size - 1
-        val sizeLength = size.toString().length
-        val space = " " * sizeLength
-        val table = arrayListOf(" $space┌${"───┬" * len}───┐")
-        val div = " $space├${"───┼" * len}───┤"
-        grid.withIndex().forEach {
-            val index = size - it.index
-            table add "${" " * (sizeLength - index.toString().length)}$index │" +
-                    "${it.value.joinToString("│") { cell ->
-                        " ${if (cell) "${Color.RED}x" else "${Color.GREEN} "}${Color.RESET} "
-                    }}│" add div
+    fun addShip(ship: Ship, coordinates: HashSet<Point>): Boolean {
+        if (invalidShipCoordinates(ship, coordinates)) return false
+
+        shipCoordinates[ship] = coordinates
+        coordinates.forEach {
+            grid[it.x, it.y] = Cell.SHIP
         }
-        table.removeLast()
-        return (table add " $space└${"───┴" * len}───┘"
-                add "   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
-                .joinToString("\n")
+
+        return true
     }
-}
 
-// ---------------- Extensions and Overloading ----------------
-private operator fun String.times(i: Int): String = this.repeat(i)
+    private fun invalidShipCoordinates(ship: Ship, coordinates: HashSet<Point>): Boolean {
+        if (ship.size != coordinates.size) return true
 
-private infix fun ArrayList<String>.add(element: String): ArrayList<String> {
-    add(element)
-    return this
+        coordinates.forEach { point ->
+            if (point.x !in (0 until size)) return true
+            if (point.y !in (0 until size)) return true
+            if (grid[point.x, point.y] == Cell.SHIP) return true
+        }
+
+        // count of distinct x and y values must be ship size + 1
+        return coordinates.map { it.x }.distinct().size + coordinates.map { it.y }.distinct().size != ship.size + 1
+    }
+
+    fun hit(x: Int, y: Int): Move {
+        if (!mark(x, y, if (grid[x, y] == Cell.SHIP) Cell.HIT_SHIP else Cell.HIT_NOTHING)) return Move.INVALID
+
+        for ((key, value) in shipCoordinates) {
+            val removePoint = value.firstOrNull { point ->
+                point.x == x && point.y == y
+            } ?: continue
+
+            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.isEmpty()) {
+                shipCoordinates.remove(key)
+
+                return if (shipCoordinates.isEmpty()) Move.GAME_OVER else Move.SUNK
+            }
+            return Move.HIT
+        }
+
+        return Move.NO_HIT
+    }
 }
