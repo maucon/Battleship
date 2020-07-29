@@ -1,33 +1,32 @@
 package main.de.twintorx.battleship.connection
 
+import main.de.twintorx.battleship.game.Move
 import java.awt.Point
 import java.net.Socket
 import java.util.*
 
 class Client(
-        address: String = "localhost",
-        private val player: Any // TODO change to type Player
+        address: String = "localhost"
 ) {
-    var client: Socket = Socket(address, 9999)
-            .also { it.getOutputStream().write("Hello from a new player!".toByteArray()) }
+    private val socket: Socket = Socket(address, 9999)
+    private val outputStream = socket.getOutputStream()
+            .also { it.write("Hello from a new player!".toByteArray()) }
+    private val scanner = Scanner(socket.getInputStream())
 
-    fun sendShot(coordinates: Point): Boolean {
-        client.outputStream
-                .write("${coordinates.x},${coordinates.y}".toByteArray())
-        // get move from server ->
-        var answerReceived = false
-        val scanner = Scanner(client.inputStream)
-        while (!answerReceived) {
-            if (scanner.hasNextLine())
-                answerReceived = true
-        }
-        player.handleShotAnswer(scanner.nextLine()) // TODO implement
-        // TODO receive servers answer
-        // answer of client will be boolean
+    fun sendReady() {
+        outputStream.write(1)
     }
 
+    fun sendShot(coordinates: Point): Move {
+        outputStream.write("${coordinates.x},${coordinates.y}".toByteArray())
+
+        val response = scanner.nextLine().toString().toInt() // TODO check
+        return Move.values()[response]
+    }
 
     fun disconnect() {
-        client.close()
+        outputStream.close()
+        scanner.close()
+        socket.close()
     }
 }
