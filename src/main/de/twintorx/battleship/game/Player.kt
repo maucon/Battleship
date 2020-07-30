@@ -13,48 +13,31 @@ class Player {
 
     fun connect() {
         println("Do you want to host a server? [Y]/[N]")
-        if (readLine()?.toLowerCase() == "y") {
+        client = if (readLine()?.toLowerCase() == "y") {
             GlobalScope.launch {
                 Server().start()
             }
-            client = Client()
-        } else {
-            var address: String?
-            do {
-                println("Please enter the Server-Ip you want to connect to:")
-                address = readLine()
-            } while (address == null)
-            client = Client(address)
-        }
+            Client()
+
+        } else Client(input("Please enter the Server-Ip you want to connect to:"))
+
         prepare()
     }
 
     private fun prepare() {
         println("Please place your ships")
         //TODO place shits
-        if (client.sendReadyGetTurn()) {
-            shoot()
-        } else {
-            waitForTurn()
-        }
+        if (client.sendReadyGetTurn()) shoot() else waitForTurn()
     }
 
     private fun shoot() {
         println("Which cell do you want to shoot at?")
-        var column: Int?
-        do {
-            println("Please enter a column:")
-            column = readLine()?.get(0)?.toLowerCase()?.toInt()!! - 'a'.toInt()
-        } while (column == null)
-
-        var line: Int?
-        do {
-            println("Please enter a line:")
-            line = readLine()?.toInt()
-        } while (line == null)
+        val column = input("Please enter a column:")[0].toInt() - 97 // 'a'.toInt()
+        val line = input("Please enter a line:").toInt()
 
         val point = Point(column, line - 1)
         val move = client.sendShot(point)
+
         updateTrackBoard(move, point)
     }
 
@@ -89,6 +72,7 @@ class Player {
     private fun updateGameBoard(shot: Point) {
         val move = gameBoard.hit(shot.x, shot.y).also { println(gameBoard) }
         client.sendShotAnswer(move)
+
         when (move) {
             Move.HIT -> {
                 println("Your opponent hit!")
@@ -100,7 +84,7 @@ class Player {
             }
             Move.GAME_OVER -> {
                 println("You lost :(")
-                gameOver()
+                client.disconnect()
             }
             Move.NO_HIT -> {
                 println("Your opponent missed a shot")
@@ -113,16 +97,11 @@ class Player {
     }
 
     private fun waitForTurn() {
-        val shot = client.waitForIncomingShot()
-        updateGameBoard(shot)
+        updateGameBoard(client.waitForIncomingShot())
     }
 
-    private fun gameOver() {
-        client.disconnect()
-        println("Arrivederci")
+    private fun input(msg: String): String {
+        println(msg)
+        return readLine() ?: input(msg)
     }
-}
-
-fun clearConsole() {
-    print("\u001b[H\u001b[2J")
 }
