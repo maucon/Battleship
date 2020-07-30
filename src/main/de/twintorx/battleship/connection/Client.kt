@@ -13,10 +13,6 @@ class Client(
     private var outputStream: OutputStream = socket.getOutputStream()
     private var scanner: Scanner = Scanner(socket.getInputStream())
 
-    private fun OutputStream.write(message: String) {
-        this.write("$message\n".toByteArray())
-    }
-
     init {
         // client waits until he is connected
         if (scanner.hasNextLine()) {
@@ -30,6 +26,16 @@ class Client(
         return scanner.nextLine().toString().toInt() == 1
     } // TODO if not turn -> wait to send answer if hit
 
+    fun waitForShot(): Point {
+        val coordinates = scanner.nextLine().toString()
+        val split = coordinates.split(",").map { it.toInt() }
+        return Point(split[0], split[1])
+    }
+
+    fun sendShotAnswer(move: Move) {
+        outputStream.write("${move.ordinal}")
+    }
+
     fun sendShot(coordinates: Point): Move {
         outputStream.write("${coordinates.x},${coordinates.y}")
 
@@ -42,5 +48,4 @@ class Client(
         scanner.close()
         socket.close()
     }
-
 }

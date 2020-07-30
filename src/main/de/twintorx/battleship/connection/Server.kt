@@ -20,10 +20,6 @@ class Server() {
         println("[Server] Server running on port ${server.localPort}")
     }
 
-    private fun OutputStream.write(message:String){
-        this.write("$message\n".toByteArray())
-    }
-
     fun start() {
         val host = server.accept().also {
             println("[Server] Client connected as host: ${it.inetAddress.hostAddress}")
@@ -82,4 +78,9 @@ class Server() {
         server.close()
         running = false
     }
+}
+
+// ---------------- Extensions and Overloading ----------------
+ fun OutputStream.write(message: String) {
+    this.write("$message\n".toByteArray())
 }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class ConnectionTest {
 
     @Test
-    fun testConnection() {
+    fun testConnection() { // fixme
         var server: Server? = null
         runBlocking {
             val host = GlobalScope.launch {
