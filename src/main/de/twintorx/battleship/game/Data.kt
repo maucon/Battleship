@@ -28,12 +28,10 @@ enum class Cell(
     SHIP("░")
 }
 
-enum class Move(
-        val message: String
-) {
-    INVALID("Invalid move!"),
-    HIT("You hit!"),
-    SUNK("You've sunk an enemy ship!"),
-    NO_HIT("You missed!"),
-    GAME_OVER("You won!")
+enum class Move() {
+    INVALID,
+    HIT,
+    SUNK,
+    NO_HIT,
+    GAME_OVER
 }
