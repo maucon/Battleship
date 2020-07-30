@@ -13,28 +13,32 @@ import kotlin.random.Random
 
 class Server() {
     private val server = ServerSocket(9999)
+            .also { println("[Server] Server running on port ${it.localPort}") }
     private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, OutputStream>>()
     private var running = true
-
-    init {
-        println("[Server] Server running on port ${server.localPort}")
-    }
 
     fun start() {
         val host = server.accept().also {
             println("[Server] Client connected as host: ${it.inetAddress.hostAddress}")
         }
+
         clientSockets[true] = Triple(host, Scanner(host.getInputStream()), host.getOutputStream())
         clientSockets[true]!!.third.write("1")
+
         println("[Server] Waiting for another player to connect...")
+
         val client2 = server.accept().also {
             println("[Server] Client connected as second player: ${it.inetAddress.hostAddress}")
         }
+
         clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()), client2.getOutputStream())
         clientSockets[false]!!.third.write("1")
+
         println("[Server] Starting preparation")
+
         prepare()
         startLoop()
+
         println("[Server] Game finished!")
     }
 
@@ -52,10 +56,13 @@ class Server() {
 
     private fun startLoop() = GlobalScope.launch {
         var turn = Random.nextBoolean()
+
         println("[Server] Starting the game")
+
         for ((key, value) in clientSockets) {
             value.third.write(if (key == turn) "1" else "0")
         }
+
         while (running) {
             val attack = clientSockets[turn]!!.second.nextLine()
             clientSockets[!turn]!!.third.write(attack.toByteArray().toString()) // TODO implement this in client
@@ -75,12 +82,13 @@ class Server() {
         clientSockets.values.forEach {
             it.toList().forEach(Closeable::close)
         }
+
         server.close()
         running = false
     }
 }
 
 // ---------------- Extensions and Overloading ----------------
- fun OutputStream.write(message: String) {
+fun OutputStream.write(message: String) {
     this.write("$message\n".toByteArray())
 }

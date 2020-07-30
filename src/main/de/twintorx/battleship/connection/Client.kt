@@ -11,20 +11,13 @@ class Client(
 ) {
     private var socket: Socket = Socket(address, 9999)
     private var outputStream: OutputStream = socket.getOutputStream()
-    private var scanner: Scanner = Scanner(socket.getInputStream())
+    private var scanner: Scanner = Scanner(socket.getInputStream()).also { it.nextLine() }
 
-    init {
-        // client waits until he is connected
-        if (scanner.hasNextLine()) {
-            scanner.nextLine()
-        }
-    }
-
-    fun sendReadyGetTurn(): Boolean { // TODO rename or outsource in other method
+    fun sendReadyGetTurn(): Boolean {
         outputStream.write("1")
         // returns 1 -> its this players turn; 0 -> its the other players turn
         return scanner.nextLine().toString().toInt() == 1
-    } // TODO if not turn -> wait to send answer if hit
+    }
 
     fun waitForShot(): Point {
         val coordinates = scanner.nextLine().toString()
