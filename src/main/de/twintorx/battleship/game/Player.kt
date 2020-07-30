@@ -32,8 +32,7 @@ class Player {
     private fun prepare() {
         println("Please place your ships")
         //TODO place shits
-        val turn = client.sendReadyGetTurn()
-        if (turn) {
+        if (client.sendReadyGetTurn()) {
             shoot()
         } else {
             waitForTurn()
