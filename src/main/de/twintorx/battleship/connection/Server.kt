@@ -4,8 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import main.de.twintorx.battleship.game.Move
-import java.io.Closeable
-import java.io.OutputStream
+import java.io.*
 import java.net.ServerSocket
 import java.net.Socket
 import java.util.*
@@ -14,23 +13,25 @@ import kotlin.random.Random
 class Server {
     private val server = ServerSocket(9999)
             .also { println("[Server] Server running on port ${it.localPort}") }
-    private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, OutputStream>>()
+    private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, PrintWriter>>()
     private var running = true
 
     fun start() {
         val host = server.accept().also {
             println("[Server] Client connected as host: ${it.inetAddress.hostAddress}")
         }
-        clientSockets[true] = Triple(host, Scanner(host.getInputStream()), host.getOutputStream())
+        clientSockets[true] = Triple(host, Scanner(host.getInputStream()),
+                PrintWriter(OutputStreamWriter(host.getOutputStream()), true)) // TODO maybe add outputsreamwriter
 
         println("[Server] Waiting for another player to connect...")
 
         val client2 = server.accept().also {
             println("[Server] Client connected as second player: ${it.inetAddress.hostAddress}")
         }
-        clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()), client2.getOutputStream())
+        clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()),
+                PrintWriter(OutputStreamWriter(client2.getOutputStream()), true))// TODO maybe add outputsreamwriter
 
-        clientSockets.values.forEach { it.third.write("1") }
+        clientSockets.values.forEach { it.third.println("1") }
         println("[Server] Starting preparation")
 
         prepare()
@@ -51,21 +52,21 @@ class Server {
         answer2.join()
     }
 
-    private fun startLoop() =GlobalScope.launch{
+    private fun startLoop() {
         var turn = Random.nextBoolean()
 
         println("[Server] Starting the game")
 
         for ((key, value) in clientSockets) {
-            value.third.write(if (key == turn) "1" else "0")
+            value.third.println(if (key == turn) "1" else "0")
         }
 
         while (running) {
             val attack = clientSockets[turn]!!.second.nextLine()
-            clientSockets[!turn]!!.third.write(attack.toByteArray().toString()) // TODO implement this in client
+            clientSockets[!turn]!!.third.println(attack) // TODO implement this in client
 
             val response = clientSockets[!turn]!!.second.nextLine().toInt()
-            clientSockets[turn]!!.third.write(response.toString())
+            clientSockets[turn]!!.third.println(response.toString())
 
             when (Move.values()[response]) {
                 Move.NO_HIT -> turn = !turn
@@ -85,7 +86,7 @@ class Server {
     }
 }
 
-// ---------------- Extensions and Overloading ----------------
-fun OutputStream.write(msg: String) {
-    write("$msg\n".toByteArray())
-}
+//// ---------------- Extensions and Overloading ----------------
+//fun OutputStream.write(msg: String) {
+//    write("$msg\n".toByteArray())
+//}
