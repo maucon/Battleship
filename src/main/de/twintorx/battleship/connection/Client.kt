@@ -2,7 +2,10 @@ package main.de.twintorx.battleship.connection
 
 import main.de.twintorx.battleship.game.Move
 import java.awt.Point
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.io.OutputStream
+import java.io.PrintWriter
 import java.net.Socket
 import java.util.*
 
@@ -19,8 +22,9 @@ class Client(
         return scanner.nextLine().toString().toInt() == 1
     }
 
-    fun waitForShot(): Point {
-        val coordinates = scanner.nextLine().toString()
+    fun waitForIncomingShot(): Point {
+        val coordinates = scanner.nextLine()
+
         val split = coordinates.split(",").map { it.toInt() }
         return Point(split[0], split[1])
     }
