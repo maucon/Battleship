@@ -63,21 +63,21 @@ class Player {
         when (move) {
             Move.HIT -> {
                 println("You've hit a ship!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).let(::println)
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
                 shoot()
             }
             Move.SUNK -> {
                 println("You've sunk a ship!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).let(::println)
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
                 shoot()
             }
             Move.GAME_OVER -> {
                 println("You've sunk the last ship and won the game!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).let(::println)
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
             }
             Move.NO_HIT -> {
                 println("You hit nothing")
-                trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).let(::println)
+                trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { println(trackBoard) }
                 waitForTurn()
             }
             else -> {
@@ -88,7 +88,7 @@ class Player {
     }
 
     private fun updateGameBoard(shot: Point) {
-        val move = gameBoard.hit(shot.x, shot.y).also(::println)
+        val move = gameBoard.hit(shot.x, shot.y).also { println(gameBoard) }
         client.sendShotAnswer(move)
         when (move) {
             Move.HIT -> {
@@ -100,7 +100,7 @@ class Player {
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                println("You lost u gay :(")
+                println("You lost :(")
                 gameOver()
             }
             Move.NO_HIT -> {
