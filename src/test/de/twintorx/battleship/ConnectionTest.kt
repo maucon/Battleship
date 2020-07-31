@@ -13,7 +13,6 @@ import java.io.PipedOutputStream
 import java.io.PrintStream
 import java.util.*
 
-
 class ConnectionTest {
 
     @Test
