@@ -4,6 +4,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import main.de.twintorx.battleship.connection.Client
 import main.de.twintorx.battleship.connection.Server
+import main.de.twintorx.battleship.console.PlayerMessage
+import main.de.twintorx.battleship.game.board.GameBoard
+import main.de.twintorx.battleship.game.board.TrackBoard
 import java.awt.Point
 
 class Player {
@@ -12,14 +15,14 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        client = if (input("Do you want to host a server? [Y]/[N]").toLowerCase() == "y") {
+        client = if (input(PlayerMessage.HOST_SERVER).toLowerCase() == "y") {
 
             GlobalScope.launch {
                 Server().start()
             }
             Client()
 
-        } else Client(input("Please enter the Server-Ip you want to connect to:"))
+        } else Client(input(PlayerMessage.SERVER_IP))
 
         prepare()
     }
@@ -45,9 +48,9 @@ class Player {
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val horizontal = input("Please enter orientation ([H]orizontal/[V]ertical):").toLowerCase() == "h"
-            val startCol = input("Please enter your start column ([A]-[J]):")[0].toInt() - 97
-            val startLine = input("Please enter your start line ([1]-[10]):") { it.toIntOrNull() != null }.toInt() - 1
+            val horizontal = input(PlayerMessage.ORIENTATION).toLowerCase() == "h"
+            val startCol = input(PlayerMessage.COLUMN)[0].toInt() - 97
+            val startLine = input(PlayerMessage.LINE) { it.toIntOrNull() != null }.toInt() - 1
 
             val points = hashSetOf<Point>().apply {
                 when (horizontal) {
@@ -62,10 +65,10 @@ class Player {
 
     private fun shoot() {
         println("Which cell do you want to shoot at?")
-        val column = input("Please enter a column:")[0].toInt() - 97 // 'a'.toInt()
-        val line = input("Please enter a line:") { it.toIntOrNull() != null }.toInt()
+        val column = input(PlayerMessage.COLUMN)[0].toInt() - 97 // 'a'.toInt()
+        val line = input(PlayerMessage.LINE) { it.toIntOrNull() != null }.toInt() - 1
 
-        val point = Point(column, line - 1)
+        val point = Point(column, line)
         val move = client.sendShot(point)
 
         updateTrackBoard(move, point)
@@ -133,10 +136,15 @@ class Player {
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
         while (true) {
             println(msg)
+
             val line = readLine() ?: continue
             if (!validationMethod(line) or line.isEmpty()) continue
 
             return line
         }
+    }
+
+    private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
+        return input(msg.toString(), validationMethod)
     }
 }
