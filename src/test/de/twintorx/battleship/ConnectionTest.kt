@@ -22,6 +22,7 @@ class ConnectionTest {
 
         runBlocking {
             val pipeOut = PipedOutputStream()
+            val backup = System.out
             System.setOut(PrintStream(pipeOut))
 
             GlobalScope.launch {
@@ -47,6 +48,7 @@ class ConnectionTest {
                 }
             }
 
+            System.setOut(backup)
             return@runBlocking
         }
     }

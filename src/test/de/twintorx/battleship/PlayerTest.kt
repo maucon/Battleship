@@ -5,10 +5,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import main.de.twintorx.battleship.game.Player
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayInputStream
+import java.io.InputStream
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.jvm.isAccessible
@@ -16,9 +18,11 @@ import kotlin.reflect.jvm.isAccessible
 class PlayerTest {
     private lateinit var player: Player
     private lateinit var input: KFunction<*>
+    private lateinit var backup: InputStream
 
     @BeforeEach
     fun setUp() {
+        backup = System.`in`
         player = Player()
         input = player::class.declaredFunctions.filter { it.name == "input" }[0].apply { isAccessible = true }
     }
@@ -45,5 +49,10 @@ class PlayerTest {
 
         Assertions.assertEquals("12345",
                 input.call(player, "try", { it: String -> it.length == 5 }).toString())
+    }
+
+    @AfterEach
+    fun tearDown() {
+        System.setIn(backup)
     }
 }
