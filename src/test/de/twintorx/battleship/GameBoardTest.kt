@@ -13,7 +13,7 @@ internal class GameBoardTest {
     private lateinit var gameBoard: GameBoard
 
     @BeforeEach
-    fun init() {
+    fun setUp() {
         gameBoard = GameBoard()
     }
 

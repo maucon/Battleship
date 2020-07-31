@@ -47,7 +47,7 @@ class Player {
         while (true) {
             val horizontal = input("Please enter orientation ([H]orizontal/[V]ertical):").toLowerCase() == "h"
             val startCol = input("Please enter your start column ([A]-[J]):")[0].toInt() - 97
-            val startLine = input("Please enter your start line ([1]-[10]):").toInt() - 1
+            val startLine = input("Please enter your start line ([1]-[10]):") { it.toIntOrNull() != null }.toInt() - 1
 
             val points = hashSetOf<Point>().apply {
                 when (horizontal) {
@@ -63,7 +63,7 @@ class Player {
     private fun shoot() {
         println("Which cell do you want to shoot at?")
         val column = input("Please enter a column:")[0].toInt() - 97 // 'a'.toInt()
-        val line = input("Please enter a line:").toInt()
+        val line = input("Please enter a line:") { it.toIntOrNull() != null }.toInt()
 
         val point = Point(column, line - 1)
         val move = client.sendShot(point)
@@ -130,8 +130,13 @@ class Player {
         updateGameBoard(client.waitForIncomingShot())
     }
 
-    private fun input(msg: String): String {
-        println(msg)
-        return readLine() ?: input(msg)
+    private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
+        while (true) {
+            println(msg)
+            val line = readLine() ?: continue
+            if (!validationMethod(line) or line.isEmpty()) continue
+
+            return line
+        }
     }
 }
