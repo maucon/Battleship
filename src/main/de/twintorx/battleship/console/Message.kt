@@ -22,7 +22,7 @@ enum class ServerMessage(
     PLAYER2_CONNECTED("Client connected as second player: "),
     WAITING_PLAYER2("Waiting for another player to connect..."),
     START_PREPARATION("Starting preparation"),
-    START_GAME("Starting the game"),
+    START_GAME("Starting the game..."),
     GAME_FINISHED("Game finished!"),
     HOST_IS("Host is "),
     PLAYER2_IS("Player2 is ");

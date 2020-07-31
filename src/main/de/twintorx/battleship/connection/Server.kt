@@ -51,10 +51,10 @@ class Server {
     private fun prepare(): Boolean {
         runBlocking { // wait for players ready signal -> placed their ships
             val answer1 = GlobalScope.launch {
-                println("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}")
+                println("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
             }
             val answer2 = GlobalScope.launch {
-                println("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}")
+                println("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.")
             }
 
             answer1.join()
