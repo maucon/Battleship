@@ -13,9 +13,7 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.jvm.isAccessible
 
-
 class PlayerTest {
-
     private lateinit var player: Player
     private lateinit var input: KFunction<*>
 
