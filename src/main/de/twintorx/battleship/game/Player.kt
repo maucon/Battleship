@@ -27,14 +27,18 @@ class Player {
     private fun prepare() {
         println("Please place your ships.")
         val ships = Ship.getStandardShipSet()
+
         while (ships.isNotEmpty()) {
             println("Choose your ship:")
             val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }.joinToString(" ")).toInt()
+
             val ship = ships[option]!![0]
             placeShip(ship).run { println(gameBoard) }
             ships[option]!!.removeFirst()
-            if (ships[option]!!.isEmpty())
+
+            if (ships[option]!!.isEmpty()) {
                 ships.remove(option)
+            }
         }
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
     }
@@ -43,15 +47,15 @@ class Player {
         while (true) {
             val horizontal = input("Please enter orientation ([H]orizontal/[V]ertical):").toLowerCase() == "h"
             val startCol = input("Please enter your start column ([A]-[J]):")[0].toInt() - 97
-            val startLine = input("Please enter your start line ([1]-[10]):").toInt()-1
+            val startLine = input("Please enter your start line ([1]-[10]):").toInt() - 1
+
             val points = hashSetOf<Point>().apply {
-                if (horizontal) {
-                    (startCol until startCol + ship.size).forEach { add(Point(it, startLine)) }
-                } else {
-                    (startLine until startLine + ship.size).forEach { add(Point(startCol, it)) }
+                when (horizontal) {
+                    true -> (startCol until startCol + ship.size).forEach { add(Point(it, startLine)) }
+                    else -> (startLine until startLine + ship.size).forEach { add(Point(startCol, it)) }
                 }
             }
-            println(points)
+
             if (gameBoard.addShip(ship, points)) return
         }
     }
