@@ -29,11 +29,11 @@ class Player {
     }
 
     private fun prepare() {
-        println("Please place your ships.")
+        println(PlayerMessage.PLACE_SHIPS)
         val ships = Ship.getStandardShipSet()
 
         while (ships.isNotEmpty()) {
-            println("Choose your ship:")
+            println(PlayerMessage.CHOOSE_SHIP)
             val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }
                     .joinToString(" ")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
@@ -70,7 +70,7 @@ class Player {
     }
 
     private fun shoot() {
-        val position = input("Which cell do you want to shoot at e.g: A1 ?") { InputRegex.SHOOT_CELL.matches(it) }
+        val position = input("Which cell do you want to shoot at e.g: A1 ?") { InputRegex.SHOOT_CELL.matches(it) } // TODO change msg
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
 
@@ -83,26 +83,26 @@ class Player {
     private fun updateTrackBoard(move: Move, point: Point) {
         when (move) {
             Move.HIT -> {
-                println("You've hit a ship!")
+                println(PlayerMessage.HIT_SHIP)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
                 shoot()
             }
             Move.SUNK -> {
-                println("You've sunk a ship!")
+                println(PlayerMessage.SUNK_SHIP)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
                 shoot()
             }
             Move.GAME_OVER -> {
-                println("You've sunk the last ship and won the game!")
+                println(PlayerMessage.WIN)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
             }
             Move.NO_HIT -> {
-                println("You hit nothing")
+                println(PlayerMessage.HIT_NOTHING)
                 trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { println(trackBoard) }
                 waitForTurn()
             }
             else -> {
-                println("Your move was invalid.")
+                println(PlayerMessage.INVALID_MOVE)
                 shoot()
             }
         }
@@ -114,19 +114,19 @@ class Player {
 
         when (move) {
             Move.HIT -> {
-                println("Your opponent hit!")
+                println(PlayerMessage.OPPONENT_HIT)
                 waitForTurn()
             }
             Move.SUNK -> {
-                println("Your opponent sunk one of your ships!")
+                println(PlayerMessage.OPPONENT_SUNK)
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                println("You lost :(")
+                println(PlayerMessage.LOSE)
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                println("Your opponent missed a shot")
+                println(PlayerMessage.OPPONENT_MISSED)
                 shoot()
             }
             else -> {
