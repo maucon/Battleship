@@ -5,20 +5,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import main.de.twintorx.battleship.connection.Client
 import main.de.twintorx.battleship.connection.Server
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayOutputStream
+import java.io.PipedInputStream
+import java.io.PipedOutputStream
 import java.io.PrintStream
+import java.util.*
+
 
 class ConnectionTest {
 
     @Test
     fun testConnection() {
-        val reader = ByteArrayOutputStream()
-        System.setOut(PrintStream(reader))
-
+        val startTime = System.currentTimeMillis()
         var server: Server? = null
+
         runBlocking {
-            val host = GlobalScope.launch {
+            val pipeOut = PipedOutputStream()
+            System.setOut(PrintStream(pipeOut))
+
+            GlobalScope.launch {
                 val hostServer = GlobalScope.launch {
                     server = Server()
                     server!!.start()
@@ -29,16 +35,20 @@ class ConnectionTest {
                 hostServer.join()
             }
 
-            val player2 = GlobalScope.launch {
+            GlobalScope.launch {
                 val client2 = Client("127.0.0.1")
                 client2.sendReadyGetTurn()
             }
 
-            System.err.println("Out was: $reader")
-            host.join()
-            player2.join()
+            val sc = Scanner(PipedInputStream(pipeOut))
+            while (sc.nextLine() != "[Server] Starting the game") {
+                if (System.currentTimeMillis() - startTime > 5000) {
+                    Assertions.fail<String>("Not connected after 5s!")
+                }
+            }
+
+            server!!.close()
         }
-        server!!.close()
 
     }
 }
