@@ -12,8 +12,8 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        println("Do you want to host a server? [Y]/[N]")
-        client = if (readLine()?.toLowerCase() == "y") {
+        client = if (input("Do you want to host a server? [Y]/[N]").toLowerCase() == "y") {
+
             GlobalScope.launch {
                 Server().start()
             }
