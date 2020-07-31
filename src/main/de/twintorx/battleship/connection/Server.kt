@@ -31,7 +31,7 @@ class Server {
 
         // Player 2 connecting
         val client2 = server.accept().also {
-            println("[Server] Client connected as second player: ${it.inetAddress.hostAddress}")
+            println("${ServerMessage.PLAYER2_CONNECTED}${it.inetAddress.hostAddress}")
         }
         clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()),
                 PrintWriter(OutputStreamWriter(client2.getOutputStream()), true))

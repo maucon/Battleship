@@ -19,6 +19,7 @@ enum class ServerMessage(
 ) {
     PORT_RUNNING("Server running on port: "),
     HOST_CONNECTED("Client connected as host: "),
+    PLAYER2_CONNECTED("Client connected as second player: "),
     WAITING_PLAYER2("Waiting for another player to connect..."),
     START_PREPARATION("Starting preparation"),
     START_GAME("Starting the game"),
