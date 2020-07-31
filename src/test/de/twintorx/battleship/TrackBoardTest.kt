@@ -11,7 +11,7 @@ internal class TrackBoardTest {
     private lateinit var trackBoard: TrackBoard
 
     @BeforeEach
-    fun init() {
+    fun setUp() {
         trackBoard = TrackBoard(5)
     }
 
