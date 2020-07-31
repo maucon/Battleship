@@ -1,6 +1,6 @@
 package test.de.twintorx.battleship
 
-import main.de.twintorx.battleship.game.GameBoard
+import main.de.twintorx.battleship.game.board.GameBoard
 import main.de.twintorx.battleship.game.Move
 import main.de.twintorx.battleship.game.Ship
 import org.junit.jupiter.api.Assertions

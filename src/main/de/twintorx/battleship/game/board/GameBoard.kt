@@ -1,5 +1,8 @@
-package main.de.twintorx.battleship.game
+package main.de.twintorx.battleship.game.board
 
+import main.de.twintorx.battleship.game.Cell
+import main.de.twintorx.battleship.game.Move
+import main.de.twintorx.battleship.game.Ship
 import java.awt.Point
 
 class GameBoard(

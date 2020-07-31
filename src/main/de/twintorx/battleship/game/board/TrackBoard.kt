@@ -1,4 +1,7 @@
-package main.de.twintorx.battleship.game
+package main.de.twintorx.battleship.game.board
+
+import main.de.twintorx.battleship.game.Cell
+import main.de.twintorx.battleship.game.Grid
 
 open class TrackBoard(
         val size: Int = 10
@@ -41,19 +44,7 @@ open class TrackBoard(
 
         return table.joinToString("\n")
     }
+
+    // ---------------- Extensions and Overloading ----------------
+    private operator fun String.times(i: Int): String = this.repeat(i)
 }
-
-class Grid(
-        private val size: Int
-) {
-    val values: Array<Array<Cell>> = Array(size) { Array(size) { Cell.WATER } }
-
-    operator fun get(x: Int, y: Int) = values[size - y - 1][x]
-
-    operator fun set(x: Int, y: Int, value: Cell) {
-        values[size - y - 1][x] = value
-    }
-}
-
-// ---------------- Extensions and Overloading ----------------
-private operator fun String.times(i: Int): String = this.repeat(i)

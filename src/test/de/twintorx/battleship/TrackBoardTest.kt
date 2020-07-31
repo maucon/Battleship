@@ -1,7 +1,7 @@
 package test.de.twintorx.battleship
 
 import main.de.twintorx.battleship.game.Cell
-import main.de.twintorx.battleship.game.TrackBoard
+import main.de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -1,6 +1,8 @@
 package test.de.twintorx.battleship
 
 import main.de.twintorx.battleship.game.*
+import main.de.twintorx.battleship.game.board.GameBoard
+import main.de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.awt.Point

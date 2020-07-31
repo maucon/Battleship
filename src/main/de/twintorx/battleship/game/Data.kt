@@ -1,21 +1,16 @@
 package main.de.twintorx.battleship.game
 
+import main.de.twintorx.battleship.console.Color
 
-enum class Color(
-        private val ansi: String
+class Grid(
+        private val size: Int
 ) {
-    RESET("\u001B[0m"),
-    WHITE("\u001B[37m"),
-    RED("\u001B[31m"),
-    GREEN("\u001B[32m"),
-    BLUE("\u001B[34m"),
-    YELLOW("\u001B[33m"),
-    CYAN("\u001B[36m"),
-    PURPLE("\u001B[35m"),
-    BLACK("\u001B[30m");
+    val values: Array<Array<Cell>> = Array(size) { Array(size) { Cell.WATER } }
 
-    override fun toString(): String {
-        return ansi
+    operator fun get(x: Int, y: Int) = values[size - y - 1][x]
+
+    operator fun set(x: Int, y: Int, value: Cell) {
+        values[size - y - 1][x] = value
     }
 }
 
@@ -28,7 +23,7 @@ enum class Cell(
     SHIP("░")
 }
 
-enum class Move() {
+enum class Move {
     INVALID,
     HIT,
     SUNK,
