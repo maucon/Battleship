@@ -35,16 +35,17 @@ class Player {
         while (ships.isNotEmpty()) {
             println("Choose your ship:")
             val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }
-                    .joinToString(" ")) { InputRegex.SELECT_SHIP.matches(it) }.toInt()
+                    .joinToString(" ")) {
+                InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
+            }.toInt()
 
-            if (option !in ships.keys) continue
+            with(ships[option]!!) {
+                placeShip(this[0]).run { println(gameBoard) }
+                removeFirst()
 
-            val ship = ships[option]!![0]
-            placeShip(ship).run { println(gameBoard) }
-            ships[option]!!.removeFirst()
-
-            if (ships[option]!!.isEmpty()) {
-                ships.remove(option)
+                if (isEmpty()) {
+                    ships.remove(option)
+                }
             }
         }
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
@@ -52,9 +53,9 @@ class Player {
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val placement = input("Pls enter ship position e.g: h1a :") { InputRegex.PLACE_SHIP.matches(it) }
-                    .toLowerCase() // TODO add to messages
-            val startCol = placement[1].toInt() - 97
+            val placement = input("Pls enter ship position e.g: ha1 :") { InputRegex.PLACE_SHIP.matches(it) }
+                    .toLowerCase()
+            val startCol = placement[1].toInt() - 97 // 'a'.toInt()
             val startLine = placement.substring(2).toInt() - 1
 
             val points = hashSetOf<Point>().apply {
