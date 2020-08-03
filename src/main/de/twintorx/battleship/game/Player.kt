@@ -16,6 +16,7 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
+        println(PlayerMessage.WELCOME)
         client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
 
             GlobalScope.launch {
@@ -146,23 +147,24 @@ class Player {
         println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
         val lines = (trackBoard.getLines() zip gameBoard.getLines())
         lines.forEach {
-            println(it.second + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.first) }
-        }
-
-        private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
-            while (true) {
-                println(msg)
-
-                val line = readLine() ?: continue
-                if (!validationMethod(line) or line.isEmpty()) continue
-
-                return line
-            }
-        }
-
-        private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
-            return input(msg.toString(), validationMethod)
+            println(it.second + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.first)
         }
     }
 
-    private operator fun String.times(size: Int): String = this.repeat(size)
+    private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
+        while (true) {
+            println(msg)
+
+            val line = readLine() ?: continue
+            if (!validationMethod(line) or line.isEmpty()) continue
+
+            return line
+        }
+    }
+
+    private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
+        return input(msg.toString(), validationMethod)
+    }
+}
+
+private operator fun String.times(size: Int): String = this.repeat(size)
