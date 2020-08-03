@@ -34,8 +34,8 @@ class Player {
 
         while (ships.isNotEmpty()) {
             println(PlayerMessage.CHOOSE_SHIP)
-            val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }
-                    .joinToString(" ")) {
+            val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].name}(Size:${it.value[0].size})\n" }
+                    .joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
             }.toInt()
 
@@ -70,7 +70,8 @@ class Player {
     }
 
     private fun shoot() {
-        val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }.toLowerCase() // TODO change msg
+        val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }
+                .toLowerCase() // TODO change msg
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
 
@@ -140,7 +141,9 @@ class Player {
     }
 
     private fun printBoards() {
-        (trackBoard.getLines() zip gameBoard.getLines()).forEach { println(it.first + "\t" + it.second) }
+        println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size*3) + "\t\t" + PlayerMessage.GAME_BOARD)
+        val lines = (trackBoard.getLines() zip gameBoard.getLines())
+        lines.forEach { if(it==lines[lines.size-1]) println(it.first + "\t\t" + it.second) else println(it.first + "\t" + it.second) }
     }
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
@@ -158,3 +161,5 @@ class Player {
         return input(msg.toString(), validationMethod)
     }
 }
+
+private operator fun String.times(size: Int): String = this.repeat(size)

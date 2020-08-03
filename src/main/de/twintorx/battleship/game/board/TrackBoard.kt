@@ -40,7 +40,7 @@ open class TrackBoard(
 
         table.removeLast()
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
+        table.add("   $space${(65..(64 + size)).map { it.toChar() + " "}.joinToString("  ")}")
 
         return table
     }

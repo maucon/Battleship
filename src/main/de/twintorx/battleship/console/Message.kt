@@ -4,6 +4,7 @@ enum class PlayerMessage(
         private val message: String
 ) {
     CHOOSE_SHIP("Choose your ship:"),
+    GAME_BOARD("Your ships:"),
     HIT_NOTHING("You hit nothing"),
     HIT_SHIP("You've hit a ship!"),
     HOST_SERVER("Do you want to host a server? [Y]/[N]"),
@@ -17,6 +18,7 @@ enum class PlayerMessage(
     SERVER_IP("Please enter the Server-Ip you want to connect to:"),
     SHOOT("Which cell do you want to shoot at ? ~ line[A-J] + column [1-10] ~ (e.g: A1) :"),
     SUNK_SHIP("You've sunk a ship!"),
+    TRACK_BOARD("Your shots:"),
     WIN("You've sunk the last ship and won the game!");
 
     override fun toString(): String {
