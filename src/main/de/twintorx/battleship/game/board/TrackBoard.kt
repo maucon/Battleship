@@ -20,11 +20,11 @@ open class TrackBoard(
         return true
     }
 
-    override fun toString(): String {
+    fun getLines(): MutableList<String> {
         val len = size - 1
         val sizeLength = size.toString().length
         val space = " " * sizeLength
-        val table = arrayListOf(" $space┌${"───┬" * len}───┐")
+        val table = mutableListOf(" $space┌${"───┬" * len}───┐")
         val div = " $space├${"───┼" * len}───┤"
 
         grid.values.withIndex().forEach {
@@ -42,7 +42,7 @@ open class TrackBoard(
         table.add(" $space└${"───┴" * len}───┘")
         table.add("   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
 
-        return table.joinToString("\n")
+        return table
     }
 
     // ---------------- Extensions and Overloading ----------------
