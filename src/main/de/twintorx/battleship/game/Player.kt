@@ -53,7 +53,7 @@ class Player {
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val placement = input("Pls enter ship position e.g: ha1 :") { InputRegex.PLACE_SHIP.matches(it) } // TODO change msg
+            val placement = input(PlayerMessage.POSITION_SHIP) { InputRegex.PLACE_SHIP.matches(it) } // TODO change msg
                     .toLowerCase()
             val startCol = placement[1].toInt() - 97 // 'a'.toInt()
             val startLine = placement.substring(2).toInt() - 1
@@ -70,7 +70,7 @@ class Player {
     }
 
     private fun shoot() {
-        val position = input("Which cell do you want to shoot at e.g: A1 ?") { InputRegex.SHOOT_CELL.matches(it) } // TODO change msg
+        val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }.toLowerCase() // TODO change msg
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
 

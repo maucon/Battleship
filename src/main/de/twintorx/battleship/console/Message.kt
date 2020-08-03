@@ -4,20 +4,18 @@ enum class PlayerMessage(
         private val message: String
 ) {
     CHOOSE_SHIP("Choose your ship:"),
-    COLUMN("Please enter a column ([A]-[J]):"),
     HIT_NOTHING("You hit nothing"),
     HIT_SHIP("You've hit a ship!"),
     HOST_SERVER("Do you want to host a server? [Y]/[N]"),
     INVALID_MOVE("Your move was invalid."),
-    LINE("Please enter a line ([1]-[10]):"),
     LOSE("You lost :("),
     OPPONENT_HIT("Your opponent hit!"),
     OPPONENT_MISSED("Your opponent missed a shot"),
     OPPONENT_SUNK("Your opponent sunk one of your ships!"),
-    ORIENTATION("Please enter orientation ([H]orizontal/[V]ertical):"),
     PLACE_SHIPS("Please place your ships."),
-    SELECT_CELL("Which cell do you want to shoot at?"),
+    POSITION_SHIP("Pls enter ship position! ~ [h]orizontal/[v]ertical + column[A-J] + line [1-10] ~ (e.g: ha1) :"),
     SERVER_IP("Please enter the Server-Ip you want to connect to:"),
+    SHOOT("Which cell do you want to shoot at ? ~ line[A-J] + column [1-10] ~ (e.g: A1) :"),
     SUNK_SHIP("You've sunk a ship!"),
     WIN("You've sunk the last ship and won the game!");
 
