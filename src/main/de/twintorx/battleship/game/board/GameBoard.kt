@@ -3,6 +3,7 @@ package main.de.twintorx.battleship.game.board
 import main.de.twintorx.battleship.game.Cell
 import main.de.twintorx.battleship.game.Move
 import main.de.twintorx.battleship.game.Ship
+import main.de.twintorx.battleship.game.ShipType
 import java.awt.Point
 
 class GameBoard(
@@ -16,7 +17,13 @@ class GameBoard(
 
         shipCoordinates[ship] = coordinates
         coordinates.forEach {
-            grid[it.x, it.y] = Cell.SHIP
+            grid[it.x, it.y] = when (ship.type) {
+                ShipType.CARRIER -> Cell.SHIP_CARRIER
+                ShipType.BATTLESHIP -> Cell.SHIP_BATTLESHIP
+                ShipType.CRUISER -> Cell.SHIP_CRUISER
+                ShipType.SUBMARINE -> Cell.SHIP_SUBMARINE
+                else -> Cell.SHIP_DESTROYER
+            }
         }
 
         return true
@@ -28,7 +35,7 @@ class GameBoard(
         coordinates.forEach { point ->
             if (point.x !in (0 until size)) return true
             if (point.y !in (0 until size)) return true
-            if (grid[point.x, point.y] == Cell.SHIP) return true
+            if (grid[point.x, point.y].isShip()) return true
         }
 
         // count of distinct x and y values must be ship size + 1
@@ -36,7 +43,7 @@ class GameBoard(
     }
 
     fun hit(x: Int, y: Int): Move {
-        if (!mark(x, y, if (grid[x, y] == Cell.SHIP) Cell.HIT_SHIP else Cell.HIT_NOTHING)) return Move.INVALID
+        if (!mark(x, y, if (grid[x, y].isShip()) Cell.HIT_SHIP else Cell.HIT_NOTHING)) return Move.INVALID
 
         for ((key, value) in shipCoordinates) {
             val removePoint = value.firstOrNull { point ->

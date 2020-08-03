@@ -19,7 +19,7 @@ internal class TrackBoardTest {
     fun testMark() {
         Assertions.assertTrue(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
-        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP))
+        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP_DESTROYER))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.WATER))
     }
 

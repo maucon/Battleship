@@ -34,7 +34,7 @@ class Player {
 
         while (ships.isNotEmpty()) {
             println(PlayerMessage.CHOOSE_SHIP)
-            val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].name}(Size:${it.value[0].size})\n" }
+            val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].type.value}(Size:${it.value[0].size})\n" }
                     .joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
             }.toInt()

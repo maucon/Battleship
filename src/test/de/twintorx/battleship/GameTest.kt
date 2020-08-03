@@ -1,6 +1,9 @@
 package test.de.twintorx.battleship
 
-import main.de.twintorx.battleship.game.*
+import main.de.twintorx.battleship.game.Cell
+import main.de.twintorx.battleship.game.Move
+import main.de.twintorx.battleship.game.Ship
+import main.de.twintorx.battleship.game.ShipType
 import main.de.twintorx.battleship.game.board.GameBoard
 import main.de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
@@ -19,12 +22,12 @@ internal class GameTest {
 
         // Prepare game
         // player 1 places ships
-        Assertions.assertTrue(player1GameBoard.addShip(Ship("1", 3), hashSetOf(Point(2, 2), Point(2, 3), Point(2, 4))))
-        Assertions.assertTrue(player1GameBoard.addShip(Ship("2", 2), hashSetOf(Point(0, 0), Point(0, 1))))
+        Assertions.assertTrue(player1GameBoard.addShip(Ship(ShipType.SUBMARINE, 3), hashSetOf(Point(2, 2), Point(2, 3), Point(2, 4))))
+        Assertions.assertTrue(player1GameBoard.addShip(Ship(ShipType.DESTROYER, 2), hashSetOf(Point(0, 0), Point(0, 1))))
 
         // player 2 places ships
-        Assertions.assertTrue(player2GameBoard.addShip(Ship("1", 3), hashSetOf(Point(6, 2), Point(6, 3), Point(6, 4))))
-        Assertions.assertTrue(player2GameBoard.addShip(Ship("2", 2), hashSetOf(Point(2, 5), Point(3, 5))))
+        Assertions.assertTrue(player2GameBoard.addShip(Ship(ShipType.SUBMARINE, 3), hashSetOf(Point(6, 2), Point(6, 3), Point(6, 4))))
+        Assertions.assertTrue(player2GameBoard.addShip(Ship(ShipType.DESTROYER, 2), hashSetOf(Point(2, 5), Point(3, 5))))
 
         // Game starting
         // player 1 turn hitting: 1 1

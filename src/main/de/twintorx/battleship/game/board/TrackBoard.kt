@@ -11,7 +11,7 @@ open class TrackBoard(
     fun mark(x: Int, y: Int, cell: Cell): Boolean {
         //fail when mark as water or ship or cell is already marked
         if (cell == Cell.WATER
-                || cell == Cell.SHIP
+                || cell.isShip()
                 || grid[x, y] == Cell.HIT_NOTHING
                 || grid[x, y] == Cell.HIT_SHIP)
             return false
@@ -33,14 +33,14 @@ open class TrackBoard(
 
             table.add("${" " * indexPadding}$index │" +
                     "${it.value.joinToString("│") { cell ->
-                        " ${cell.value} "
+                        " ${cell.getString()} "
                     }}│")
             table.add(div)
         }
 
         table.removeLast()
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).map { it.toChar() + " "}.joinToString("  ")}")
+        table.add("   $space${(65..(64 + size)).map { it.toChar() + " " }.joinToString("  ")}")
 
         return table
     }
