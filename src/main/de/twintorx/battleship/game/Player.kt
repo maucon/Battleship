@@ -4,6 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import main.de.twintorx.battleship.connection.Client
 import main.de.twintorx.battleship.connection.Server
+import main.de.twintorx.battleship.console.InputRegex
 import main.de.twintorx.battleship.console.PlayerMessage
 import main.de.twintorx.battleship.game.board.GameBoard
 import main.de.twintorx.battleship.game.board.TrackBoard
@@ -15,7 +16,7 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        client = if (input(PlayerMessage.HOST_SERVER).toLowerCase() == "y") {
+        client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
 
             GlobalScope.launch {
                 Server().start()
@@ -33,14 +34,18 @@ class Player {
 
         while (ships.isNotEmpty()) {
             println("Choose your ship:")
-            val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }.joinToString(" ")).toInt()
+            val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }
+                    .joinToString(" ")) {
+                InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
+            }.toInt()
 
-            val ship = ships[option]!![0]
-            placeShip(ship).run { println(gameBoard) }
-            ships[option]!!.removeFirst()
+            with(ships[option]!!) {
+                placeShip(this[0]).run { println(gameBoard) }
+                removeFirst()
 
-            if (ships[option]!!.isEmpty()) {
-                ships.remove(option)
+                if (isEmpty()) {
+                    ships.remove(option)
+                }
             }
         }
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
@@ -48,12 +53,13 @@ class Player {
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val horizontal = input(PlayerMessage.ORIENTATION).toLowerCase() == "h"
-            val startCol = input(PlayerMessage.COLUMN)[0].toInt() - 97
-            val startLine = input(PlayerMessage.LINE) { it.toIntOrNull() != null }.toInt() - 1
+            val placement = input("Pls enter ship position e.g: ha1 :") { InputRegex.PLACE_SHIP.matches(it) }
+                    .toLowerCase()
+            val startCol = placement[1].toInt() - 97 // 'a'.toInt()
+            val startLine = placement.substring(2).toInt() - 1
 
             val points = hashSetOf<Point>().apply {
-                when (horizontal) {
+                when (placement[0] == 'h') {
                     true -> (startCol until startCol + ship.size).forEach { add(Point(it, startLine)) }
                     else -> (startLine until startLine + ship.size).forEach { add(Point(startCol, it)) }
                 }
@@ -64,9 +70,9 @@ class Player {
     }
 
     private fun shoot() {
-        println("Which cell do you want to shoot at?")
-        val column = input(PlayerMessage.COLUMN)[0].toInt() - 97 // 'a'.toInt()
-        val line = input(PlayerMessage.LINE) { it.toIntOrNull() != null }.toInt() - 1
+        val position = input("Which cell do you want to shoot at e.g: A1 ?") { InputRegex.SHOOT_CELL.matches(it) }
+        val column = position[0].toInt() - 97 // 'a'.toInt()
+        val line = position.substring(1).toInt() - 1
 
         val point = Point(column, line)
         val move = client.sendShot(point)

@@ -31,3 +31,12 @@ enum class ServerMessage(
         return "${Color.RED}[SERVER]${Color.RESET} $message"
     }
 }
+
+class InputRegex {
+    companion object {
+        val YES_OR_NO = "[yYnN]".toRegex()
+        val PLACE_SHIP = "[hHvV][a-jA-J]([1-9]|10)".toRegex()
+        val SELECT_SHIP = "[1-5]".toRegex()
+        val SHOOT_CELL = "[a-jA-J]([1-9]|10)".toRegex()
+    }
+}
