@@ -15,7 +15,7 @@ class Grid(
 }
 
 enum class Cell(
-        val value: String,
+        private val value: String,
         private val shipType: ShipType = ShipType.NONE
 ) {
     WATER(" "),
