@@ -16,9 +16,11 @@ enum class PlayerMessage(
     PLACE_SHIPS("Please place your ships."),
     POSITION_SHIP("Pls enter ship position! ~ [h]orizontal/[v]ertical + column[A-J] + line [1-10] ~ (e.g: ha1) :"),
     SERVER_IP("Please enter the Server-Ip you want to connect to:"),
-    SHOOT("Which cell do you want to shoot at ? ~ line[A-J] + column [1-10] ~ (e.g: A1) :"),
+    SHOOT("Which cell do you want to shoot at ? ~ column[A-J] + line [1-10] ~ (e.g: A1) :"),
     SUNK_SHIP("You've sunk a ship!"),
     TRACK_BOARD("Your shots:"),
+    WAITING_FOR_PLACEMENT("Waiting until all players have placed their ships..."),
+    WAITING_FOR_TURN("Wait until its your turn..."),
     WIN("You've sunk the last ship and won the game!");
 
     override fun toString(): String {

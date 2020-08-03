@@ -48,12 +48,13 @@ class Player {
                 }
             }
         }
+        println(PlayerMessage.WAITING_FOR_PLACEMENT)
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
     }
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val placement = input(PlayerMessage.POSITION_SHIP) { InputRegex.PLACE_SHIP.matches(it) } // TODO change msg
+            val placement = input(PlayerMessage.POSITION_SHIP) { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
             val startCol = placement[1].toInt() - 97 // 'a'.toInt()
             val startLine = placement.substring(2).toInt() - 1
@@ -71,7 +72,7 @@ class Player {
 
     private fun shoot() {
         val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }
-                .toLowerCase() // TODO change msg
+                .toLowerCase()
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
 
@@ -84,22 +85,22 @@ class Player {
     private fun updateTrackBoard(move: Move, point: Point) {
         when (move) {
             Move.HIT -> {
-                println(PlayerMessage.HIT_SHIP)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.HIT_SHIP)
                 shoot()
             }
             Move.SUNK -> {
-                println(PlayerMessage.SUNK_SHIP)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.SUNK_SHIP)
                 shoot()
             }
             Move.GAME_OVER -> {
-                println(PlayerMessage.WIN)
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.WIN)
             }
             Move.NO_HIT -> {
-                println(PlayerMessage.HIT_NOTHING)
                 trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { printBoards() }
+                println(PlayerMessage.HIT_NOTHING)
                 waitForTurn()
             }
             else -> {
@@ -137,13 +138,14 @@ class Player {
     }
 
     private fun waitForTurn() {
+        println(PlayerMessage.WAITING_FOR_TURN)
         updateGameBoard(client.waitForIncomingShot())
     }
 
     private fun printBoards() {
-        println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size*3) + "\t\t" + PlayerMessage.GAME_BOARD)
+        println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
         val lines = (trackBoard.getLines() zip gameBoard.getLines())
-        lines.forEach { if(it==lines[lines.size-1]) println(it.first + "\t\t" + it.second) else println(it.first + "\t" + it.second) }
+        lines.forEach { if (it == lines[lines.size - 1]) println(it.first + "\t\t" + it.second) else println(it.first + "\t" + it.second) }
     }
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
