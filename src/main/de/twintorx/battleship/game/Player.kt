@@ -145,23 +145,24 @@ class Player {
     private fun printBoards() {
         println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
         val lines = (trackBoard.getLines() zip gameBoard.getLines())
-        lines.forEach { if (it == lines[lines.size - 1]) println(it.first + "\t\t" + it.second) else println(it.first + "\t" + it.second) }
-    }
+        lines.forEach {
+            println(it.second + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.first) }
+        }
 
-    private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
-        while (true) {
-            println(msg)
+        private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
+            while (true) {
+                println(msg)
 
-            val line = readLine() ?: continue
-            if (!validationMethod(line) or line.isEmpty()) continue
+                val line = readLine() ?: continue
+                if (!validationMethod(line) or line.isEmpty()) continue
 
-            return line
+                return line
+            }
+        }
+
+        private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
+            return input(msg.toString(), validationMethod)
         }
     }
 
-    private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
-        return input(msg.toString(), validationMethod)
-    }
-}
-
-private operator fun String.times(size: Int): String = this.repeat(size)
+    private operator fun String.times(size: Int): String = this.repeat(size)
