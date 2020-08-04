@@ -15,12 +15,27 @@ class Grid(
 }
 
 enum class Cell(
-        val value: String
+        private val value: String,
+        private val shipType: ShipType = ShipType.NONE
 ) {
     WATER(" "),
     HIT_SHIP("${Color.RED}o${Color.RESET}"),
     HIT_NOTHING("x"),
-    SHIP("░")
+    SHIP_CARRIER("░", ShipType.CARRIER),
+    SHIP_BATTLESHIP("░", ShipType.BATTLESHIP),
+    SHIP_CRUISER("░", ShipType.CRUISER),
+    SHIP_SUBMARINE("░", ShipType.SUBMARINE),
+    SHIP_DESTROYER("░", ShipType.DESTROYER);
+
+    override fun toString() = when (shipType.color) {
+        null -> value
+        else -> "${shipType.color}$value${Color.RESET}"
+    }
+
+    fun isShip() = when (this) {
+        WATER, HIT_SHIP, HIT_NOTHING -> false
+        else -> true
+    }
 }
 
 enum class Move {
@@ -29,4 +44,16 @@ enum class Move {
     SUNK,
     NO_HIT,
     GAME_OVER
+}
+
+enum class ShipType(
+        val value: String,
+        val color: Color?
+) {
+    NONE("", null),
+    CARRIER("Carrier", Color.YELLOW),
+    BATTLESHIP("Battleship", Color.BLUE),
+    CRUISER("Cruiser", Color.PURPLE),
+    SUBMARINE("Submarine", Color.GREEN),
+    DESTROYER("Destroyer", Color.RED)
 }

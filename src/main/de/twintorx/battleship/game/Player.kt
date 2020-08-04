@@ -16,6 +16,7 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
+        println(PlayerMessage.WELCOME)
         client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
 
             GlobalScope.launch {
@@ -29,18 +30,18 @@ class Player {
     }
 
     private fun prepare() {
-        println("Please place your ships.")
+        println(PlayerMessage.PLACE_SHIPS)
         val ships = Ship.getStandardShipSet()
 
         while (ships.isNotEmpty()) {
-            println("Choose your ship:")
-            val option = input(ships.map { "${it.value.size}x${it.value[0].name}[${it.key}]" }
-                    .joinToString(" ")) {
+            println(PlayerMessage.CHOOSE_SHIP)
+            val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].type.value}(Size:${it.value[0].size})\n" }
+                    .joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
             }.toInt()
 
             with(ships[option]!!) {
-                placeShip(this[0]).run { println(gameBoard) }
+                placeShip(this[0]).run { printBoards() }
                 removeFirst()
 
                 if (isEmpty()) {
@@ -48,12 +49,13 @@ class Player {
                 }
             }
         }
+        println(PlayerMessage.WAITING_FOR_PLACEMENT)
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
     }
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val placement = input("Pls enter ship position e.g: ha1 :") { InputRegex.PLACE_SHIP.matches(it) }
+            val placement = input(PlayerMessage.POSITION_SHIP) { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
             val startCol = placement[1].toInt() - 97 // 'a'.toInt()
             val startLine = placement.substring(2).toInt() - 1
@@ -70,7 +72,8 @@ class Player {
     }
 
     private fun shoot() {
-        val position = input("Which cell do you want to shoot at e.g: A1 ?") { InputRegex.SHOOT_CELL.matches(it) }
+        val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }
+                .toLowerCase()
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
 
@@ -83,50 +86,50 @@ class Player {
     private fun updateTrackBoard(move: Move, point: Point) {
         when (move) {
             Move.HIT -> {
-                println("You've hit a ship!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.HIT_SHIP)
                 shoot()
             }
             Move.SUNK -> {
-                println("You've sunk a ship!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.SUNK_SHIP)
                 shoot()
             }
             Move.GAME_OVER -> {
-                println("You've sunk the last ship and won the game!")
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { println(trackBoard) }
+                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                println(PlayerMessage.WIN)
             }
             Move.NO_HIT -> {
-                println("You hit nothing")
-                trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { println(trackBoard) }
+                trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { printBoards() }
+                println(PlayerMessage.HIT_NOTHING)
                 waitForTurn()
             }
             else -> {
-                println("Your move was invalid.")
+                println(PlayerMessage.INVALID_MOVE)
                 shoot()
             }
         }
     }
 
     private fun updateGameBoard(shot: Point) {
-        val move = gameBoard.hit(shot.x, shot.y).also { println(gameBoard) }
+        val move = gameBoard.hit(shot.x, shot.y).also { printBoards() }
         client.sendShotAnswer(move)
 
         when (move) {
             Move.HIT -> {
-                println("Your opponent hit!")
+                println(PlayerMessage.OPPONENT_HIT)
                 waitForTurn()
             }
             Move.SUNK -> {
-                println("Your opponent sunk one of your ships!")
+                println(PlayerMessage.OPPONENT_SUNK)
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                println("You lost :(")
+                println(PlayerMessage.LOSE)
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                println("Your opponent missed a shot")
+                println(PlayerMessage.OPPONENT_MISSED)
                 shoot()
             }
             else -> {
@@ -136,7 +139,16 @@ class Player {
     }
 
     private fun waitForTurn() {
+        println(PlayerMessage.WAITING_FOR_TURN)
         updateGameBoard(client.waitForIncomingShot())
+    }
+
+    private fun printBoards() {
+        println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
+        val lines = (gameBoard.getLines() zip trackBoard.getLines())
+        lines.forEach {
+            println(it.first + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.second)
+        }
     }
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
@@ -154,3 +166,6 @@ class Player {
         return input(msg.toString(), validationMethod)
     }
 }
+
+// ---------------- Extensions and Overloading ----------------
+private operator fun String.times(size: Int): String = this.repeat(size)

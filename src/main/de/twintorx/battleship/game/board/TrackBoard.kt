@@ -11,7 +11,7 @@ open class TrackBoard(
     fun mark(x: Int, y: Int, cell: Cell): Boolean {
         //fail when mark as water or ship or cell is already marked
         if (cell == Cell.WATER
-                || cell == Cell.SHIP
+                || cell.isShip()
                 || grid[x, y] == Cell.HIT_NOTHING
                 || grid[x, y] == Cell.HIT_SHIP)
             return false
@@ -20,11 +20,11 @@ open class TrackBoard(
         return true
     }
 
-    override fun toString(): String {
+    fun getLines(): MutableList<String> {
         val len = size - 1
         val sizeLength = size.toString().length
         val space = " " * sizeLength
-        val table = arrayListOf(" $space┌${"───┬" * len}───┐")
+        val table = mutableListOf(" $space┌${"───┬" * len}───┐")
         val div = " $space├${"───┼" * len}───┤"
 
         grid.values.withIndex().forEach {
@@ -33,18 +33,19 @@ open class TrackBoard(
 
             table.add("${" " * indexPadding}$index │" +
                     "${it.value.joinToString("│") { cell ->
-                        " ${cell.value} "
+                        " $cell "
                     }}│")
             table.add(div)
         }
 
         table.removeLast()
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).map { it.toChar() }.joinToString("   ")}")
+        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }}")
 
-        return table.joinToString("\n")
+        return table
     }
 
-    // ---------------- Extensions and Overloading ----------------
-    private operator fun String.times(i: Int): String = this.repeat(i)
 }
+
+// ---------------- Extensions and Overloading ----------------
+private operator fun String.times(i: Int): String = this.repeat(i)

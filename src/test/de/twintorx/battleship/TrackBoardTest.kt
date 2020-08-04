@@ -19,7 +19,7 @@ internal class TrackBoardTest {
     fun testMark() {
         Assertions.assertTrue(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
-        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP))
+        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP_DESTROYER))
         Assertions.assertFalse(trackBoard.mark(1, 1, Cell.WATER))
     }
 
@@ -27,7 +27,21 @@ internal class TrackBoardTest {
     fun testToString() {
         trackBoard.mark(1, 1, Cell.HIT_NOTHING)
         trackBoard.mark(4, 4, Cell.HIT_NOTHING)
-        Assertions.assertEquals("  ┌───┬───┬───┬───┬───┐\n5 │   │   │   │   │ x │\n  ├───┼───┼───┼───┼───┤\n4 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n3 │   │   │   │   │   │\n  ├───┼───┼───┼───┼───┤\n2 │   │ x │   │   │   │\n  ├───┼───┼───┼───┼───┤\n1 │   │   │   │   │   │\n  └───┴───┴───┴───┴───┘\n    A   B   C   D   E"
-                , trackBoard.toString())
+        val lines = trackBoard.getLines()
+        lines.forEach { println("|$it|") }
+        Assertions.assertEquals(mutableListOf(
+                "  ┌───┬───┬───┬───┬───┐",
+                "5 │   │   │   │   │ x │",
+                "  ├───┼───┼───┼───┼───┤",
+                "4 │   │   │   │   │   │",
+                "  ├───┼───┼───┼───┼───┤",
+                "3 │   │   │   │   │   │",
+                "  ├───┼───┼───┼───┼───┤",
+                "2 │   │ x │   │   │   │",
+                "  ├───┼───┼───┼───┼───┤",
+                "1 │   │   │   │   │   │",
+                "  └───┴───┴───┴───┴───┘",
+                "    A   B   C   D   E "),
+                trackBoard.getLines())
     }
 }
