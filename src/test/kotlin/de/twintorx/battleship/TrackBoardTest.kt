@@ -1,5 +1,6 @@
 package de.twintorx.battleship
 
+import de.twintorx.battleship.console.Writer
 import de.twintorx.battleship.game.Cell
 import de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
@@ -28,7 +29,7 @@ internal class TrackBoardTest {
         trackBoard.mark(1, 1, Cell.HIT_NOTHING)
         trackBoard.mark(4, 4, Cell.HIT_NOTHING)
         val lines = trackBoard.getLines()
-        lines.forEach { println("|$it|") }
+        lines.forEach { Writer.printColored("|$it|") }
         Assertions.assertEquals(mutableListOf(
                 "  ┌───┬───┬───┬───┬───┐",
                 "5 │   │   │   │   │ x │",
