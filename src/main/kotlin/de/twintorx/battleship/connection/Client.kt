@@ -7,12 +7,22 @@ import java.io.PrintWriter
 import java.net.Socket
 import java.util.*
 
-class Client(
-        address: String = "localhost"
-) {
-    private val socket = Socket(address, 9999)
-    private val output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
-    private val input = Scanner(socket.getInputStream()).also { it.nextLine() }
+class Client {
+    private lateinit var socket: Socket
+    private lateinit var output: PrintWriter
+    private lateinit var input: Scanner
+
+    fun testConnect(address: String = "localhost"): Boolean {
+        return try {
+            socket = Socket(address, 9999)
+            output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
+            input = Scanner(socket.getInputStream()).also { it.nextLine() }
+
+            true
+        } catch (ignored: Exception) {
+            false
+        }
+    }
 
     fun sendReadyGetTurn(): Boolean {
         output.println("ready") // Sending server ready signal

@@ -17,14 +17,21 @@ class Player {
 
     fun connect() {
         println(PlayerMessage.WELCOME)
-        client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
+        if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
 
             GlobalScope.launch {
                 Server().start()
             }
-            Client()
+            client = Client()
+            client.testConnect()
 
-        } else Client(input(PlayerMessage.SERVER_IP))
+        } else {
+            client = Client().also {
+                while (!it.testConnect(input(PlayerMessage.SERVER_IP))) {
+                    continue
+                }
+            }
+        }
 
         prepare()
     }
