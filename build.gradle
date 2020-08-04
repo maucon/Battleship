@@ -3,7 +3,6 @@ plugins {
 }
 
 group 'de.twintorx'
-version '1.0'
 
 repositories {
     mavenCentral()
