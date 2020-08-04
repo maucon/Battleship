@@ -3,7 +3,7 @@ name: "release"
 on:
   push:
     branches:
-      - "github-actions"
+      - "release"
 
 jobs:
   pre-release:
@@ -30,6 +30,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "v1.0"
           prerelease: false
-          files: |
-            LICENSE.txt
-            build/libs/*.jar
+          files: build/libs/*.jar
