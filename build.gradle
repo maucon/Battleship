@@ -22,6 +22,12 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.twintorx.battleship.Main'
+    }
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
