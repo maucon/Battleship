@@ -24,12 +24,12 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Test with Gradle
         run: ./gradlew build
-      - name: Move jar
-        run: mv build/libs/Battleship.jar ci
       - name: Run release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "v1.0"
           prerelease: false
-          files: ci/*
+          files: |
+            LICENSE.txt
+            build/libs/*.jar
