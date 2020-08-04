@@ -7,7 +7,7 @@ on:
 
 jobs:
   pre-release:
-    name: "Pre Release"
+    name: "Release"
     runs-on: windows-latest
 
     steps:
@@ -22,12 +22,12 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Test with Gradle
+        run: ./gradlew test
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "1.0.0"
+          automatic_release_tag: "v1.0"
           prerelease: false
           files: |
             LICENSE.txt
