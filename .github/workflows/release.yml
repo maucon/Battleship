@@ -1,13 +1,13 @@
-name: Build
+name: "release"
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - "master"
 
 jobs:
-  build:
+  pre-release:
+    name: "Pre Release"
     runs-on: windows-latest
 
     steps:
@@ -24,3 +24,12 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle
         run: ./gradlew build
+      - uses: "marvinpinto/action-automatic-releases@<VERSION>"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            LICENSE.txt
+            *.jar
