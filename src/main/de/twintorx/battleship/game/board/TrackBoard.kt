@@ -45,6 +45,7 @@ open class TrackBoard(
         return table
     }
 
-    // ---------------- Extensions and Overloading ----------------
-    private operator fun String.times(i: Int): String = this.repeat(i)
 }
+
+// ---------------- Extensions and Overloading ----------------
+private operator fun String.times(i: Int): String = this.repeat(i)
