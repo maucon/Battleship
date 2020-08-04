@@ -1,13 +1,13 @@
-package main.de.twintorx.battleship.game
+package de.twintorx.battleship.game
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import main.de.twintorx.battleship.connection.Client
-import main.de.twintorx.battleship.connection.Server
-import main.de.twintorx.battleship.console.InputRegex
-import main.de.twintorx.battleship.console.PlayerMessage
-import main.de.twintorx.battleship.game.board.GameBoard
-import main.de.twintorx.battleship.game.board.TrackBoard
+import de.twintorx.battleship.connection.Client
+import de.twintorx.battleship.connection.Server
+import de.twintorx.battleship.console.InputRegex
+import de.twintorx.battleship.console.PlayerMessage
+import de.twintorx.battleship.game.board.GameBoard
+import de.twintorx.battleship.game.board.TrackBoard
 import java.awt.Point
 
 class Player {
@@ -15,6 +15,7 @@ class Player {
     private var gameBoard: GameBoard = GameBoard()
     private var trackBoard: TrackBoard = TrackBoard()
 
+    @ExperimentalStdlibApi
     fun connect() {
         println(PlayerMessage.WELCOME)
         client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
@@ -29,6 +30,7 @@ class Player {
         prepare()
     }
 
+    @ExperimentalStdlibApi
     private fun prepare() {
         println(PlayerMessage.PLACE_SHIPS)
         val ships = Ship.getStandardShipSet()

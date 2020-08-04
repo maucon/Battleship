@@ -1,11 +1,11 @@
-package test.de.twintorx.battleship
+package de.twintorx.battleship
 
-import main.de.twintorx.battleship.game.Cell
-import main.de.twintorx.battleship.game.Move
-import main.de.twintorx.battleship.game.Ship
-import main.de.twintorx.battleship.game.ShipType
-import main.de.twintorx.battleship.game.board.GameBoard
-import main.de.twintorx.battleship.game.board.TrackBoard
+import de.twintorx.battleship.game.Cell
+import de.twintorx.battleship.game.Move
+import de.twintorx.battleship.game.Ship
+import de.twintorx.battleship.game.board.GameBoard
+import de.twintorx.battleship.game.board.TrackBoard
+import de.twintorx.battleship.game.ShipType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.awt.Point

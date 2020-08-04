@@ -1,11 +1,11 @@
-package test.de.twintorx.battleship
+package de.twintorx.battleship
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import main.de.twintorx.battleship.connection.Client
-import main.de.twintorx.battleship.connection.Server
-import main.de.twintorx.battleship.console.ServerMessage
+import de.twintorx.battleship.connection.Client
+import de.twintorx.battleship.connection.Server
+import de.twintorx.battleship.console.ServerMessage
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.PipedInputStream

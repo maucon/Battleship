@@ -1,6 +1,6 @@
-package main.de.twintorx.battleship;
+package de.twintorx.battleship;
 
-import main.de.twintorx.battleship.game.Player;
+import de.twintorx.battleship.game.Player;
 
 public class Main {
     public static void main(String[] args) {

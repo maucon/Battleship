@@ -1,7 +1,7 @@
-package main.de.twintorx.battleship.game.board
+package de.twintorx.battleship.game.board
 
-import main.de.twintorx.battleship.game.Cell
-import main.de.twintorx.battleship.game.Grid
+import de.twintorx.battleship.game.Cell
+import de.twintorx.battleship.game.Grid
 
 open class TrackBoard(
         val size: Int = 10
@@ -38,7 +38,7 @@ open class TrackBoard(
             table.add(div)
         }
 
-        table.removeLast()
+        table.removeAt(table.size - 1)
         table.add(" $space└${"───┴" * len}───┘")
         table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }}")
 

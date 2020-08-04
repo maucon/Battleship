@@ -1,4 +1,4 @@
-package main.de.twintorx.battleship.game
+package de.twintorx.battleship.game
 
 import main.de.twintorx.battleship.console.Color
 

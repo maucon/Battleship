@@ -1,4 +1,6 @@
-package main.de.twintorx.battleship.console
+package de.twintorx.battleship.console
+
+import main.de.twintorx.battleship.console.Color
 
 enum class PlayerMessage(
         private val message: String
