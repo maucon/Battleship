@@ -145,9 +145,9 @@ class Player {
 
     private fun printBoards() {
         println("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
-        val lines = (trackBoard.getLines() zip gameBoard.getLines())
+        val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
-            println(it.second + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.first)
+            println(it.first + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.second)
         }
     }
 
