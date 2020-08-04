@@ -1,10 +1,10 @@
 package de.twintorx.battleship.connection
 
+import de.twintorx.battleship.console.ServerMessage
+import de.twintorx.battleship.game.Move
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import de.twintorx.battleship.console.ServerMessage
-import de.twintorx.battleship.game.Move
 import java.io.Closeable
 import java.io.OutputStreamWriter
 import java.io.PrintWriter

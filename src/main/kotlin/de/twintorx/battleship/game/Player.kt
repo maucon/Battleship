@@ -1,13 +1,13 @@
 package de.twintorx.battleship.game
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import de.twintorx.battleship.connection.Client
 import de.twintorx.battleship.connection.Server
 import de.twintorx.battleship.console.InputRegex
 import de.twintorx.battleship.console.PlayerMessage
 import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.TrackBoard
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.awt.Point
 
 class Player {

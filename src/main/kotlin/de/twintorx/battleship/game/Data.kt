@@ -1,6 +1,6 @@
 package de.twintorx.battleship.game
 
-import main.de.twintorx.battleship.console.Color
+import de.twintorx.battleship.console.Color
 
 class Grid(
         private val size: Int
