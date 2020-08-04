@@ -30,6 +30,5 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "v1.0"
           prerelease: false
-          files: |
-            LICENSE.txt
-            *.jar
+          files: test1/*
+
