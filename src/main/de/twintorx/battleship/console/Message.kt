@@ -22,7 +22,7 @@ enum class PlayerMessage(
     TRACK_BOARD("Your shots:"),
     WAITING_FOR_PLACEMENT("Waiting until all players have placed their ships..."),
     WAITING_FOR_TURN("Wait until its your turn..."),
-    WELCOME("${Color.GREEN}~~ Welcome do BATTLESHIP by Maurice and Dennis ~~${Color.RESET}"),
+    WELCOME("${Color.GREEN}~~ Welcome to BATTLESHIP by Maucon and Dennis ~~${Color.RESET}"),
     WIN("You've sunk the last ship and won the game!");
 
     override fun toString(): String {
