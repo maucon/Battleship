@@ -15,7 +15,6 @@ class Player {
     private var gameBoard: GameBoard = GameBoard()
     private var trackBoard: TrackBoard = TrackBoard()
 
-    @ExperimentalStdlibApi
     fun connect() {
         println(PlayerMessage.WELCOME)
         client = if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
@@ -30,7 +29,6 @@ class Player {
         prepare()
     }
 
-    @ExperimentalStdlibApi
     private fun prepare() {
         println(PlayerMessage.PLACE_SHIPS)
         val ships = Ship.getStandardShipSet()
@@ -44,7 +42,7 @@ class Player {
 
             with(ships[option]!!) {
                 placeShip(this[0]).run { printBoards() }
-                removeFirst()
+                removeAt(0)
 
                 if (isEmpty()) {
                     ships.remove(option)
