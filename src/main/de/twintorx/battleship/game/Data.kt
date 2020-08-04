@@ -27,7 +27,7 @@ enum class Cell(
     SHIP_SUBMARINE("░", ShipType.SUBMARINE),
     SHIP_DESTROYER("░", ShipType.DESTROYER);
 
-    fun getString() = when (shipType.color) {
+    override fun toString() = when (shipType.color) {
         null -> value
         else -> "${shipType.color}$value${Color.RESET}"
     }

@@ -33,14 +33,14 @@ open class TrackBoard(
 
             table.add("${" " * indexPadding}$index │" +
                     "${it.value.joinToString("│") { cell ->
-                        " ${cell.getString()} "
+                        " $cell "
                     }}│")
             table.add(div)
         }
 
         table.removeLast()
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).map { it.toChar() + " " }.joinToString("  ")}")
+        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }}")
 
         return table
     }
