@@ -1,13 +1,13 @@
-name: "release"
+name: Release
 
 on:
   push:
     branches:
-      - "release"
+      - release
 
 jobs:
   pre-release:
-    name: "Release"
+    name: Release
     runs-on: windows-latest
 
     steps:
@@ -28,6 +28,6 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "v1.0"
+          automatic_release_tag: v1.0
           prerelease: false
           files: build/libs/*.jar
