@@ -47,9 +47,11 @@ class Player {
 
         while (ships.isNotEmpty()) {
             Writer.print("\n${PlayerMessage.CHOOSE_SHIP}")
-            val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].type.value}(Size:${it.value[0].size})\n" }
-                    .joinToString("")) {
-                InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
+            val option = input(ships.map {
+                val name = it.value[0].type.value
+                "[${it.key}] ${it.value.size}x$name${" " * (11 - name.length)}(Size:${it.value[0].size})\n"
+            }.joinToString("")) {
+                InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
             }.toInt()
 
             with(ships[option]!!) {
