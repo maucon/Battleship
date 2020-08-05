@@ -19,7 +19,7 @@ enum class Cell(
         private val shipType: ShipType = ShipType.NONE
 ) {
     WATER(" "),
-    HIT_SHIP("${Color.RED}o${Color.RESET}"),
+    HIT_SHIP(Color.RED.paint("o")),
     HIT_NOTHING("x"),
     SHIP_CARRIER("░", ShipType.CARRIER),
     SHIP_BATTLESHIP("░", ShipType.BATTLESHIP),
@@ -29,7 +29,7 @@ enum class Cell(
 
     override fun toString() = when (shipType.color) {
         null -> value
-        else -> "${shipType.color}$value${Color.RESET}"
+        else -> shipType.color.paint(value)
     }
 
     fun isShip() = when (this) {
@@ -53,7 +53,7 @@ enum class ShipType(
     NONE("", null),
     CARRIER("Carrier", Color.YELLOW),
     BATTLESHIP("Battleship", Color.BLUE),
-    CRUISER("Cruiser", Color.PURPLE),
+    CRUISER("Cruiser", Color.MAGENTA),
     SUBMARINE("Submarine", Color.GREEN),
-    DESTROYER("Destroyer", Color.RED)
+    DESTROYER("Destroyer", Color.CYAN)
 }

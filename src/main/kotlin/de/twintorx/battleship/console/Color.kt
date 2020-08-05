@@ -1,19 +1,19 @@
 package de.twintorx.battleship.console
 
 enum class Color(
-        private val ansi: String
+        private val value: String
 ) {
-    RESET("\u001B[0m"),
-    WHITE("\u001B[37m"),
-    RED("\u001B[31m"),
-    GREEN("\u001B[32m"),
-    BLUE("\u001B[34m"),
-    YELLOW("\u001B[33m"),
-    CYAN("\u001B[36m"),
-    PURPLE("\u001B[35m"),
-    BLACK("\u001B[30m");
+    DEFAULT("@|default"),
+    WHITE("@|white"),
+    RED("@|red"),
+    GREEN("@|green"),
+    BLUE("@|blue"),
+    YELLOW("@|yellow"),
+    CYAN("@|cyan"),
+    MAGENTA("@|magenta"),
+    BLACK("q|black");
 
-    override fun toString(): String {
-        return ansi
+    fun paint(msg: String): String {
+        return "${this.value} $msg|@"
     }
 }

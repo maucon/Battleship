@@ -1,9 +1,9 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.Move
 import de.twintorx.battleship.game.Ship
 import de.twintorx.battleship.game.ShipType
+import de.twintorx.battleship.game.board.GameBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,7 +44,7 @@ internal class GameBoardTest {
 
     @Test
     fun testToString() {
-        gameBoard.addShip(Ship(ShipType.DESTROYER, 3), hashSetOf(Point(4, 2), Point(4, 1), Point(4, 3)))
+        gameBoard.addShip(Ship(ShipType.SUBMARINE, 3), hashSetOf(Point(4, 2), Point(4, 1), Point(4, 3)))
         gameBoard.addShip(Ship(ShipType.DESTROYER, 2), hashSetOf(Point(7, 2), Point(7, 3)))
 
         gameBoard.hit(7, 3)
@@ -64,11 +64,11 @@ internal class GameBoardTest {
                 "   ├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤",
                 " 5 │   │   │   │   │   │   │   │   │   │   │",
                 "   ├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤",
-                " 4 │   │   │   │   │ \u001B[31m░\u001B[0m │   │   │ \u001B[31mo\u001B[0m │   │   │",
+                " 4 │   │   │   │   │ @|green ░|@ │   │   │ @|red o|@ │   │   │",
                 "   ├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤",
-                " 3 │   │   │   │   │ \u001B[31m░\u001B[0m │   │   │ \u001B[31m░\u001B[0m │   │   │",
+                " 3 │   │   │   │   │ @|green ░|@ │   │   │ @|cyan ░|@ │   │   │",
                 "   ├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤",
-                " 2 │   │   │   │   │ \u001B[31m░\u001B[0m │   │   │   │   │   │",
+                " 2 │   │   │   │   │ @|green ░|@ │   │   │   │   │   │",
                 "   ├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤",
                 " 1 │   │   │   │   │   │   │   │   │   │   │",
                 "   └───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘",
