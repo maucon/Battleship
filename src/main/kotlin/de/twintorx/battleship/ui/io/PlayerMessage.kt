@@ -25,7 +25,8 @@ enum class PlayerMessage(
     WAITING_FOR_PLACEMENT("Waiting until all players have placed their ships..."),
     WAITING_FOR_TURN("Wait until its your turn..."),
     WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),
-    WIN("You've sunk the last ship and won the game!");
+    WIN("You've sunk the last ship and won the game!"),
+    GAME_ABORT("The game was aborted because your opponent lost connection");
 
     override fun toString(): String {
         return message

@@ -1,11 +1,14 @@
 package de.twintorx.battleship.connection
 
 import de.twintorx.battleship.game.board.Move
+import de.twintorx.battleship.ui.io.PlayerMessage
+import de.twintorx.battleship.ui.io.Writer
 import java.awt.Point
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.net.Socket
 import java.util.*
+import kotlin.system.exitProcess
 
 class Client {
     private lateinit var socket: Socket
@@ -30,7 +33,7 @@ class Client {
     }
 
     fun waitForIncomingShot(): Point {
-        val split = input.nextLine().split(",").map { it.toInt() }
+        val split = doSafe { input.nextLine().split(",").map { it.toInt() } } as List<Int>
         return Point(split[0], split[1])
     }
 
@@ -40,7 +43,14 @@ class Client {
 
     fun sendShot(coordinates: Point): Move {
         output.println("${coordinates.x},${coordinates.y}")
-        return Move.values()[input.nextLine().toString().toInt()]
+        return doSafe { Move.values()[input.nextLine().toString().toInt()] } as Move
+    }
+
+    private fun doSafe(method: () -> (Any)) = try {
+        method()
+    } catch (e: Exception) {
+        Writer.print(PlayerMessage.GAME_ABORT.toString())
+        exitProcess(1)
     }
 
     fun disconnect() {

@@ -13,7 +13,8 @@ enum class ServerMessage(
     START_GAME("Starting the game..."),
     GAME_FINISHED("Game finished!"),
     HOST_IS("Host is "),
-    PLAYER2_IS("Player2 is ");
+    PLAYER2_IS("Player2 is "),
+    GAME_ABORT("The game was aborted because your opponent lost connection");
 
     override fun toString(): String {
         return "${Color.RED.paint("[SERVER]")} $message"
