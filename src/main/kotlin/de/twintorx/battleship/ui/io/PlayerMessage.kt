@@ -5,28 +5,34 @@ import de.twintorx.battleship.ui.Color
 enum class PlayerMessage(
         private val message: String
 ) {
-    CHOOSE_SHIP("Choose your ship:"),
+    CHOOSE_SHIP(Color.YELLOW.paint("Choose your ship:")),
+    HOST_SERVER(Color.YELLOW.paint("Do you want to host a server? [Y]/[N]")),
+    SERVER_IP(Color.YELLOW.paint("Please enter the Server-Ip you want to connect to:")),
+    PLACE_SHIPS(Color.YELLOW.paint("Please place your ships:")),
+    POSITION_SHIP(Color.YELLOW.paint("Please enter the ship position!\n[h]orizontal/[v]ertical + column[A-J] + line[1-10] -> (e.g: ha1) :")),
+    SHOOT(Color.YELLOW.paint("Which cell do you want to shoot at ? ~ column[A-J] + line[1-10] ~ (e.g: a1) :")),
+
+    WAITING_FOR_PLACEMENT(Color.WHITE.paint("Waiting until all players have placed their ships...")),
+    WAITING_FOR_TURN(Color.WHITE.paint("Wait until its your turn...")),
+
     GAME_BOARD("Your ships:"),
-    HIT_NOTHING("You hit nothing"),
-    HIT_SHIP("You've hit a ship!"),
-    HOST_SERVER("Do you want to host a server? [Y]/[N]"),
-    INVALID_MOVE("Your move was invalid."),
-    LOSE("You lost :("),
-    OPPONENT_HIT("Your opponent hit!"),
-    OPPONENT_MISSED("Your opponent missed a shot"),
-    OPPONENT_SUNK("Your opponent sunk one of your ships!"),
-    PLACE_SHIPS("Please place your ships."),
-    POSITION_SHIP("Pls enter ship position!\n[h]orizontal/[v]ertical + column[A-J] + line[1-10] -> (e.g: ha1) :"),
-    QUIT(Color.GREEN.paint("~~ Thank you for playing! ~~")),
-    SERVER_IP("Please enter the Server-Ip you want to connect to:"),
-    SHOOT("Which cell do you want to shoot at ? ~ column[A-J] + line[1-10] ~ (e.g: a1) :"),
-    SUNK_SHIP("You've sunk a ship!"),
     TRACK_BOARD("Your shots:"),
-    WAITING_FOR_PLACEMENT("Waiting until all players have placed their ships..."),
-    WAITING_FOR_TURN("Wait until its your turn..."),
+
+    HIT_NOTHING(Color.CYAN.paint("You hit nothing")),
+    HIT_SHIP(Color.CYAN.paint("You've hit a ship!")),
+    SUNK_SHIP(Color.CYAN.paint("You've sunk a ship!")),
+    WIN(Color.CYAN.paint("You've sunk the last ship and won the game!")),
+
+    OPPONENT_HIT(Color.CYAN.paint("Your opponent hit!")),
+    OPPONENT_MISSED(Color.CYAN.paint("Your opponent missed a shot")),
+    OPPONENT_SUNK(Color.CYAN.paint("Your opponent sunk one of your ships!")),
+    LOSE(Color.CYAN.paint("You lost :(")),
+
+    INVALID_MOVE(Color.RED.paint("Your move was invalid.")),
+    GAME_ABORT(Color.RED.paint("The game was aborted because your opponent lost connection")),
+
     WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),
-    WIN("You've sunk the last ship and won the game!"),
-    GAME_ABORT("The game was aborted because your opponent lost connection");
+    QUIT(Color.GREEN.paint("~~ Thank you for playing! ~~"));
 
     override fun toString(): String {
         return message

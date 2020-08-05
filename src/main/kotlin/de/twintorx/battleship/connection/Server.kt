@@ -96,6 +96,7 @@ class Server {
         method()
     } catch (e: Exception) {
         Writer.print(ServerMessage.GAME_ABORT.toString())
+        close()
         exitProcess(1)
     }
 

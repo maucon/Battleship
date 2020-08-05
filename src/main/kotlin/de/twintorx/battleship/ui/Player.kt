@@ -38,6 +38,7 @@ class Player {
         }
 
         prepare()
+        Writer.print(PlayerMessage.QUIT.toString())
     }
 
     private fun prepare() {
