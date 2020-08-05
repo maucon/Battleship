@@ -36,7 +36,7 @@ class Player {
                 }
             }
         }
-        if (client.sendReadyGetTurn()) shoot() else waitForTurn()
+
         prepare()
     }
 
