@@ -24,6 +24,12 @@ test {
     useJUnitPlatform()
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.twintorx.battleship.Main'
+    }
+}
+
 shadowJar {
     manifest {
         attributes 'Main-Class': 'de.twintorx.battleship.Main'
