@@ -1,8 +1,8 @@
 package de.twintorx.battleship.connection
 
+import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.ui.io.ServerMessage
 import de.twintorx.battleship.ui.io.Writer
-import de.twintorx.battleship.game.board.Move
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,6 +13,7 @@ import java.net.ServerSocket
 import java.net.Socket
 import java.util.*
 import kotlin.random.Random
+import kotlin.system.exitProcess
 
 class Server {
     private val server = ServerSocket(9999)
@@ -55,7 +56,7 @@ class Server {
                 Writer.print("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
             }
             val answer2 = GlobalScope.launch {
-                Writer.print("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.")
+                doSafe { Writer.print("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.") }
             }
 
             answer1.join()
@@ -76,11 +77,11 @@ class Server {
 
         while (running) {
             // sending players attack to other player
-            val attack = clientSockets[turn]!!.second.nextLine()
+            val attack = doSafe { clientSockets[turn]!!.second.nextLine() } as String
             clientSockets[!turn]!!.third.println(attack)
 
             // getting response of player and sending tp other player
-            val response = clientSockets[!turn]!!.second.nextLine().toInt()
+            val response = doSafe { clientSockets[!turn]!!.second.nextLine().toInt() } as Int
             clientSockets[turn]!!.third.println(response.toString())
 
             when (Move.values()[response]) {
@@ -91,7 +92,14 @@ class Server {
         }
     }
 
-    fun close() {
+    private fun doSafe(method: () -> (Any)) = try {
+        method()
+    } catch (e: Exception) {
+        Writer.print(ServerMessage.GAME_ABORT.toString())
+        exitProcess(1)
+    }
+
+    private fun close() {
         clientSockets.values.flatMap { it.toList() }.forEach(Closeable::close)
         server.close()
 
