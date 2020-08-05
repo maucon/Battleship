@@ -12,7 +12,7 @@ class Client {
     private lateinit var output: PrintWriter
     private lateinit var input: Scanner
 
-    fun testConnect(address: String = "localhost"): Boolean {
+    fun tryConnect(address: String = "localhost"): Boolean {
         return try {
             socket = Socket(address, 9999)
             output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)

@@ -23,11 +23,11 @@ class Player {
                 Server().start()
             }
             client = Client()
-            client.testConnect()
+            client.tryConnect()
 
         } else {
             client = Client().also {
-                while (!it.testConnect(input(PlayerMessage.SERVER_IP))) {
+                while (!it.tryConnect(input(PlayerMessage.SERVER_IP))) {
                     continue
                 }
             }
