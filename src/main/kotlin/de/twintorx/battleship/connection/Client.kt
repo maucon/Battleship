@@ -33,6 +33,7 @@ class Client {
     }
 
     fun waitForIncomingShot(): Point {
+        @Suppress("UNCHECKED_CAST")
         val split = doSafe { input.nextLine().split(",").map { it.toInt() } } as List<Int>
         return Point(split[0], split[1])
     }
