@@ -23,7 +23,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Test with Gradle
-        run: ./gradlew build
+        run: ./gradlew test
+      - name: Building jar
+        run: ./gradlew shadowJar
       - name: Run release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
