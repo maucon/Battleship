@@ -24,13 +24,11 @@ test {
     useJUnitPlatform()
 }
 
-jar {
+shadowJar {
     manifest {
         attributes 'Main-Class': 'de.twintorx.battleship.Main'
     }
-}
 
-shadowJar {
     archiveFileName = "${baseName}.${extension}"
 }
 
