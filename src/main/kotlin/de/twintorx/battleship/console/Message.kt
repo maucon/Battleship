@@ -15,14 +15,14 @@ enum class PlayerMessage(
     OPPONENT_SUNK("Your opponent sunk one of your ships!"),
     PLACE_SHIPS("Please place your ships."),
     POSITION_SHIP("Pls enter ship position!\n[h]orizontal/[v]ertical + column[A-J] + line[1-10] -> (e.g: ha1) :"),
-    QUIT(Color.GREEN.paintString("~~ Thank you for playing! ~~")),
+    QUIT(Color.GREEN.paint("~~ Thank you for playing! ~~")),
     SERVER_IP("Please enter the Server-Ip you want to connect to:"),
     SHOOT("Which cell do you want to shoot at ? ~ column[A-J] + line[1-10] ~ (e.g: a1) :"),
     SUNK_SHIP("You've sunk a ship!"),
     TRACK_BOARD("Your shots:"),
     WAITING_FOR_PLACEMENT("Waiting until all players have placed their ships..."),
     WAITING_FOR_TURN("Wait until its your turn..."),
-    WELCOME(Color.GREEN.paintString("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),
+    WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),
     WIN("You've sunk the last ship and won the game!");
 
     override fun toString(): String {
@@ -44,7 +44,7 @@ enum class ServerMessage(
     PLAYER2_IS("Player2 is ");
 
     override fun toString(): String {
-        return Color.RED.paintString("[SERVER] ") + message
+        return Color.RED.paint("[SERVER] ") + message
     }
 }
 

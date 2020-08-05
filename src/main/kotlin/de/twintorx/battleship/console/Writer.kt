@@ -8,7 +8,7 @@ object Writer {
     // TODO add clear console
     private val printStream = PrintStream(AnsiConsole.out(), true, "CP850")
 
-    fun printColored(msg: String) {
+    fun print(msg: String) {
         printStream.println(ansi().render(msg))
     }
 }

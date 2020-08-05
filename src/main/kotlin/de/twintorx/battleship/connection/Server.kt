@@ -16,23 +16,23 @@ import kotlin.random.Random
 
 class Server {
     private val server = ServerSocket(9999)
-            .also { Writer.printColored("${ServerMessage.PORT_RUNNING}${it.localPort}") }
+            .also { Writer.print("${ServerMessage.PORT_RUNNING}${it.localPort}") }
     private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, PrintWriter>>()
     private var running = true
 
     fun start() {
         // Host connecting
         val host = server.accept().also {
-            Writer.printColored("${ServerMessage.HOST_CONNECTED}${it.inetAddress.hostAddress}")
+            Writer.print("${ServerMessage.HOST_CONNECTED}${it.inetAddress.hostAddress}")
         }
         clientSockets[true] = Triple(host, Scanner(host.getInputStream()),
                 PrintWriter(OutputStreamWriter(host.getOutputStream()), true))
 
-        Writer.printColored(ServerMessage.WAITING_PLAYER2.toString())
+        Writer.print(ServerMessage.WAITING_PLAYER2.toString())
 
         // Player 2 connecting
         val client2 = server.accept().also {
-            Writer.printColored("${ServerMessage.PLAYER2_CONNECTED}${it.inetAddress.hostAddress}")
+            Writer.print("${ServerMessage.PLAYER2_CONNECTED}${it.inetAddress.hostAddress}")
         }
         clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()),
                 PrintWriter(OutputStreamWriter(client2.getOutputStream()), true))
@@ -40,22 +40,22 @@ class Server {
         // Sending start signal to clients
         clientSockets.values.forEach { it.third.println("1") }
 
-        Writer.printColored(ServerMessage.START_PREPARATION.toString())
+        Writer.print(ServerMessage.START_PREPARATION.toString())
         val startingPlayer = prepare()
 
-        Writer.printColored(ServerMessage.START_GAME.toString())
+        Writer.print(ServerMessage.START_GAME.toString())
         gameLoop(startingPlayer)
 
-        Writer.printColored(ServerMessage.GAME_FINISHED.toString())
+        Writer.print(ServerMessage.GAME_FINISHED.toString())
     }
 
     private fun prepare(): Boolean {
         runBlocking { // wait for players ready signal -> placed their ships
             val answer1 = GlobalScope.launch {
-                Writer.printColored("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
+                Writer.print("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
             }
             val answer2 = GlobalScope.launch {
-                Writer.printColored("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.")
+                Writer.print("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.")
             }
 
             answer1.join()

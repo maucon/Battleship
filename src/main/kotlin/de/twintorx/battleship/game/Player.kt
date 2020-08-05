@@ -17,7 +17,7 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        Writer.printColored(PlayerMessage.WELCOME.toString())
+        Writer.print(PlayerMessage.WELCOME.toString())
         if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
 
             GlobalScope.launch {
@@ -38,11 +38,11 @@ class Player {
     }
 
     private fun prepare() {
-        Writer.printColored(PlayerMessage.PLACE_SHIPS.toString())
+        Writer.print(PlayerMessage.PLACE_SHIPS.toString())
         val ships = Ship.getStandardShipSet()
 
         while (ships.isNotEmpty()) {
-            Writer.printColored("\n${PlayerMessage.CHOOSE_SHIP}")
+            Writer.print("\n${PlayerMessage.CHOOSE_SHIP}")
             val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].type.value}(Size:${it.value[0].size})\n" }
                     .joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
@@ -57,7 +57,7 @@ class Player {
                 }
             }
         }
-        Writer.printColored(PlayerMessage.WAITING_FOR_PLACEMENT.toString())
+        Writer.print(PlayerMessage.WAITING_FOR_PLACEMENT.toString())
         if (client.sendReadyGetTurn()) shoot() else waitForTurn()
     }
 
@@ -95,25 +95,25 @@ class Player {
         when (move) {
             Move.HIT -> {
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.printColored(PlayerMessage.HIT_SHIP.toString())
+                Writer.print(PlayerMessage.HIT_SHIP.toString())
                 shoot()
             }
             Move.SUNK -> {
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.printColored(PlayerMessage.SUNK_SHIP.toString())
+                Writer.print(PlayerMessage.SUNK_SHIP.toString())
                 shoot()
             }
             Move.GAME_OVER -> {
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.printColored(PlayerMessage.WIN.toString())
+                Writer.print(PlayerMessage.WIN.toString())
             }
             Move.NO_HIT -> {
                 trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { printBoards() }
-                Writer.printColored(PlayerMessage.HIT_NOTHING.toString())
+                Writer.print(PlayerMessage.HIT_NOTHING.toString())
                 waitForTurn()
             }
             else -> {
-                Writer.printColored(PlayerMessage.INVALID_MOVE.toString())
+                Writer.print(PlayerMessage.INVALID_MOVE.toString())
                 shoot()
             }
         }
@@ -125,19 +125,19 @@ class Player {
 
         when (move) {
             Move.HIT -> {
-                Writer.printColored(PlayerMessage.OPPONENT_HIT.toString())
+                Writer.print(PlayerMessage.OPPONENT_HIT.toString())
                 waitForTurn()
             }
             Move.SUNK -> {
-                Writer.printColored(PlayerMessage.OPPONENT_SUNK.toString())
+                Writer.print(PlayerMessage.OPPONENT_SUNK.toString())
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                Writer.printColored(PlayerMessage.LOSE.toString())
+                Writer.print(PlayerMessage.LOSE.toString())
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                Writer.printColored(PlayerMessage.OPPONENT_MISSED.toString())
+                Writer.print(PlayerMessage.OPPONENT_MISSED.toString())
                 shoot()
             }
             else -> {
@@ -147,21 +147,21 @@ class Player {
     }
 
     private fun waitForTurn() {
-        Writer.printColored(PlayerMessage.WAITING_FOR_TURN.toString())
+        Writer.print(PlayerMessage.WAITING_FOR_TURN.toString())
         updateGameBoard(client.waitForIncomingShot())
     }
 
     private fun printBoards() {
-        Writer.printColored("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
+        Writer.print("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
-            Writer.printColored("${it.first}\t${it.second}")
+            Writer.print("${it.first}\t${it.second}")
         }
     }
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
         while (true) {
-            Writer.printColored(msg)
+            Writer.print(msg)
 
             val line = readLine() ?: continue
             if (!validationMethod(line) or line.isEmpty()) continue

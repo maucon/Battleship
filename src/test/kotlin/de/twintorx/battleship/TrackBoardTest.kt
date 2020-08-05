@@ -29,7 +29,7 @@ internal class TrackBoardTest {
         trackBoard.mark(1, 1, Cell.HIT_NOTHING)
         trackBoard.mark(4, 4, Cell.HIT_NOTHING)
         val lines = trackBoard.getLines()
-        lines.forEach { Writer.printColored("|$it|") }
+        lines.forEach { Writer.print("|$it|") }
         Assertions.assertEquals(mutableListOf(
                 "  ┌───┬───┬───┬───┬───┐",
                 "5 │   │   │   │   │ x │",

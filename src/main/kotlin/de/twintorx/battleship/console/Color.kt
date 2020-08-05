@@ -13,7 +13,7 @@ enum class Color(
     MAGENTA("@|magenta"),
     BLACK("q|black");
 
-    fun paintString(msg: String): String {
+    fun paint(msg: String): String {
         return "${this.value} $msg|@"
     }
 }
