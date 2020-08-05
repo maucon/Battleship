@@ -15,16 +15,14 @@ class Client {
     private lateinit var output: PrintWriter
     private lateinit var input: Scanner
 
-    fun tryConnect(address: String = "localhost"): Boolean {
-        return try {
-            socket = Socket(address, 9999)
-            output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
-            input = Scanner(socket.getInputStream()).also { it.nextLine() }
+    fun tryConnect(address: String = "localhost") = try {
+        socket = Socket(address, 9999)
+        output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
+        input = Scanner(socket.getInputStream()).also { it.nextLine() }
 
-            true
-        } catch (ignored: Exception) {
-            false
-        }
+        true
+    } catch (ignored: Exception) {
+        false
     }
 
     fun sendReadyGetTurn(): Boolean {
