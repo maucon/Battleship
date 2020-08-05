@@ -20,9 +20,11 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        Writer.print(PlayerMessage.WELCOME.toString())
+        // TODO print fullscreen recommendation
+        Writer.clearConsole()
+        Writer.print("\n ${PlayerMessage.WELCOME}")
         if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
-
+            Writer.clearConsole()
             GlobalScope.launch {
                 Server().start()
             }
@@ -30,6 +32,7 @@ class Player {
             client.tryConnect()
 
         } else {
+            Writer.clearConsole()
             client = Client().also {
                 while (!it.tryConnect(input(PlayerMessage.SERVER_IP))) {
                     continue
@@ -42,8 +45,10 @@ class Player {
     }
 
     private fun prepare() {
-        Writer.print(PlayerMessage.PLACE_SHIPS.toString())
+        Writer.clearConsole()
         val ships = Ship.getStandardShipSet()
+        Writer.print(PlayerMessage.PLACE_SHIPS.toString())
+        printBoards()
 
         while (ships.isNotEmpty()) {
             Writer.print("\n${PlayerMessage.CHOOSE_SHIP}")
@@ -54,8 +59,14 @@ class Player {
                 InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
             }.toInt()
 
+            Writer.eraseLast(8)
+
             with(ships[option]!!) {
-                placeShip(this[0]).run { printBoards() }
+                placeShip(this[0]).run {
+                    Writer.clearConsole()
+                    Writer.print(PlayerMessage.PLACE_SHIPS.toString())
+                    printBoards()
+                }
                 removeAt(0)
 
                 if (isEmpty()) {

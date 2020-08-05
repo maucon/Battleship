@@ -1,6 +1,7 @@
 package de.twintorx.battleship
 
 import de.twintorx.battleship.ui.Player
+import de.twintorx.battleship.ui.io.Writer
 import org.fusesource.jansi.AnsiConsole
 
 object Main {
