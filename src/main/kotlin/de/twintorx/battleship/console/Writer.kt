@@ -1,11 +1,15 @@
 package de.twintorx.battleship.console
 
 import org.fusesource.jansi.Ansi.ansi
+import org.fusesource.jansi.AnsiConsole
+import java.io.PrintStream
 
 object Writer {
     // TODO add clear console
+    private val printStream = PrintStream(AnsiConsole.out(), true, "CP850")
+
     fun printColored(msg: String) {
-        println(ansi().render(msg))
+        printStream.println(ansi().render(msg))
     }
 }
 

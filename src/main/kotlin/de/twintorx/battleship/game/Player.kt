@@ -42,7 +42,7 @@ class Player {
         val ships = Ship.getStandardShipSet()
 
         while (ships.isNotEmpty()) {
-            Writer.printColored(PlayerMessage.CHOOSE_SHIP.toString())
+            Writer.printColored("\n${PlayerMessage.CHOOSE_SHIP}")
             val option = input(ships.map { "[${it.key}] ${it.value.size}x${it.value[0].type.value}(Size:${it.value[0].size})\n" }
                     .joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships[it.toInt()] != null
@@ -152,10 +152,10 @@ class Player {
     }
 
     private fun printBoards() {
-        Writer.printColored("\t" + PlayerMessage.TRACK_BOARD + " " * (trackBoard.size * 3) + "\t\t" + PlayerMessage.GAME_BOARD)
+        Writer.printColored("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
-            Writer.printColored(it.first + (if (it == lines[lines.size - 1]) "\t\t" else "\t") + it.second)
+            Writer.printColored("${it.first}\t${it.second}")
         }
     }
 

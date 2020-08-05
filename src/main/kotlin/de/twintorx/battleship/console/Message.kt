@@ -44,7 +44,7 @@ enum class ServerMessage(
     PLAYER2_IS("Player2 is ");
 
     override fun toString(): String {
-        return Color.RED.paintString("[SERVER]") + message
+        return Color.RED.paintString("[SERVER] ") + message
     }
 }
 

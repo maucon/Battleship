@@ -14,6 +14,6 @@ enum class Color(
     BLACK("q|black");
 
     fun paintString(msg: String): String {
-        return "${this.value} $msg |@"
+        return "${this.value} $msg|@"
     }
 }
