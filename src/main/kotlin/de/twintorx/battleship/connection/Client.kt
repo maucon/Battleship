@@ -27,7 +27,7 @@ class Client {
 
     fun sendReadyGetTurn(): Boolean {
         output.println("ready") // Sending server ready signal
-        return doSafe { input.nextLine().toString().toInt() }.toString().toInt() == 1 // 1 -> your turn: 0 -> opponents turn
+        return doSafe { input.nextLine() }.toString().toInt() == 1 // 1 -> your turn: 0 -> opponents turn
     }
 
     fun waitForIncomingShot(): Point {
