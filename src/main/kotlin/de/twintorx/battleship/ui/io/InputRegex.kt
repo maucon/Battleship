@@ -9,5 +9,5 @@ enum class InputRegex(
     SHOOT_CELL("[a-jA-J]([1-9]|10)");
 
     private val regex = regexString.toRegex()
-    infix fun matches(string: String) = regex.matches(string)
+    fun matches(string: String) = regex.matches(string)
 }

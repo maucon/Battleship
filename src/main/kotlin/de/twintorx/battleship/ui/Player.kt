@@ -23,6 +23,7 @@ class Player {
         // TODO print fullscreen recommendation
         Writer.clearConsole()
         Writer.print("\n ${PlayerMessage.WELCOME}")
+        Writer.print("${PlayerMessage.WELCOME_INFO}")
         if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
             Writer.clearConsole()
             GlobalScope.launch {
@@ -59,7 +60,7 @@ class Player {
                 InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
             }.toInt()
 
-            Writer.eraseLast(8)
+            Writer.eraseLast(ships.size + 3)
 
             with(ships[option]!!) {
                 placeShip(this[0]).run {
