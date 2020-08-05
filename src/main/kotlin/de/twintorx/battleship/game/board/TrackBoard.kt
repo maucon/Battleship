@@ -1,8 +1,5 @@
 package de.twintorx.battleship.game.board
 
-import de.twintorx.battleship.game.Cell
-import de.twintorx.battleship.game.Grid
-
 open class TrackBoard(
         val size: Int = 10
 ) {

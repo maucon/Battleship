@@ -1,4 +1,4 @@
-package de.twintorx.battleship.console
+package de.twintorx.battleship.ui
 
 enum class Color(
         private val value: String

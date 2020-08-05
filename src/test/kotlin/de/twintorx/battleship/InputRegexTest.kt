@@ -1,6 +1,6 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.console.InputRegex
+import de.twintorx.battleship.ui.io.InputRegex
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
