@@ -55,5 +55,5 @@ enum class ShipType(
     BATTLESHIP("Battleship", Color.BLUE),
     CRUISER("Cruiser", Color.MAGENTA),
     SUBMARINE("Submarine", Color.GREEN),
-    DESTROYER("Destroyer", Color.RED)
+    DESTROYER("Destroyer", Color.CYAN)
 }
