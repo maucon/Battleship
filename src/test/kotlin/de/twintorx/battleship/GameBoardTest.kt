@@ -1,8 +1,8 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.game.Move
-import de.twintorx.battleship.game.Ship
-import de.twintorx.battleship.game.ShipType
+import de.twintorx.battleship.game.board.Move
+import de.twintorx.battleship.game.ship.Ship
+import de.twintorx.battleship.game.ship.ShipType
 import de.twintorx.battleship.game.board.GameBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach

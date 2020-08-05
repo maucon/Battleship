@@ -1,12 +1,15 @@
-package de.twintorx.battleship.game
+package de.twintorx.battleship.ui
 
 import de.twintorx.battleship.connection.Client
 import de.twintorx.battleship.connection.Server
-import de.twintorx.battleship.console.InputRegex
-import de.twintorx.battleship.console.PlayerMessage
-import de.twintorx.battleship.console.Writer
+import de.twintorx.battleship.ui.io.InputRegex
+import de.twintorx.battleship.ui.io.PlayerMessage
+import de.twintorx.battleship.game.board.Cell
+import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.TrackBoard
+import de.twintorx.battleship.game.ship.Ship
+import de.twintorx.battleship.ui.io.Writer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.awt.Point

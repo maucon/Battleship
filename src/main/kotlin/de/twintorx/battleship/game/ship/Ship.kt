@@ -1,4 +1,4 @@
-package de.twintorx.battleship.game
+package de.twintorx.battleship.game.ship
 
 class Ship(
         val type: ShipType,

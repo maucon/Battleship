@@ -1,4 +1,6 @@
-package de.twintorx.battleship.console
+package de.twintorx.battleship.ui.io
+
+import de.twintorx.battleship.ui.Color
 
 enum class PlayerMessage(
         private val message: String
@@ -27,32 +29,5 @@ enum class PlayerMessage(
 
     override fun toString(): String {
         return message
-    }
-}
-
-enum class ServerMessage(
-        private val message: String
-) {
-    PORT_RUNNING("Server running on port: "),
-    HOST_CONNECTED("Client connected as host: "),
-    PLAYER2_CONNECTED("Client connected as second player: "),
-    WAITING_PLAYER2("Waiting for another player to connect..."),
-    START_PREPARATION("Starting preparation..."),
-    START_GAME("Starting the game..."),
-    GAME_FINISHED("Game finished!"),
-    HOST_IS("Host is "),
-    PLAYER2_IS("Player2 is ");
-
-    override fun toString(): String {
-        return "${Color.RED.paint("[SERVER]")} $message"
-    }
-}
-
-class InputRegex {
-    companion object {
-        val YES_OR_NO = "[yYnN]".toRegex()
-        val PLACE_SHIP = "[hHvV][a-jA-J]([1-9]|10)".toRegex()
-        val SELECT_SHIP = "[1-5]".toRegex()
-        val SHOOT_CELL = "[a-jA-J]([1-9]|10)".toRegex()
     }
 }

@@ -1,4 +1,4 @@
-package de.twintorx.battleship.console
+package de.twintorx.battleship.ui.io
 
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole

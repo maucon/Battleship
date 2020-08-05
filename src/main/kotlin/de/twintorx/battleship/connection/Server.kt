@@ -1,8 +1,8 @@
 package de.twintorx.battleship.connection
 
-import de.twintorx.battleship.console.ServerMessage
-import de.twintorx.battleship.console.Writer
-import de.twintorx.battleship.game.Move
+import de.twintorx.battleship.ui.io.ServerMessage
+import de.twintorx.battleship.ui.io.Writer
+import de.twintorx.battleship.game.board.Move
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

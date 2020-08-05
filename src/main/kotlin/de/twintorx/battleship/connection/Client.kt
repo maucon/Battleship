@@ -1,6 +1,6 @@
 package de.twintorx.battleship.connection
 
-import de.twintorx.battleship.game.Move
+import de.twintorx.battleship.game.board.Move
 import java.awt.Point
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
