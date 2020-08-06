@@ -8,6 +8,10 @@ object Writer {
     private val printStream = PrintStream(AnsiConsole.out(), true, "CP850")
 
     fun print(msg: String) {
+        printStream.print(ansi().render(msg))
+    }
+
+    fun println(msg: String) {
         printStream.println(ansi().render(msg))
     }
 

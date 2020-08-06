@@ -17,23 +17,23 @@ import kotlin.system.exitProcess
 
 class Server {
     private val server = ServerSocket(9999)
-            .also { Writer.print("${ServerMessage.PORT_RUNNING}${it.localPort}") }
+            .also { Writer.println("${ServerMessage.PORT_RUNNING}${it.localPort}") }
     private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, PrintWriter>>()
     private var running = true
 
     fun start() {
         // Host connecting
         val host = server.accept().also {
-            Writer.print("${ServerMessage.HOST_CONNECTED}${it.inetAddress.hostAddress}")
+            Writer.println("${ServerMessage.HOST_CONNECTED}${it.inetAddress.hostAddress}")
         }
         clientSockets[true] = Triple(host, Scanner(host.getInputStream()),
                 PrintWriter(OutputStreamWriter(host.getOutputStream()), true))
 
-        Writer.print(ServerMessage.WAITING_PLAYER2.toString())
+        Writer.println("\n${ServerMessage.WAITING_PLAYER2}\n")
 
         // Player 2 connecting
         val client2 = server.accept().also {
-            Writer.print("${ServerMessage.PLAYER2_CONNECTED}${it.inetAddress.hostAddress}")
+            Writer.println("${ServerMessage.PLAYER2_CONNECTED}${it.inetAddress.hostAddress}")
         }
         clientSockets[false] = Triple(client2, Scanner(client2.getInputStream()),
                 PrintWriter(OutputStreamWriter(client2.getOutputStream()), true))
@@ -41,13 +41,13 @@ class Server {
         // Sending start signal to clients
         clientSockets.values.forEach { it.third.println("1") }
 
-        Writer.print(ServerMessage.START_PREPARATION.toString())
+        Writer.println(ServerMessage.START_PREPARATION.toString())
         val startingPlayer = prepare()
 
-        Writer.print(ServerMessage.START_GAME.toString())
+        Writer.println(ServerMessage.START_GAME.toString())
         gameLoop(startingPlayer)
 
-        Writer.print(ServerMessage.GAME_FINISHED.toString())
+        Writer.println(ServerMessage.GAME_FINISHED.toString())
     }
 
     private fun prepare(): Boolean {
@@ -56,7 +56,7 @@ class Server {
                 Writer.print("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
             }
             val answer2 = GlobalScope.launch {
-                doSafe { Writer.print("${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.") }
+                doSafe { Writer.print("\n${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.\n") }
             }
 
             answer1.join()

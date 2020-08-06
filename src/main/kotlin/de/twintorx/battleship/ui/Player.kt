@@ -22,9 +22,8 @@ class Player {
     fun connect() {
         // TODO print fullscreen recommendation
         Writer.clearConsole()
-        Writer.print("\n ${PlayerMessage.WELCOME}")
-        Writer.print("${PlayerMessage.WELCOME_INFO}")
-        if (input(PlayerMessage.HOST_SERVER) { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
+        Writer.print("${PlayerMessage.WELCOME}\n${PlayerMessage.WELCOME_INFO}\n")
+        if (input("${PlayerMessage.HOST_SERVER}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
             Writer.clearConsole()
             GlobalScope.launch {
                 Server().start()
@@ -35,24 +34,25 @@ class Player {
         } else {
             Writer.clearConsole()
             client = Client().also {
-                while (!it.tryConnect(input(PlayerMessage.SERVER_IP))) {
+                while (!it.tryConnect(input("${PlayerMessage.SERVER_IP}\n"))) {
+                    Writer.eraseLast(2)
                     continue
                 }
             }
         }
 
         prepare()
-        Writer.print(PlayerMessage.QUIT.toString())
+        Writer.print("\n${PlayerMessage.QUIT}\n")
     }
 
     private fun prepare() {
         Writer.clearConsole()
         val ships = Ship.getStandardShipSet()
-        Writer.print(PlayerMessage.PLACE_SHIPS.toString())
+        Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
         printBoards()
 
         while (ships.isNotEmpty()) {
-            Writer.print("\n${PlayerMessage.CHOOSE_SHIP}")
+            Writer.print("\n${PlayerMessage.CHOOSE_SHIP}\n")
             val option = input(ships.map {
                 val name = it.value[0].type.value
                 "[${it.key}] ${it.value.size}x$name${" " * (11 - name.length)}(Size:${it.value[0].size})\n"
@@ -60,12 +60,12 @@ class Player {
                 InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
             }.toInt()
 
-            Writer.eraseLast(ships.size + 3)
+            Writer.eraseLast(ships.size + 2)
 
             with(ships[option]!!) {
                 placeShip(this[0]).run {
                     Writer.clearConsole()
-                    Writer.print(PlayerMessage.PLACE_SHIPS.toString())
+                    Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
                     printBoards()
                 }
                 removeAt(0)
@@ -75,13 +75,16 @@ class Player {
                 }
             }
         }
-        Writer.print(PlayerMessage.WAITING_FOR_PLACEMENT.toString())
-        if (client.sendReadyGetTurn()) shoot() else waitForTurn()
+        Writer.print("\n${PlayerMessage.WAITING_FOR_PLACEMENT}\n")
+        if (client.sendReadyGetTurn().also {
+                    Writer.clearConsole()
+                    printBoards()
+                }) shoot() else waitForTurn()
     }
 
     private fun placeShip(ship: Ship) {
         while (true) {
-            val placement = input(PlayerMessage.POSITION_SHIP) { InputRegex.PLACE_SHIP.matches(it) }
+            val placement = input("${PlayerMessage.POSITION_SHIP}\n") { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
             val startCol = placement[1].toInt() - 97 // 'a'.toInt()
             val startLine = placement.substring(2).toInt() - 1
@@ -98,7 +101,7 @@ class Player {
     }
 
     private fun shoot() {
-        val position = input(PlayerMessage.SHOOT) { InputRegex.SHOOT_CELL.matches(it) }
+        val position = input("\n${PlayerMessage.SHOOT}\n") { InputRegex.SHOOT_CELL.matches(it) }
                 .toLowerCase()
         val column = position[0].toInt() - 97 // 'a'.toInt()
         val line = position.substring(1).toInt() - 1
@@ -112,26 +115,30 @@ class Player {
     private fun updateTrackBoard(move: Move, point: Point) {
         when (move) {
             Move.HIT -> {
+                Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print(PlayerMessage.HIT_SHIP.toString())
+                Writer.print("\n ${PlayerMessage.HIT_SHIP}\n")
                 shoot()
             }
             Move.SUNK -> {
+                Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print(PlayerMessage.SUNK_SHIP.toString())
+                Writer.print("\n ${PlayerMessage.SUNK_SHIP}\n")
                 shoot()
             }
             Move.GAME_OVER -> {
+                Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print(PlayerMessage.WIN.toString())
+                Writer.print("\n ${PlayerMessage.WIN}\n")
             }
             Move.NO_HIT -> {
+                Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { printBoards() }
-                Writer.print(PlayerMessage.HIT_NOTHING.toString())
+                Writer.print("\n${PlayerMessage.HIT_NOTHING}\n")
                 waitForTurn()
             }
             else -> {
-                Writer.print(PlayerMessage.INVALID_MOVE.toString())
+                Writer.print("\n ${PlayerMessage.INVALID_MOVE}\n")
                 shoot()
             }
         }
@@ -143,19 +150,19 @@ class Player {
 
         when (move) {
             Move.HIT -> {
-                Writer.print(PlayerMessage.OPPONENT_HIT.toString())
+                Writer.print("\n${PlayerMessage.OPPONENT_HIT}\n")
                 waitForTurn()
             }
             Move.SUNK -> {
-                Writer.print(PlayerMessage.OPPONENT_SUNK.toString())
+                Writer.print("\n${PlayerMessage.OPPONENT_SUNK}\n")
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                Writer.print(PlayerMessage.LOSE.toString())
+                Writer.print("\n${PlayerMessage.LOSE}\n")
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                Writer.print(PlayerMessage.OPPONENT_MISSED.toString())
+                Writer.print("\n${PlayerMessage.OPPONENT_MISSED}\n")
                 shoot()
             }
             else -> {
@@ -165,15 +172,15 @@ class Player {
     }
 
     private fun waitForTurn() {
-        Writer.print(PlayerMessage.WAITING_FOR_TURN.toString())
+        Writer.print("\n${PlayerMessage.WAITING_FOR_TURN}\n")
         updateGameBoard(client.waitForIncomingShot())
     }
 
     private fun printBoards() {
-        Writer.print("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
+        Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
-            Writer.print("${it.first}\t${it.second}")
+            Writer.println("${it.first}\t${it.second}")
         }
     }
 
@@ -182,15 +189,18 @@ class Player {
             Writer.print(msg)
 
             val line = readLine() ?: continue
-            if (!validationMethod(line) or line.isEmpty()) continue
+            if (!validationMethod(line) or line.isEmpty()) {
+                val lines = msg.split("\n").size
+                println(lines)
+                Writer.eraseLast(lines + 1)
+                continue
+            }
 
             return line
         }
     }
 
-    private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }): String {
-        return input(msg.toString(), validationMethod)
-    }
+    private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }) = input(msg.toString(), validationMethod)
 }
 
 // ---------------- Extensions and Overloading ----------------
