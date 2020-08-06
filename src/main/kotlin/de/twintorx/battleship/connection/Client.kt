@@ -48,7 +48,7 @@ class Client {
     private fun doSafe(method: () -> (Any)) = try {
         method()
     } catch (e: Exception) {
-        Writer.print(PlayerMessage.GAME_ABORT.toString())
+        Writer.print("\n${PlayerMessage.GAME_ABORT}")
         disconnect()
         exitProcess(1)
     }

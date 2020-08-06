@@ -28,7 +28,6 @@ enum class PlayerMessage(
     OPPONENT_SUNK(Color.CYAN.paint("Your opponent sunk one of your ships!")),
     LOSE(Color.CYAN.paint("You lost :(")),
 
-    INVALID_MOVE(Color.RED.paint("Your move was invalid.")),
     GAME_ABORT(Color.RED.paint("The game was aborted because your opponent lost connection")),
 
     WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),

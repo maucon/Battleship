@@ -96,7 +96,7 @@ class Player {
                 }
             }
 
-            if (gameBoard.addShip(ship, points)) return
+            if (gameBoard.addShip(ship, points)) return else Writer.eraseLast(3)
         }
     }
 
@@ -138,7 +138,7 @@ class Player {
                 waitForTurn()
             }
             else -> {
-                Writer.print("\n${PlayerMessage.INVALID_MOVE}\n")
+                Writer.eraseLast(3)
                 shoot()
             }
         }
