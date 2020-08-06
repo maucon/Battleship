@@ -117,19 +117,19 @@ class Player {
             Move.HIT -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print("\n ${PlayerMessage.HIT_SHIP}\n")
+                Writer.print("\n${PlayerMessage.HIT_SHIP}\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print("\n ${PlayerMessage.SUNK_SHIP}\n")
+                Writer.print("\n${PlayerMessage.SUNK_SHIP}\n")
                 shoot()
             }
             Move.GAME_OVER -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
-                Writer.print("\n ${PlayerMessage.WIN}\n")
+                Writer.print("\n${PlayerMessage.WIN}\n")
             }
             Move.NO_HIT -> {
                 Writer.clearConsole()
@@ -138,13 +138,14 @@ class Player {
                 waitForTurn()
             }
             else -> {
-                Writer.print("\n ${PlayerMessage.INVALID_MOVE}\n")
+                Writer.print("\n${PlayerMessage.INVALID_MOVE}\n")
                 shoot()
             }
         }
     }
 
     private fun updateGameBoard(shot: Point) {
+        Writer.clearConsole()
         val move = gameBoard.hit(shot.x, shot.y).also { printBoards() }
         client.sendShotAnswer(move)
 

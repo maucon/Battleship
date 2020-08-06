@@ -10,11 +10,11 @@ enum class Cell(
     WATER(" "),
     HIT_SHIP(Color.RED.paint("o")),
     HIT_NOTHING("x"),
-    SHIP_CARRIER("░", ShipType.CARRIER),
-    SHIP_BATTLESHIP("░", ShipType.BATTLESHIP),
-    SHIP_CRUISER("░", ShipType.CRUISER),
-    SHIP_SUBMARINE("░", ShipType.SUBMARINE),
-    SHIP_DESTROYER("░", ShipType.DESTROYER);
+    SHIP_CARRIER("■", ShipType.CARRIER),
+    SHIP_BATTLESHIP("■", ShipType.BATTLESHIP),
+    SHIP_CRUISER("■", ShipType.CRUISER),
+    SHIP_SUBMARINE("■", ShipType.SUBMARINE),
+    SHIP_DESTROYER("■", ShipType.DESTROYER);
 
     override fun toString() = when (shipType.color) {
         null -> value

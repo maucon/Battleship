@@ -48,22 +48,16 @@ class Server {
         // Sending start signal to clients
         clientSockets.values.forEach { it.third.println("1") }
 
-        Writer.println(ServerMessage.START_PREPARATION.toString())
-        val startingPlayer = prepare()
-
-        Writer.println(ServerMessage.START_GAME.toString())
-        gameLoop(startingPlayer)
-
-        Writer.println(ServerMessage.GAME_FINISHED.toString())
+        gameLoop(prepare())
     }
 
     private fun prepare(): Boolean {
         runBlocking { // wait for players ready signal -> placed their ships
             val answer1 = GlobalScope.launch {
-                Writer.print("${ServerMessage.HOST_IS}${clientSockets[true]!!.second.nextLine()}.")
+                clientSockets[true]!!.second.nextLine()
             }
             val answer2 = GlobalScope.launch {
-                doSafe { Writer.print("\n${ServerMessage.PLAYER2_IS}${clientSockets[false]!!.second.nextLine()}.\n") }
+                doSafe { clientSockets[false]!!.second.nextLine() }
             }
 
             answer1.join()
