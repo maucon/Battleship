@@ -14,7 +14,9 @@ enum class ServerMessage(
     GAME_FINISHED("Game finished!"),
     HOST_IS("Host is "),
     PLAYER2_IS("Player2 is "),
-    GAME_ABORT("The game was aborted because your opponent lost connection");
+    GAME_ABORT("The game was aborted because your opponent lost connection"),
+    PUBLIC_ADDRESS("Public-IP:"),
+    LOCAL_ADDRESS("Local-IP: ");
 
     override fun toString(): String {
         return "${Color.RED.paint("[SERVER]")} $message"

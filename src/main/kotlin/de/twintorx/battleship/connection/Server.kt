@@ -6,11 +6,11 @@ import de.twintorx.battleship.ui.io.Writer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.Closeable
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
+import java.io.*
+import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.Socket
+import java.net.URL
 import java.util.*
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -29,7 +29,14 @@ class Server {
         clientSockets[true] = Triple(host, Scanner(host.getInputStream()),
                 PrintWriter(OutputStreamWriter(host.getOutputStream()), true))
 
-        Writer.println("\n${ServerMessage.WAITING_PLAYER2}\n")
+        Writer.println("\n${ServerMessage.LOCAL_ADDRESS} ${InetAddress.getLocalHost().hostAddress}" +
+                "\n${ServerMessage.PUBLIC_ADDRESS} ${try {
+                    BufferedReader(InputStreamReader(URL("http://checkip.amazonaws.com").openStream())).readLine()
+                } catch (e: Exception) {
+                    "-"
+                }}")
+
+        Writer.println("\n${ServerMessage.WAITING_PLAYER2}")
 
         // Player 2 connecting
         val client2 = server.accept().also {
