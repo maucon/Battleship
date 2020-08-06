@@ -5,11 +5,24 @@ import org.fusesource.jansi.AnsiConsole
 import java.io.PrintStream
 
 object Writer {
-    // TODO add clear console
     private val printStream = PrintStream(AnsiConsole.out(), true, "CP850")
 
     fun print(msg: String) {
+        printStream.print(ansi().render(msg))
+    }
+
+    fun println(msg: String) {
         printStream.println(ansi().render(msg))
+    }
+
+    fun eraseLast(count: Int = 1) {
+        (0 until count).forEach { _ ->
+            print(ansi().cursorUp(1).eraseLine()) // TODO erases just lines in window -> abhängig vom scroll
+        }
+    }
+
+    fun clearConsole() {
+        eraseLast(100)
     }
 }
 
