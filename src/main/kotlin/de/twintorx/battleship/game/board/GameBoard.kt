@@ -9,12 +9,12 @@ class GameBoard(
         size: Int = 10
 ) : TrackBoard(size) {
 
-    private var shipCoordinates = mutableMapOf<Ship, HashSet<Point>>()
+    private var shipList = mutableListOf<Pair<Ship, HashSet<Point>>>()
 
     fun addShip(ship: Ship, coordinates: HashSet<Point>): Boolean {
         if (invalidShipCoordinates(ship, coordinates)) return false
 
-        shipCoordinates[ship] = coordinates
+        shipList.add(Pair(ship, coordinates))
         coordinates.forEach {
             grid[it.x, it.y] = Cell(Mark.SHIP, ship)
         }
@@ -39,15 +39,16 @@ class GameBoard(
         if (!mark(x, y, if (grid[x, y].mark == Mark.SHIP) Mark.HIT_SHIP else Mark.HIT_NOTHING))
             return Move.INVALID
 
-        for ((key, value) in shipCoordinates) {
-            val removePoint = value.firstOrNull { point ->
+        for (pair in shipList) {
+            val coordinates = pair.second // val (ship, coordinates) = pair
+            val removePoint = coordinates.firstOrNull { point ->
                 point.x == x && point.y == y
             } ?: continue
 
-            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.isEmpty()) {
-                shipCoordinates.remove(key)
+            if (coordinates.remove(removePoint) && coordinates.isEmpty()) {
+                shipList.remove(pair)
 
-                return if (shipCoordinates.isEmpty()) Move.GAME_OVER else Move.SUNK
+                return if (shipList.isEmpty()) Move.GAME_OVER else Move.SUNK
             }
             return Move.HIT
         }
