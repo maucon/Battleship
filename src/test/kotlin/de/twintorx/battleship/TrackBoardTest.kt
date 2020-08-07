@@ -1,6 +1,6 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.game.board.Cell
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -17,16 +17,16 @@ internal class TrackBoardTest {
 
     @Test
     fun testMark() {
-        Assertions.assertTrue(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
-        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.HIT_NOTHING))
-        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.SHIP_DESTROYER))
-        Assertions.assertFalse(trackBoard.mark(1, 1, Cell.WATER))
+        Assertions.assertTrue(trackBoard.mark(1, 1, Mark.HIT_NOTHING))
+        Assertions.assertFalse(trackBoard.mark(1, 1, Mark.HIT_NOTHING))
+        Assertions.assertFalse(trackBoard.mark(1, 1, Mark.SHIP))
+        Assertions.assertFalse(trackBoard.mark(1, 1, Mark.WATER))
     }
 
     @Test
     fun testToString() {
-        trackBoard.mark(1, 1, Cell.HIT_NOTHING)
-        trackBoard.mark(4, 4, Cell.HIT_NOTHING)
+        trackBoard.mark(1, 1, Mark.HIT_NOTHING)
+        trackBoard.mark(4, 4, Mark.HIT_NOTHING)
         Assertions.assertEquals(mutableListOf(
                 "  ┌───┬───┬───┬───┬───┐",
                 "5 │   │   │   │   │ x │",

@@ -2,11 +2,11 @@ package de.twintorx.battleship.ui
 
 import de.twintorx.battleship.connection.Client
 import de.twintorx.battleship.connection.Server
-import de.twintorx.battleship.game.board.Cell
+import de.twintorx.battleship.game.Ship
 import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.game.board.TrackBoard
-import de.twintorx.battleship.game.ship.Ship
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.ui.io.InputRegex
 import de.twintorx.battleship.ui.io.PlayerMessage
 import de.twintorx.battleship.ui.io.Writer
@@ -54,7 +54,7 @@ class Player {
         while (ships.isNotEmpty()) {
             Writer.print("\n${PlayerMessage.CHOOSE_SHIP}\n")
             val option = input(ships.map {
-                val name = it.value[0].type.value
+                val name = it.value[0].type
                 "[${it.key}] ${it.value.size}x$name${" " * (11 - name.length)}(Size:${it.value[0].size})\n"
             }.joinToString("")) {
                 InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
@@ -116,24 +116,24 @@ class Player {
         when (move) {
             Move.HIT -> {
                 Writer.clearConsole()
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.HIT_SHIP}\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.SUNK_SHIP}\n")
                 shoot()
             }
             Move.GAME_OVER -> {
                 Writer.clearConsole()
-                trackBoard.mark(point.x, point.y, Cell.HIT_SHIP).run { printBoards() }
+                trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.WIN}\n")
             }
             Move.NO_HIT -> {
                 Writer.clearConsole()
-                trackBoard.mark(point.x, point.y, Cell.HIT_NOTHING).run { printBoards() }
+                trackBoard.mark(point.x, point.y, Mark.HIT_NOTHING).run { printBoards() }
                 Writer.print("\n${PlayerMessage.HIT_NOTHING}\n")
                 waitForTurn()
             }
@@ -145,8 +145,13 @@ class Player {
     }
 
     private fun updateGameBoard(shot: Point) {
-        Writer.clearConsole()
-        val move = gameBoard.hit(shot.x, shot.y).also { printBoards() }
+        val move = gameBoard.hit(shot.x, shot.y)
+
+        if (move != Move.INVALID) {
+            Writer.clearConsole()
+            printBoards()
+        } else Writer.eraseLast(2)
+
         client.sendShotAnswer(move)
 
         when (move) {

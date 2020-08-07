@@ -1,27 +1,22 @@
 package de.twintorx.battleship.game.board
 
-import de.twintorx.battleship.game.ship.Ship
-import de.twintorx.battleship.game.ship.ShipType
+import de.twintorx.battleship.game.cell.Cell
+import de.twintorx.battleship.game.cell.Mark
+import de.twintorx.battleship.game.Ship
 import java.awt.Point
 
 class GameBoard(
         size: Int = 10
 ) : TrackBoard(size) {
 
-    private var shipCoordinates = mutableMapOf<Ship, HashSet<Point>>()
+    private var shipList = mutableListOf<Pair<Ship, HashSet<Point>>>()
 
     fun addShip(ship: Ship, coordinates: HashSet<Point>): Boolean {
         if (invalidShipCoordinates(ship, coordinates)) return false
 
-        shipCoordinates[ship] = coordinates
+        shipList.add(Pair(ship, coordinates))
         coordinates.forEach {
-            grid[it.x, it.y] = when (ship.type) {
-                ShipType.CARRIER -> Cell.SHIP_CARRIER
-                ShipType.BATTLESHIP -> Cell.SHIP_BATTLESHIP
-                ShipType.CRUISER -> Cell.SHIP_CRUISER
-                ShipType.SUBMARINE -> Cell.SHIP_SUBMARINE
-                else -> Cell.SHIP_DESTROYER
-            }
+            grid[it.x, it.y] = Cell(Mark.SHIP, ship)
         }
 
         return true
@@ -33,7 +28,7 @@ class GameBoard(
         coordinates.forEach { point ->
             if (point.x !in (0 until size)) return true
             if (point.y !in (0 until size)) return true
-            if (grid[point.x, point.y].isShip()) return true
+            if (grid[point.x, point.y].mark == Mark.SHIP) return true
         }
 
         // count of distinct x and y values must be ship size + 1
@@ -41,17 +36,19 @@ class GameBoard(
     }
 
     fun hit(x: Int, y: Int): Move {
-        if (!mark(x, y, if (grid[x, y].isShip()) Cell.HIT_SHIP else Cell.HIT_NOTHING)) return Move.INVALID
+        if (!mark(x, y, if (grid[x, y].mark == Mark.SHIP) Mark.HIT_SHIP else Mark.HIT_NOTHING))
+            return Move.INVALID
 
-        for ((key, value) in shipCoordinates) {
-            val removePoint = value.firstOrNull { point ->
+        for (pair in shipList) {
+            val coordinates = pair.second // val (ship, coordinates) = pair
+            val removePoint = coordinates.firstOrNull { point ->
                 point.x == x && point.y == y
             } ?: continue
 
-            if (shipCoordinates[key]!!.remove(removePoint) && shipCoordinates[key]!!.isEmpty()) {
-                shipCoordinates.remove(key)
+            if (coordinates.remove(removePoint) && coordinates.isEmpty()) {
+                shipList.remove(pair)
 
-                return if (shipCoordinates.isEmpty()) Move.GAME_OVER else Move.SUNK
+                return if (shipList.isEmpty()) Move.GAME_OVER else Move.SUNK
             }
             return Move.HIT
         }
