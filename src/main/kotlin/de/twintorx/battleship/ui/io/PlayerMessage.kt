@@ -18,6 +18,8 @@ enum class PlayerMessage(
 
     GAME_BOARD("Your ships:"),
     TRACK_BOARD("Your shots:"),
+    REMAINING_HIT_POINTS("Remaining hit points:"),
+    REMAINING_SHIPS("Remaining enemy ships:"),
 
     HIT_NOTHING(Color.CYAN.paint("You hit nothing on")),
     HIT_SHIP(Color.CYAN.paint("You hit a ship on")),

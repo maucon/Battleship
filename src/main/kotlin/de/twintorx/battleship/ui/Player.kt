@@ -18,6 +18,8 @@ class Player {
     private lateinit var client: Client
     private var gameBoard: GameBoard = GameBoard()
     private var trackBoard: TrackBoard = TrackBoard()
+    private var remainingShips = 15
+    private var remainingHitPoints = 44
 
     fun connect() {
         Writer.clearConsole()
@@ -125,18 +127,23 @@ class Player {
         when (move) {
             Move.HIT -> {
                 Writer.clearConsole()
+                remainingHitPoints--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.HIT_SHIP} $shotPosition\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
+                remainingHitPoints--
+                remainingShips--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.SUNK_SHIP}\n $shotPosition")
                 shoot()
             }
             Move.GAME_OVER -> {
                 Writer.clearConsole()
+                remainingHitPoints--
+                remainingShips--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.WIN}\n")
             }
@@ -196,7 +203,12 @@ class Player {
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
-            Writer.println("${it.first}\t${it.second}")
+            when (it) {
+                lines[1] -> Writer.println("${it.first}\t${it.second}\t${PlayerMessage.REMAINING_HIT_POINTS} $remainingHitPoints")
+                lines[3] -> Writer.println("${it.first}\t${it.second}\t${PlayerMessage.REMAINING_SHIPS} $remainingShips")
+                else -> Writer.println("${it.first}\t${it.second}")
+
+            }
         }
     }
 
