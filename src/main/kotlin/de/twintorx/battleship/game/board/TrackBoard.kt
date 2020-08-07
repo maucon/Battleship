@@ -1,20 +1,24 @@
 package de.twintorx.battleship.game.board
 
+import de.twintorx.battleship.game.Cell
+import de.twintorx.battleship.game.Mark
+
 open class TrackBoard(
         val size: Int = 10
 ) {
     protected val grid: Grid = Grid(size)
 
-    fun mark(x: Int, y: Int, cell: Cell): Boolean {
-        //fail when mark as water or ship or cell is already marked
-        if (cell == Cell.WATER
-                || cell.isShip()
-                || grid[x, y] == Cell.HIT_NOTHING
-                || grid[x, y] == Cell.HIT_SHIP)
-            return false
-
-        grid[x, y] = cell
-        return true
+    fun mark(x: Int, y: Int, mark: Mark): Boolean {
+        //fail when mark as water or ship ; or cell is already marked
+        return if (mark == Mark.WATER
+                || mark == Mark.SHIP
+                || grid[x, y].mark == Mark.HIT_NOTHING
+                || grid[x, y].mark == Mark.HIT_SHIP)
+            false
+        else {
+            grid[x, y] = Cell(mark)
+            true
+        }
     }
 
     fun getLines(): MutableList<String> {
@@ -29,8 +33,11 @@ open class TrackBoard(
             val indexPadding = sizeLength - index.toString().length
 
             table.add("${" " * indexPadding}$index │" +
-                    "${it.value.joinToString("│") { cell ->
-                        " $cell "
+                    "${it.value.map { cell ->
+                        if (cell.mark == Mark.SHIP) cell.ship!!.color.paint(cell.mark.value)
+                        else cell.mark.value
+                    }.joinToString("│") { str ->
+                        " $str "
                     }}│")
             table.add(div)
         }
