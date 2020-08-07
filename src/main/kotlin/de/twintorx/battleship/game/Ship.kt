@@ -27,11 +27,6 @@ enum class Ship(
 // ---------------- Extensions and Overloading ----------------
 private operator fun Ship.times(i: Int): MutableList<Ship> {
     val list = mutableListOf<Ship>()
-
-    repeat(i) {
-        list.add(this)
-    }
-
+    repeat(i) { list.add(this) }
     return list
 }
-

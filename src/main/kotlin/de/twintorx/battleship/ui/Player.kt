@@ -2,7 +2,7 @@ package de.twintorx.battleship.ui
 
 import de.twintorx.battleship.connection.Client
 import de.twintorx.battleship.connection.Server
-import de.twintorx.battleship.game.Mark
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.game.Ship
 import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.Move

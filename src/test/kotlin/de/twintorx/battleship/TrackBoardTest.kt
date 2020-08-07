@@ -1,6 +1,6 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.game.Mark
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.game.board.TrackBoard
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach

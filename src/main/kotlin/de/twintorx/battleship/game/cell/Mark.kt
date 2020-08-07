@@ -1,4 +1,4 @@
-package de.twintorx.battleship.game
+package de.twintorx.battleship.game.cell
 
 import de.twintorx.battleship.ui.Color
 

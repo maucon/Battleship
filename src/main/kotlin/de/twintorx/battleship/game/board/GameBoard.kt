@@ -1,7 +1,7 @@
 package de.twintorx.battleship.game.board
 
-import de.twintorx.battleship.game.Cell
-import de.twintorx.battleship.game.Mark
+import de.twintorx.battleship.game.cell.Cell
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.game.Ship
 import java.awt.Point
 

@@ -1,6 +1,6 @@
 package de.twintorx.battleship.game.board
 
-import de.twintorx.battleship.game.Cell
+import de.twintorx.battleship.game.cell.Cell
 
 data class Grid(
         private val size: Int

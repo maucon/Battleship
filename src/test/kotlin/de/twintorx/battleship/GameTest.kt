@@ -1,6 +1,6 @@
 package de.twintorx.battleship
 
-import de.twintorx.battleship.game.Mark
+import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.TrackBoard

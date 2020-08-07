@@ -1,4 +1,6 @@
-package de.twintorx.battleship.game
+package de.twintorx.battleship.game.cell
+
+import de.twintorx.battleship.game.Ship
 
 class Cell(
         val mark: Mark = Mark.WATER,
