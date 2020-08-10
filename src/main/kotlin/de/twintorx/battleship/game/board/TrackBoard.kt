@@ -2,21 +2,23 @@ package de.twintorx.battleship.game.board
 
 import de.twintorx.battleship.game.cell.Cell
 import de.twintorx.battleship.game.cell.Mark
+import de.twintorx.battleship.ui.Color
+import java.awt.Point
 
 open class TrackBoard(
         val size: Int = 10
 ) {
-    protected val grid: Grid = Grid(size)
+    protected val grid = Grid(size)
+    protected val lastPoint = Point(-1, -1)
 
     fun mark(x: Int, y: Int, mark: Mark): Boolean {
         //fail when mark as water or ship ; or cell is already marked
-        return if (mark == Mark.WATER
-                || mark == Mark.SHIP
-                || grid[x, y].mark == Mark.HIT_NOTHING
+        return if (grid[x, y].mark == Mark.HIT_NOTHING
                 || grid[x, y].mark == Mark.HIT_SHIP)
             false
         else {
             grid[x, y] = Cell(mark)
+            lastPoint.move(x, y)
             true
         }
     }
@@ -33,9 +35,12 @@ open class TrackBoard(
             val indexPadding = sizeLength - index.toString().length
 
             table.add("${" " * indexPadding}$index │" +
-                    "${it.value.map { cell ->
-                        if (cell.mark == Mark.SHIP) cell.ship!!.color.paint(cell.mark.value)
-                        else cell.mark.value
+                    "${it.value.withIndex().map { (xIndex, value) ->
+                        val markValue = value.mark.value
+                        if (xIndex == lastPoint.x && index - 1 == lastPoint.y) Color.GREEN.paint(markValue)
+                        else if (value.mark == Mark.SHIP) value.ship!!.color.paint(markValue)
+                        else if (value.mark == Mark.HIT_SHIP) Color.RED.paint(markValue)
+                        else markValue
                     }.joinToString("│") { str ->
                         " $str "
                     }}│")
