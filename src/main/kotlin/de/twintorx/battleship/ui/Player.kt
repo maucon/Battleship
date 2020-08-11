@@ -210,7 +210,7 @@ class Player {
     private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }) = input(msg.toString(), validationMethod)
 
     private fun quit(){
-        Writer.println("Press Any Key to exit...")
+        Writer.println("Press Enter to exit...")
         readLine()
     }
 }
