@@ -19,7 +19,10 @@ object Main {
             val filename = Main::class.java.protectionDomain.codeSource.location.toString().substring(6)
             Runtime.getRuntime().exec(arrayOf("cmd", "/c", "start", "cmd", "/k", "java -jar \"$filename\""))
         } else {
-            Player().connect()
+            while (true) {
+                Player().connect()
+                Thread.sleep(5000)
+            }
         }
 
         if (isWindows) {
