@@ -15,7 +15,11 @@ enum class Ship(
 
     companion object {
         fun getStandardShipSet(): MutableMap<Int, MutableList<Ship>> = mutableMapOf(
-                1 to CARRIER * 1
+                1 to CARRIER * 1,
+                2 to BATTLESHIP * 2,
+                3 to CRUISER * 3,
+                4 to SUBMARINE * 4,
+                5 to DESTROYER * 5
         )
     }
 }
