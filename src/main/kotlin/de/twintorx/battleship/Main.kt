@@ -11,19 +11,13 @@ object Main {
         val consoleIsNull = System.console() == null
         val isWindows = !consoleIsNull && System.getenv()["OS"]!!.contains("Windows")
 
-        if (isWindows) {
-            AnsiConsole.systemInstall() // only needed for windows
-        }
+        if (isWindows) AnsiConsole.systemInstall() // only needed for windows
 
         if (consoleIsNull && !GraphicsEnvironment.isHeadless()) {
             val filename = Main::class.java.protectionDomain.codeSource.location.toString().substring(6)
             Runtime.getRuntime().exec(arrayOf("cmd", "/c", "start", "cmd", "/k", "java -jar \"$filename\""))
-        } else {
-            Player().connect()
-        }
+        } else while (true) Player().connect()
 
-        if (isWindows) {
-            AnsiConsole.systemUninstall() // only needed for windows
-        }
+        if (isWindows) AnsiConsole.systemUninstall() // only needed for windows
     }
 }
