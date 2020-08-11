@@ -21,7 +21,6 @@ object Main {
         } else {
             while (true) {
                 Player().connect()
-                Thread.sleep(5000)
             }
         }
 

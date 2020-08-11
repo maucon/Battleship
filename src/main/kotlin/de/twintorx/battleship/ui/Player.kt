@@ -43,6 +43,7 @@ class Player {
 
         prepare()
         Writer.print("\n${PlayerMessage.QUIT}\n")
+        quit()
     }
 
     private fun prepare() {
@@ -207,6 +208,11 @@ class Player {
     }
 
     private fun input(msg: PlayerMessage, validationMethod: (String) -> (Boolean) = { true }) = input(msg.toString(), validationMethod)
+
+    private fun quit(){
+        Writer.println("Press Any Key to exit...")
+        readLine()
+    }
 }
 
 // ---------------- Extensions and Overloading ----------------
