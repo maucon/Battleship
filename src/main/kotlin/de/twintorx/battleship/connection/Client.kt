@@ -15,8 +15,8 @@ class Client {
     private lateinit var output: PrintWriter
     private lateinit var input: Scanner
 
-    fun tryConnect(address: String = "localhost") = try {
-        socket = Socket(address, 9999)
+    fun tryConnect(address: String = "localhost", port: Int = 9999) = try {
+        socket = Socket(address, port)
         output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
         input = Scanner(socket.getInputStream()).also { it.nextLine() }
 

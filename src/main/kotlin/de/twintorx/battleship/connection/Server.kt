@@ -15,8 +15,10 @@ import java.util.*
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
-class Server {
-    private val server = ServerSocket(9999)
+class Server(
+        port: Int = 9999
+) {
+    private val server = ServerSocket(port)
             .also { Writer.println("${ServerMessage.PORT_RUNNING}${it.localPort}") }
     private val clientSockets = mutableMapOf<Boolean, Triple<Socket, Scanner, PrintWriter>>()
     private var running = true
