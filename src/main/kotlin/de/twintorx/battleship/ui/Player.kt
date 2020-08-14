@@ -23,7 +23,7 @@ class Player {
         // TODO print fullscreen recommendation
         Writer.clearConsole()
         Writer.print("${PlayerMessage.WELCOME}\n${PlayerMessage.WELCOME_INFO}\n")
-        if (input("${PlayerMessage.HOST_SERVER}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
+        if (input("\n${PlayerMessage.HOST_SERVER}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
             Writer.clearConsole()
             GlobalScope.launch {
                 Server().start()
@@ -208,7 +208,7 @@ class Player {
     }
 
     private fun quit() {
-        Writer.println("Press Enter to play again...")
+        Writer.println("\nPress Enter to play again...")
         readLine()
     }
 }
