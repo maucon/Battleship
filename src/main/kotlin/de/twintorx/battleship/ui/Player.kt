@@ -20,21 +20,27 @@ class Player {
     private var trackBoard: TrackBoard = TrackBoard()
 
     fun connect() {
-        // TODO print fullscreen recommendation
         Writer.clearConsole()
         Writer.print("${PlayerMessage.WELCOME}\n${PlayerMessage.WELCOME_INFO}\n")
         if (input("\n${PlayerMessage.HOST_SERVER}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
             Writer.clearConsole()
+            val port = input("${PlayerMessage.PORT}\n") { InputRegex.PORT.matches(it) }.run {
+                if (isBlank()) 9999 else toInt()
+            }
+            Writer.clearConsole()
             GlobalScope.launch {
-                Server().start()
+                Server(port).start()
             }
             client = Client()
-            client.tryConnect()
+            client.tryConnect(port = port)
 
         } else {
             Writer.clearConsole()
             client = Client().also {
-                while (!it.tryConnect(input("${PlayerMessage.SERVER_IP}\n"))) {
+                while (!it.tryConnect(input("${PlayerMessage.SERVER_IP}\n").also { Writer.clearConsole() },
+                                input("${PlayerMessage.PORT}\n") { str -> InputRegex.PORT.matches(str) }.run {
+                                    if (isBlank()) 9999 else toInt()
+                                })) {
                     Writer.eraseLast(2)
                     continue
                 }
@@ -196,7 +202,7 @@ class Player {
             Writer.print(msg)
 
             val line = readLine() ?: continue
-            if (!validationMethod(line) or line.isEmpty()) {
+            if (!validationMethod(line)) {
                 val lines = msg.split("\n").size
                 println(lines)
                 Writer.eraseLast(lines + 1)
