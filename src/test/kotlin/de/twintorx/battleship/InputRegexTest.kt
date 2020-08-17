@@ -62,17 +62,17 @@ class InputRegexTest {
     }
 
     @Test
-    fun testPort(){
-        Assertions.assertTrue(InputRegex.PORT.matches(""))
-        Assertions.assertTrue(InputRegex.PORT.matches("9218"))
-        Assertions.assertTrue(InputRegex.PORT.matches("1000"))
-        Assertions.assertTrue(InputRegex.PORT.matches("65536"))
+    fun testPort() {
+        assertTrue(InputRegex.PORT.matches(""))
+        assertTrue(InputRegex.PORT.matches("9218"))
+        assertTrue(InputRegex.PORT.matches("1000"))
+        assertTrue(InputRegex.PORT.matches("65536"))
 
-        Assertions.assertFalse(InputRegex.PORT.matches("65537"))
-        Assertions.assertFalse(InputRegex.PORT.matches("999"))
-        Assertions.assertFalse(InputRegex.PORT.matches("01923"))
-        Assertions.assertFalse(InputRegex.PORT.matches("187"))
-        Assertions.assertFalse(InputRegex.PORT.matches("0"))
-        Assertions.assertFalse(InputRegex.PORT.matches("hello"))
+        assertFalse(InputRegex.PORT.matches("65537"))
+        assertFalse(InputRegex.PORT.matches("999"))
+        assertFalse(InputRegex.PORT.matches("01923"))
+        assertFalse(InputRegex.PORT.matches("187"))
+        assertFalse(InputRegex.PORT.matches("0"))
+        assertFalse(InputRegex.PORT.matches("hello"))
     }
 }
