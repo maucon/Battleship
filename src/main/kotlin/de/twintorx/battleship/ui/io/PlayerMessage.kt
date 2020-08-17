@@ -19,9 +19,9 @@ enum class PlayerMessage(
     TRACK_BOARD("Your shots:"),
 
     HIT_NOTHING(Color.CYAN.paint("You hit nothing on")),
-    HIT_SHIP(Color.CYAN.paint("You've hit a ship on")),
-    SUNK_SHIP(Color.CYAN.paint("You've sunk a ship on")),
-    WIN(Color.CYAN.paint("You've sunk the last ship and won the game!")),
+    HIT_SHIP(Color.CYAN.paint("You hit a ship on")),
+    SUNK_SHIP(Color.CYAN.paint("You sunk a ship on")),
+    WIN(Color.CYAN.paint("You sunk the last ship and won the game!")),
 
     OPPONENT_HIT(Color.CYAN.paint("Your opponent hit on")),
     OPPONENT_MISSED(Color.CYAN.paint("Your opponent missed on")),
@@ -30,7 +30,7 @@ enum class PlayerMessage(
 
     GAME_ABORT(Color.RED.paint("The game was aborted because your opponent lost connection")),
 
-    WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by Maucon and Dennis ~~")),
+    WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by MauCon and Dennis ~~")),
     WELCOME_INFO(Color.GREEN.paint("~~ We recommend to play in fullscreen mode! ~~")),
     QUIT(Color.GREEN.paint("~~ Thank you for playing! ~~"));
 
