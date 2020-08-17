@@ -58,7 +58,7 @@ class Player {
         Writer.clearConsole()
         val ships = Ship.getStandardShipSet()
         Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
-        printBoards()
+        printBoards(false)
 
         while (ships.isNotEmpty()) {
             Writer.print("\n${PlayerMessage.CHOOSE_SHIP}\n")
@@ -75,7 +75,7 @@ class Player {
                 placeShip(this[0]).run {
                     Writer.clearConsole()
                     Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
-                    printBoards()
+                    printBoards(false)
                 }
                 removeAt(0)
 
@@ -199,13 +199,15 @@ class Player {
         updateGameBoard(client.waitForIncomingShot())
     }
 
-    private fun printBoards() {
+    private fun printBoards(inGame: Boolean = true) {
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
+        val remHitPoints = if (inGame) "${PlayerMessage.REMAINING_HIT_POINTS} ${Color.YELLOW.paint(remainingHitPoints.toString())}" else ""
+        val remShips = if (inGame) "${PlayerMessage.REMAINING_SHIPS} ${Color.YELLOW.paint(remainingShips.toString())}" else ""
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
             when (it) {
-                lines[1] -> Writer.println("${it.first}\t${it.second}\t${PlayerMessage.REMAINING_HIT_POINTS} $remainingHitPoints")
-                lines[3] -> Writer.println("${it.first}\t${it.second}\t${PlayerMessage.REMAINING_SHIPS} $remainingShips")
+                lines[1] -> Writer.println("${it.first}\t${it.second}\t$remHitPoints")
+                lines[3] -> Writer.println("${it.first}\t${it.second}\t$remShips")
                 else -> Writer.println("${it.first}\t${it.second}")
 
             }
