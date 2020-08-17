@@ -120,17 +120,19 @@ class Player {
     }
 
     private fun updateTrackBoard(move: Move, point: Point) {
+        val shotPosition = Color.CYAN.paint("[${(point.x + 97).toChar()}${point.y + 1}]!")
+
         when (move) {
             Move.HIT -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
-                Writer.print("\n${PlayerMessage.HIT_SHIP}\n")
+                Writer.print("\n${PlayerMessage.HIT_SHIP} $shotPosition\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
-                Writer.print("\n${PlayerMessage.SUNK_SHIP}\n")
+                Writer.print("\n${PlayerMessage.SUNK_SHIP}\n $shotPosition")
                 shoot()
             }
             Move.GAME_OVER -> {
@@ -141,7 +143,7 @@ class Player {
             Move.NO_HIT -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Mark.HIT_NOTHING).run { printBoards() }
-                Writer.print("\n${PlayerMessage.HIT_NOTHING}\n")
+                Writer.print("\n${PlayerMessage.HIT_NOTHING} $shotPosition\n")
                 waitForTurn()
             }
             else -> {
@@ -153,6 +155,7 @@ class Player {
 
     private fun updateGameBoard(shot: Point) {
         val move = gameBoard.hit(shot.x, shot.y)
+        val shotPosition = Color.CYAN.paint("[${(shot.x + 97).toChar()}${shot.y + 1}]!")
 
         if (move != Move.INVALID) {
             Writer.clearConsole()
@@ -163,11 +166,11 @@ class Player {
 
         when (move) {
             Move.HIT -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_HIT}\n")
+                Writer.print("\n${PlayerMessage.OPPONENT_HIT} $shotPosition\n")
                 waitForTurn()
             }
             Move.SUNK -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_SUNK}\n")
+                Writer.print("\n${PlayerMessage.OPPONENT_SUNK} $shotPosition\n")
                 waitForTurn()
             }
             Move.GAME_OVER -> {
@@ -175,7 +178,7 @@ class Player {
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_MISSED}\n")
+                Writer.print("\n${PlayerMessage.OPPONENT_MISSED} $shotPosition\n")
                 shoot()
             }
             else -> {

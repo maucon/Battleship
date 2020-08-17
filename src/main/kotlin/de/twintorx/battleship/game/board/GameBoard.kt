@@ -1,8 +1,8 @@
 package de.twintorx.battleship.game.board
 
+import de.twintorx.battleship.game.Ship
 import de.twintorx.battleship.game.cell.Cell
 import de.twintorx.battleship.game.cell.Mark
-import de.twintorx.battleship.game.Ship
 import java.awt.Point
 
 class GameBoard(
@@ -38,6 +38,8 @@ class GameBoard(
     fun hit(x: Int, y: Int): Move {
         if (!mark(x, y, if (grid[x, y].mark == Mark.SHIP) Mark.HIT_SHIP else Mark.HIT_NOTHING))
             return Move.INVALID
+
+        lastPoint.move(x, y)
 
         for (pair in shipList) {
             val coordinates = pair.second // val (ship, coordinates) = pair
