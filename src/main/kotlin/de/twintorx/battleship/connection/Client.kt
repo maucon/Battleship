@@ -21,7 +21,7 @@ class Client {
 
     fun sendReadyGetTurn(): Boolean {
         socket.write(Package()) // Sending server ready signal
-        return doSafe { socket.read() }.body as Int == 1 // 1 -> your turn: 0 -> opponents turn
+        return doSafe { socket.read() }.body as Boolean // true -> your turn: false -> opponents turn
     }
 
     fun waitForIncomingShot() = doSafe { socket.read() }.body as Point

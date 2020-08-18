@@ -34,7 +34,7 @@ class Server(
 
         Writer.println("\n${ServerMessage.WAITING_PLAYER1}")
 
-        // Host connecting
+        // Player 1 connecting
         clientSockets[true] = ClientSocket(server.accept().also {
             Writer.println("${ServerMessage.PLAYER1_CONNECTED}${it.inetAddress.hostAddress}")
         })
@@ -47,7 +47,7 @@ class Server(
         })
 
         // Sending start signal to clients
-        clientSockets.values.forEach { it.write(Package(1)) }
+        clientSockets.values.forEach { it.write(Package()) }
 
         gameLoop(prepare())
     }
@@ -68,7 +68,7 @@ class Server(
         // draw starting player
         val startingPlayer = Random.nextBoolean()
         for ((key, value) in clientSockets) {
-            value.write(Package(if (key == startingPlayer) 1 else 0)) // sending player starting
+            value.write(Package(key == startingPlayer)) // sending player starting
         }
 
         return startingPlayer
