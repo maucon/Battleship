@@ -37,7 +37,7 @@ enum class PlayerMessage(
     GAME_ABORT(Color.RED.paint("The game was aborted because your opponent lost connection")),
 
     WELCOME(Color.GREEN.paint("~~ Welcome to BATTLESHIP by MauCon and Dennis ~~")),
-    WELCOME_INFO(Color.GREEN.paint("~~ We recommend to play in fullscreen mode! ~~")),
+    WELCOME_INFO(Color.GREEN.paint("~~  We recommend to play in fullscreen mode!  ~~")),
     QUIT(Color.GREEN.paint("~~ Thank you for playing! ~~"));
 
     override fun toString(): String {

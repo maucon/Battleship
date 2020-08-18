@@ -37,7 +37,7 @@ open class TrackBoard(
             table.add("${" " * indexPadding}$index │" +
                     "${it.value.withIndex().map { (xIndex, value) ->
                         val markValue = value.mark.value
-                        if (xIndex == lastPoint.x && index - 1 == lastPoint.y) Color.GREEN.paint(markValue)
+                        if (xIndex == lastPoint.x && index - 1 == lastPoint.y) Color.CYAN.paint(markValue)
                         else if (value.mark == Mark.SHIP) value.ship!!.color.paint(markValue)
                         else if (value.mark == Mark.HIT_SHIP) Color.RED.paint(markValue)
                         else markValue
