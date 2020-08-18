@@ -18,12 +18,18 @@ class Player {
     private lateinit var client: Client
     private var gameBoard: GameBoard = GameBoard()
     private var trackBoard: TrackBoard = TrackBoard()
+    private var remainingEnemyShips = 15
+    private var remainingOwnShips = 15
+    private var remainingEnemyHitPoints = 44
+    private var remainingOwnHitPoints = 44
 
     fun connect() {
         Writer.clearConsole()
         Writer.print("${PlayerMessage.WELCOME}\n${PlayerMessage.WELCOME_INFO}\n")
+
         if (input("\n${PlayerMessage.HOST_SERVER}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y") {
             Writer.clearConsole()
+
             val port = input("${PlayerMessage.PORT}\n") { InputRegex.PORT.matches(it) }.run {
                 if (isBlank()) 9999 else toInt()
             }
@@ -49,14 +55,14 @@ class Player {
 
         prepare()
         Writer.print("\n${PlayerMessage.QUIT}\n")
-        quit()
+        waitForRestart()
     }
 
     private fun prepare() {
         Writer.clearConsole()
         val ships = Ship.getStandardShipSet()
         Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
-        printBoards()
+        printBoards(false)
 
         while (ships.isNotEmpty()) {
             Writer.print("\n${PlayerMessage.CHOOSE_SHIP}\n")
@@ -73,7 +79,7 @@ class Player {
                 placeShip(this[0]).run {
                     Writer.clearConsole()
                     Writer.print("${PlayerMessage.PLACE_SHIPS}\n")
-                    printBoards()
+                    printBoards(false)
                 }
                 removeAt(0)
 
@@ -125,18 +131,23 @@ class Player {
         when (move) {
             Move.HIT -> {
                 Writer.clearConsole()
+                remainingEnemyHitPoints--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.HIT_SHIP} $shotPosition\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
+                remainingEnemyHitPoints--
+                remainingEnemyShips--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.SUNK_SHIP}\n $shotPosition")
                 shoot()
             }
             Move.GAME_OVER -> {
                 Writer.clearConsole()
+                remainingEnemyHitPoints = 0
+                remainingEnemyShips = 0
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.WIN}\n")
             }
@@ -157,31 +168,44 @@ class Player {
         val move = gameBoard.hit(shot.x, shot.y)
         val shotPosition = Color.CYAN.paint("[${(shot.x + 97).toChar()}${shot.y + 1}]!")
 
-        if (move != Move.INVALID) {
-            Writer.clearConsole()
-            printBoards()
-        } else Writer.eraseLast(2)
-
         client.sendShotAnswer(move)
 
         when (move) {
             Move.HIT -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_HIT} $shotPosition\n")
+                remainingOwnHitPoints--
+                Writer.clearConsole().also {
+                    printBoards()
+                    Writer.print("\n${PlayerMessage.OPPONENT_HIT} $shotPosition\n")
+                }
                 waitForTurn()
             }
             Move.SUNK -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_SUNK} $shotPosition\n")
+                remainingOwnHitPoints--
+                remainingOwnShips--
+                Writer.clearConsole().also {
+                    printBoards()
+                    Writer.print("\n${PlayerMessage.OPPONENT_SUNK} $shotPosition\n")
+                }
                 waitForTurn()
             }
             Move.GAME_OVER -> {
-                Writer.print("\n${PlayerMessage.LOSE}\n")
+                remainingOwnHitPoints = 0
+                remainingOwnShips = 0
+                Writer.clearConsole().also {
+                    printBoards()
+                    Writer.print("\n${PlayerMessage.LOSE}\n")
+                }
                 client.disconnect()
             }
             Move.NO_HIT -> {
-                Writer.print("\n${PlayerMessage.OPPONENT_MISSED} $shotPosition\n")
+                Writer.clearConsole().also {
+                    printBoards()
+                    Writer.print("\n${PlayerMessage.OPPONENT_MISSED} $shotPosition\n")
+                }
                 shoot()
             }
             else -> {
+                Writer.eraseLast(2)
                 waitForTurn()
             }
         }
@@ -192,13 +216,37 @@ class Player {
         updateGameBoard(client.waitForIncomingShot())
     }
 
-    private fun printBoards() {
-        Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
-        val lines = (gameBoard.getLines() zip trackBoard.getLines())
-        lines.forEach {
-            Writer.println("${it.first}\t${it.second}")
+    private fun printBoards(inGame: Boolean = true) {
+
+        with(Writer) {
+            println("\n${PlayerMessage.AVAILABLE_SHIPS}")
+            println(Ship.values().joinToString("   ") {
+                "${it.color.paint(it.type)}(Size:${it.size})"
+            })
+            println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
+
+            val remainingEnemyHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.RED, remainingEnemyHitPoints.toString())
+            val remainingOwnHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.GREEN, remainingOwnHitPoints.toString())
+            val remainingEnemyShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.RED, remainingEnemyShips.toString())
+            val remainingOwnShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.GREEN, remainingOwnShips.toString())
+
+            val lines = (gameBoard.getLines() zip trackBoard.getLines())
+            lines.withIndex().forEach { (index, value) ->
+                when (index) {
+                    3 -> println("${value.first}      ${value.second}     ${defaultValues(inGame, PlayerMessage.ENEMY)}")
+                    5 -> println("${value.first}      ${value.second}     $remainingEnemyHP")
+                    7 -> println("${value.first}      ${value.second}     $remainingEnemyShips")
+                    13 -> println("${value.first}      ${value.second}     ${defaultValues(inGame, PlayerMessage.YOU)}")
+                    15 -> println("${value.first}      ${value.second}     $remainingOwnHP")
+                    17 -> println("${value.first}      ${value.second}     $remainingOwnShips")
+                    else -> println("${value.first}      ${value.second}")
+                }
+            }
         }
     }
+
+    private fun defaultValues(inGame: Boolean, playerMessage: PlayerMessage, color: Color = Color.WHITE, counter: String = ""): String =
+            if (inGame) "$playerMessage ${color.paint(counter)}" else ""
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
         while (true) {
@@ -216,7 +264,7 @@ class Player {
         }
     }
 
-    private fun quit() {
+    private fun waitForRestart() {
         Writer.println("\nPress Enter to play again...")
         readLine()
     }

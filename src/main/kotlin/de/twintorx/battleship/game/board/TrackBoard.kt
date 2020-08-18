@@ -53,7 +53,6 @@ open class TrackBoard(
 
         return table
     }
-
 }
 
 // ---------------- Extensions and Overloading ----------------

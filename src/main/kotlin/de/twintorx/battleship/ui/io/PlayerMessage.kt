@@ -16,8 +16,13 @@ enum class PlayerMessage(
     WAITING_FOR_PLACEMENT(Color.WHITE.paint("Waiting until all players have placed their ships...")),
     WAITING_FOR_TURN(Color.WHITE.paint("Wait until its your turn...")),
 
+    AVAILABLE_SHIPS("Available ships:"),
     GAME_BOARD("Your ships:"),
     TRACK_BOARD("Your shots:"),
+    ENEMY("Enemy:"),
+    YOU("You:"),
+    REMAINING_HIT_POINTS("Remaining HP:"),
+    REMAINING_SHIPS("Remaining ships:"),
 
     HIT_NOTHING(Color.CYAN.paint("You hit nothing on")),
     HIT_SHIP(Color.CYAN.paint("You hit a ship on")),
