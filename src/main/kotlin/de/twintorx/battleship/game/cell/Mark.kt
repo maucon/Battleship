@@ -1,7 +1,5 @@
 package de.twintorx.battleship.game.cell
 
-import de.twintorx.battleship.ui.Color
-
 enum class Mark(
         val value: String
 ) {
