@@ -29,7 +29,7 @@ internal class TrackBoardTest {
         trackBoard.mark(4, 4, Mark.HIT_NOTHING)
         assertEquals(mutableListOf(
                 "  ┌───┬───┬───┬───┬───┐",
-                "5 │   │   │   │   │ @|green x|@ │",
+                "5 │   │   │   │   │ @|cyan x|@ │",
                 "  ├───┼───┼───┼───┼───┤",
                 "4 │   │   │   │   │   │",
                 "  ├───┼───┼───┼───┼───┤",
