@@ -1,12 +1,14 @@
 package de.twintorx.battleship.game
 
 import de.twintorx.battleship.ui.Color
+import java.io.Serializable
 
 enum class Ship(
         val type: String,
         val color: Color,
         val size: Int
-) {
+) : Serializable {
+
     CARRIER("Carrier", Color.YELLOW, 5),
     BATTLESHIP("Battleship", Color.BLUE, 4),
     CRUISER("Cruiser", Color.MAGENTA, 3),

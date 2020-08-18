@@ -1,6 +1,7 @@
 package de.twintorx.battleship.connection
 
 import ClientSocket
+import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.ui.io.PlayerMessage
 import de.twintorx.battleship.ui.io.Writer
@@ -33,6 +34,11 @@ class Client {
     fun sendShot(coordinates: Point): Move {
         socket.write(Package(coordinates))
         return Move.values()[doSafe { socket.read() }.body as Int]
+    }
+
+    fun sendBoardGetBoard(board: GameBoard): GameBoard {
+        socket.write(Package(board))
+        return doSafe { socket.read() }.body as GameBoard
     }
 
     private fun doSafe(method: () -> (Package)) = try {

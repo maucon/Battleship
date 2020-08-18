@@ -19,6 +19,7 @@ enum class PlayerMessage(
     AVAILABLE_SHIPS("Available ships:"),
     GAME_BOARD("Your ships:"),
     TRACK_BOARD("Your shots:"),
+    ENEMY_BOARD("Enemy ships:"),
     ENEMY("Enemy:"),
     YOU("You:"),
     REMAINING_HIT_POINTS("Remaining HP:"),

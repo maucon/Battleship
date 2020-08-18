@@ -1,6 +1,7 @@
 package de.twintorx.battleship.connection
 
 import ClientSocket
+import de.twintorx.battleship.game.board.GameBoard
 import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.ui.io.ServerMessage
 import de.twintorx.battleship.ui.io.Writer
@@ -88,7 +89,13 @@ class Server(
 
             when (Move.values()[response]) {
                 Move.NO_HIT -> turn = !turn
-                Move.GAME_OVER -> close()
+                Move.GAME_OVER -> {
+                    clientSockets.forEach { (key, value) ->
+                        // receive gameBoard and send to other player
+                        clientSockets[!key]!!.write(Package(doSafe { value.read() }.body as GameBoard))
+                    }
+                    close()
+                }
                 else -> Unit // when move is invalid or move hit ship -> players turn again
             }
         }

@@ -4,10 +4,11 @@ import de.twintorx.battleship.game.Ship
 import de.twintorx.battleship.game.cell.Cell
 import de.twintorx.battleship.game.cell.Mark
 import java.awt.Point
+import java.io.Serializable
 
 class GameBoard(
         size: Int = 10
-) : TrackBoard(size) {
+) : Serializable, TrackBoard(size) {
 
     private var shipList = mutableListOf<Pair<Ship, HashSet<Point>>>()
 
