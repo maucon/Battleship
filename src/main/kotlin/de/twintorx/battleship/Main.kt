@@ -8,7 +8,6 @@ object Main {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        println(null.toString())
         val consoleIsNull = System.console() == null
         val isWindows = !consoleIsNull && System.getenv()["OS"]!!.contains("Windows")
 
