@@ -1,24 +1,18 @@
 package de.twintorx.battleship.connection
 
+import ClientSocket
 import de.twintorx.battleship.game.board.Move
 import de.twintorx.battleship.ui.io.PlayerMessage
 import de.twintorx.battleship.ui.io.Writer
 import java.awt.Point
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
-import java.net.Socket
-import java.util.*
 import kotlin.system.exitProcess
 
 class Client {
-    private lateinit var socket: Socket
-    private lateinit var output: PrintWriter
-    private lateinit var input: Scanner
+    private lateinit var socket: ClientSocket
 
     fun tryConnect(address: String = "localhost", port: Int = 9999) = try {
-        socket = Socket(address, port)
-        output = PrintWriter(OutputStreamWriter(socket.getOutputStream()), true)
-        input = Scanner(socket.getInputStream()).also { it.nextLine() }
+        socket = ClientSocket(address, port)
+        socket.read()
 
         true
     } catch (ignored: Exception) {
@@ -26,26 +20,22 @@ class Client {
     }
 
     fun sendReadyGetTurn(): Boolean {
-        output.println("ready") // Sending server ready signal
-        return doSafe { input.nextLine() }.toString().toInt() == 1 // 1 -> your turn: 0 -> opponents turn
+        socket.write(Package()) // Sending server ready signal
+        return doSafe { socket.read() }.body as Boolean // true -> your turn: false -> opponents turn
     }
 
-    fun waitForIncomingShot(): Point {
-        @Suppress("UNCHECKED_CAST")
-        val split = doSafe { input.nextLine().split(",").map { it.toInt() } } as List<Int>
-        return Point(split[0], split[1])
-    }
+    fun waitForIncomingShot() = doSafe { socket.read() }.body as Point
 
     fun sendShotAnswer(move: Move) {
-        output.println("${move.ordinal}")
+        socket.write(Package(move.ordinal))
     }
 
     fun sendShot(coordinates: Point): Move {
-        output.println("${coordinates.x},${coordinates.y}")
-        return doSafe { Move.values()[input.nextLine().toString().toInt()] } as Move
+        socket.write(Package(coordinates))
+        return Move.values()[doSafe { socket.read() }.body as Int]
     }
 
-    private fun doSafe(method: () -> (Any)) = try {
+    private fun doSafe(method: () -> (Package)) = try {
         method()
     } catch (e: Exception) {
         Writer.print("\n${PlayerMessage.GAME_ABORT}")
@@ -54,8 +44,6 @@ class Client {
     }
 
     fun disconnect() {
-        output.close()
-        input.close()
-        socket.close()
+        socket.closeAll()
     }
 }
