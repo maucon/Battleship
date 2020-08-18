@@ -25,17 +25,19 @@ class Server(
     private var running = true
 
     fun start() {
-        // Host connecting
-        clientSockets[true] = ClientSocket(server.accept().also {
-            Writer.println("${ServerMessage.HOST_CONNECTED}${it.inetAddress.hostAddress}")
-        })
-
-        Writer.println("\n${ServerMessage.LOCAL_ADDRESS} ${InetAddress.getLocalHost().hostAddress}" +
+        Writer.println("${ServerMessage.LOCAL_ADDRESS} ${InetAddress.getLocalHost().hostAddress}" +
                 "\n${ServerMessage.PUBLIC_ADDRESS} ${try {
                     BufferedReader(InputStreamReader(URL("http://checkip.amazonaws.com").openStream())).readLine()
                 } catch (e: Exception) {
                     "-"
                 }}")
+
+        Writer.println("\n${ServerMessage.WAITING_PLAYER1}")
+
+        // Host connecting
+        clientSockets[true] = ClientSocket(server.accept().also {
+            Writer.println("${ServerMessage.PLAYER1_CONNECTED}${it.inetAddress.hostAddress}")
+        })
 
         Writer.println("\n${ServerMessage.WAITING_PLAYER2}")
 
@@ -95,7 +97,7 @@ class Server(
     private fun doSafe(method: () -> (Package)) = try {
         method()
     } catch (e: Exception) {
-        Writer.print(ServerMessage.GAME_ABORT.toString())
+        Writer.print("\n${ServerMessage.GAME_ABORT}")
         close()
         exitProcess(1)
     }
