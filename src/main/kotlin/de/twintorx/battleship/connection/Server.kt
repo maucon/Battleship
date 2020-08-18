@@ -53,7 +53,7 @@ class Server(
     private fun prepare(): Boolean {
         runBlocking { // wait for players ready signal -> placed their ships
             val answer1 = GlobalScope.launch {
-                clientSockets[true]!!.read()
+                doSafe { clientSockets[true]!!.read() }
             }
             val answer2 = GlobalScope.launch {
                 doSafe { clientSockets[false]!!.read() }
