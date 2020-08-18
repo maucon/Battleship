@@ -207,34 +207,35 @@ class Player {
     }
 
     private fun printBoards(inGame: Boolean = true) {
+        Writer.println("\n${PlayerMessage.AVAILABLE_SHIPS}")
+        var line = ""
+        Ship.values().forEach { line += "${it.color.paint(it.type)}(Size:${it.size})   " }
+        Writer.println(line)
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
 
-        var remEnemyHitPoints = ""
-        var remOwnHitPoints = ""
-        var remEnemyShips = ""
-        var remOwnShips = ""
-        val enemy = if (inGame) "${PlayerMessage.ENEMY}" else ""
-        val you = if (inGame) "${PlayerMessage.YOU}" else ""
-        if (inGame) {
-            remEnemyHitPoints = "${PlayerMessage.REMAINING_HIT_POINTS}  ${Color.MAGENTA.paint(remainingEnemyHitPoints.toString())}"
-            remOwnHitPoints = "${PlayerMessage.REMAINING_HIT_POINTS}  ${Color.GREEN.paint(remainingOwnHitPoints.toString())}"
-            remEnemyShips = "${PlayerMessage.REMAINING_SHIPS} ${Color.MAGENTA.paint(remainingEnemyShips.toString())}"
-            remOwnShips = "${PlayerMessage.REMAINING_SHIPS} ${Color.GREEN.paint(remainingOwnShips.toString())}"
-        }
+        val remEnemyHitPoints = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.MAGENTA, remainingEnemyHitPoints.toString())
+        val remOwnHitPoints = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.GREEN, remainingOwnHitPoints.toString())
+        val remEnemyShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.MAGENTA, remainingEnemyShips.toString())
+        val remOwnShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.GREEN, remainingOwnShips.toString())
+        val enemy = defaultValues(inGame, PlayerMessage.ENEMY)
+        val you = defaultValues(inGame, PlayerMessage.YOU)
+
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
             when (it) {
-                lines[1] -> Writer.println("${it.first}\t${it.second}\t$enemy")
-                lines[3] -> Writer.println("${it.first}\t${it.second}\t$remEnemyHitPoints")
-                lines[5] -> Writer.println("${it.first}\t${it.second}\t$remEnemyShips")
-                lines[9] -> Writer.println("${it.first}\t${it.second}\t$you")
-                lines[11] -> Writer.println("${it.first}\t${it.second}\t$remOwnHitPoints")
-                lines[13] -> Writer.println("${it.first}\t${it.second}\t$remOwnShips")
-                else -> Writer.println("${it.first}\t${it.second}")
-
+                lines[3] -> Writer.println("${it.first}      ${it.second}     $enemy")
+                lines[5] -> Writer.println("${it.first}      ${it.second}     $remEnemyHitPoints")
+                lines[7] -> Writer.println("${it.first}      ${it.second}     $remEnemyShips")
+                lines[13] -> Writer.println("${it.first}      ${it.second}     $you")
+                lines[15] -> Writer.println("${it.first}      ${it.second}     $remOwnHitPoints")
+                lines[17] -> Writer.println("${it.first}      ${it.second}     $remOwnShips")
+                else -> Writer.println("${it.first}      ${it.second}")
             }
         }
     }
+
+    private fun defaultValues(inGame: Boolean, playerMessage: PlayerMessage, color: Color = Color.WHITE, counter: String = ""): String =
+            if (inGame) "$playerMessage ${color.paint(counter)}" else ""
 
     private fun input(msg: String, validationMethod: (String) -> (Boolean) = { true }): String {
         while (true) {
