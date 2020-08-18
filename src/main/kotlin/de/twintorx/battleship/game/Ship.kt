@@ -22,6 +22,7 @@ enum class Ship(
                 5 to DESTROYER * 5
         )
 
+        // not used yet
         fun getAvailableShips(): MutableList<String> {
             val ships = AsciiShip.values()
             val lines = mutableListOf<String>()
@@ -43,6 +44,7 @@ enum class Ship(
         }
     }
 
+    // not used yet
     enum class AsciiShip(val lines: MutableList<String>) {
         CARRIER(mutableListOf(
                 "                           ]+[",

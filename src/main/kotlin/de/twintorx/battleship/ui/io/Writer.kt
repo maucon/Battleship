@@ -17,7 +17,7 @@ object Writer {
 
     fun eraseLast(count: Int = 1) {
         (0 until count).forEach { _ ->
-            print(ansi().cursorUp(1).eraseLine()) // TODO erases just lines in window -> abhängig vom scroll
+            print(ansi().cursorUp(1).eraseLine())
         }
     }
 
