@@ -18,8 +18,10 @@ class Player {
     private lateinit var client: Client
     private var gameBoard: GameBoard = GameBoard()
     private var trackBoard: TrackBoard = TrackBoard()
-    private var remainingShips = 15
-    private var remainingHitPoints = 44
+    private var remainingEnemyShips = 15
+    private var remainingOwnShips = 15
+    private var remainingEnemyHitPoints = 44
+    private var remainingOwnHitPoints = 44
 
     fun connect() {
         Writer.clearConsole()
@@ -127,23 +129,23 @@ class Player {
         when (move) {
             Move.HIT -> {
                 Writer.clearConsole()
-                remainingHitPoints--
+                remainingEnemyHitPoints--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.HIT_SHIP} $shotPosition\n")
                 shoot()
             }
             Move.SUNK -> {
                 Writer.clearConsole()
-                remainingHitPoints--
-                remainingShips--
+                remainingEnemyHitPoints--
+                remainingEnemyShips--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.SUNK_SHIP}\n $shotPosition")
                 shoot()
             }
             Move.GAME_OVER -> {
                 Writer.clearConsole()
-                remainingHitPoints--
-                remainingShips--
+                remainingEnemyHitPoints--
+                remainingEnemyShips--
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
                 Writer.print("\n${PlayerMessage.WIN}\n")
             }
@@ -174,14 +176,19 @@ class Player {
         when (move) {
             Move.HIT -> {
                 Writer.print("\n${PlayerMessage.OPPONENT_HIT} $shotPosition\n")
+                remainingOwnHitPoints--
                 waitForTurn()
             }
             Move.SUNK -> {
                 Writer.print("\n${PlayerMessage.OPPONENT_SUNK} $shotPosition\n")
+                remainingOwnHitPoints--
+                remainingOwnShips--
                 waitForTurn()
             }
             Move.GAME_OVER -> {
                 Writer.print("\n${PlayerMessage.LOSE}\n")
+                remainingOwnHitPoints--
+                remainingOwnShips--
                 client.disconnect()
             }
             Move.NO_HIT -> {
@@ -201,13 +208,28 @@ class Player {
 
     private fun printBoards(inGame: Boolean = true) {
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
-        val remHitPoints = if (inGame) "${PlayerMessage.REMAINING_HIT_POINTS} ${Color.YELLOW.paint(remainingHitPoints.toString())}" else ""
-        val remShips = if (inGame) "${PlayerMessage.REMAINING_SHIPS} ${Color.YELLOW.paint(remainingShips.toString())}" else ""
+
+        var remEnemyHitPoints = ""
+        var remOwnHitPoints = ""
+        var remEnemyShips = ""
+        var remOwnShips = ""
+        val enemy = if (inGame) "${PlayerMessage.ENEMY}" else ""
+        val you = if (inGame) "${PlayerMessage.YOU}" else ""
+        if (inGame) {
+            remEnemyHitPoints = "${PlayerMessage.REMAINING_HIT_POINTS}  ${Color.MAGENTA.paint(remainingEnemyHitPoints.toString())}"
+            remOwnHitPoints = "${PlayerMessage.REMAINING_HIT_POINTS}  ${Color.GREEN.paint(remainingOwnHitPoints.toString())}"
+            remEnemyShips = "${PlayerMessage.REMAINING_SHIPS} ${Color.MAGENTA.paint(remainingEnemyShips.toString())}"
+            remOwnShips = "${PlayerMessage.REMAINING_SHIPS} ${Color.GREEN.paint(remainingOwnShips.toString())}"
+        }
         val lines = (gameBoard.getLines() zip trackBoard.getLines())
         lines.forEach {
             when (it) {
-                lines[1] -> Writer.println("${it.first}\t${it.second}\t$remHitPoints")
-                lines[3] -> Writer.println("${it.first}\t${it.second}\t$remShips")
+                lines[1] -> Writer.println("${it.first}\t${it.second}\t$enemy")
+                lines[3] -> Writer.println("${it.first}\t${it.second}\t$remEnemyHitPoints")
+                lines[5] -> Writer.println("${it.first}\t${it.second}\t$remEnemyShips")
+                lines[9] -> Writer.println("${it.first}\t${it.second}\t$you")
+                lines[11] -> Writer.println("${it.first}\t${it.second}\t$remOwnHitPoints")
+                lines[13] -> Writer.println("${it.first}\t${it.second}\t$remOwnShips")
                 else -> Writer.println("${it.first}\t${it.second}")
 
             }
