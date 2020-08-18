@@ -132,7 +132,7 @@ class Player {
             Move.SUNK -> {
                 Writer.clearConsole()
                 trackBoard.mark(point.x, point.y, Mark.HIT_SHIP).run { printBoards() }
-                Writer.print("\n${PlayerMessage.SUNK_SHIP}\n $shotPosition")
+                Writer.print("\n${PlayerMessage.SUNK_SHIP} $shotPosition\n")
                 shoot()
             }
             Move.GAME_OVER -> {
