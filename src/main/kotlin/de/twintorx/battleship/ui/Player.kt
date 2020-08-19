@@ -136,7 +136,7 @@ class Player {
                         it
                 )
                 if (gameBoard.addShip(it, shipPoints)) {
-                    points.removeAll(shipPoints) // TODO check if work because obj. comparison
+                    points.removeAll(shipPoints)
                     break
                 } else {
                     shipPoints = generateShipPoints(
