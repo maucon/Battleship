@@ -105,7 +105,7 @@ class Player {
                     .toLowerCase()
 
             val points = generateShipPoints(
-                    placement[0],
+                    placement[0] == 'h',
                     placement[1].toInt() - 97,
                     placement.substring(2).toInt() - 1,
                     ship
@@ -129,22 +129,13 @@ class Player {
             while (iterator.hasNext()) {
                 val point = iterator.next()
                 val direction = Random.nextBoolean()
-                var shipPoints = generateShipPoints(
-                        if (direction) 'h' else 'v',
-                        point.x,
-                        point.y,
-                        it
-                )
+
+                var shipPoints = generateShipPoints(direction, point.x, point.y, it)
                 if (gameBoard.addShip(it, shipPoints)) {
                     points.removeAll(shipPoints)
                     break
                 } else {
-                    shipPoints = generateShipPoints(
-                            if (direction) 'v' else 'h',
-                            point.x,
-                            point.y,
-                            it
-                    )
+                    shipPoints = generateShipPoints(!direction, point.x, point.y, it)
                     if (gameBoard.addShip(it, shipPoints)) {
                         points.removeAll(shipPoints)
                         break
@@ -155,11 +146,8 @@ class Player {
         }
     }
 
-    private fun generateShipPoints(direction: Char, x: Int, y: Int, ship: Ship) = hashSetOf<Point>().apply {
-        when (direction == 'h') {
-            true -> (x until x + ship.size).forEach { add(Point(it, y)) }
-            else -> (y until y + ship.size).forEach { add(Point(x, it)) }
-        }
+    private fun generateShipPoints(direction: Boolean, x: Int, y: Int, ship: Ship) = hashSetOf<Point>().apply {
+        if (direction) (x until x + ship.size).forEach { add(Point(it, y)) } else (y until y + ship.size).forEach { add(Point(x, it)) }
     }
 
     private fun shoot() {
