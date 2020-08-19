@@ -87,7 +87,7 @@ class Player {
         Console.printWaitingForPlacement()
 
         if (client.sendReadyGetTurn().also {
-                    Console.printBoards(clearConsole = true, inGame = true, gameBoard = gameBoard, trackBoard = trackBoard,
+                    Console.printBoards(clearConsole = true, isInGame = true, gameBoard = gameBoard, trackBoard = trackBoard,
                             enemyHP = remainingEnemyHitPoints, ownHP = remainingOwnHitPoints, remEnemyShips = remainingEnemyShips, remOwnShips = remainingOwnShips)
                 }) shoot() else waitForTurn()
     }
