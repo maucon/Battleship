@@ -23,81 +23,15 @@ enum class Ship(
                 4 to SUBMARINE * 4,
                 5 to DESTROYER * 5
         )
-
-//        // not used yet
-//        fun getAvailableShips(): MutableList<String> {
-//            val ships = AsciiShip.values()
-//            val lines = mutableListOf<String>()
-//            val max = ships.maxBy { it.lines.size }!!.lines.size
-//            for (i in 0..max) {
-//                // TODO fix
-//                var line = ""
-//                ships.forEach {
-//                    val startIndex = max - (it.lines.size - 1)
-//                    line += if (startIndex < i) " " * it.lines.maxBy { line -> line.length }!!.length + "\t"
-//                    else it.lines[i - startIndex] +
-//                            " " * (it.lines.maxBy { line -> line.length }!!.length - it.lines[i - startIndex].length) +
-//                            "\t"
-//                }
-//                lines.add(line)
-//
-//            }
-//            return lines
-//        }
     }
-
-//    // not used yet
-//    enum class AsciiShip(val lines: MutableList<String>) {
-//        CARRIER(mutableListOf(
-//                "                           ]+[",
-//                "                          --|--",
-//                "                          |_|__|",
-//                "                          |____|",
-//                "___________________________|65|_____________________",
-//                "  \\\\              \\\\                    (______)     /",
-//                "   \\\\______________\\\\_______________________________/")),
-//        BATTLESHIP(mutableListOf(
-//                "                   |__",
-//                "                    |\\/",
-//                "                    ---",
-//                "                    / | [",
-//                "             !      | |||",
-//                "           _/|     _/|-++'",
-//                "       +  +--|    |--|--|_ |-",
-//                "     { /|__|  |/\\__|  |--- |||__/",
-//                "   +---------------___[}-_===_.'____",
-//                " _/_|__|_____________________________[,---.7",
-//                "|                                         /",
-//                " \\______________________________________/"
-//        )),
-//        CRUISER(mutableListOf(
-//                "                      __",
-//                "              _______/__/_",
-//                "             /===========| ",
-//                " ____    ___/____________|_",
-//                " \\   \\___/_________________\\___",
-//                "  \\                            |",
-//                "   \\ __________________________/"
-//        )),
-//        SUBMARINE(mutableListOf(
-//                "                    |   ",
-//                "                   _|_|",
-//                "   __         _____|   |____________",
-//                " >|   \\_____/                       )",
-//                "  |__ ----_________________________/"
-//        )),
-//        DESTROYER(mutableListOf(
-//                "          ___",
-//                "  __--A__/__\\_A--_",
-//                "  \\_______________|"))
-
 }
 
 // ---------------- Extensions and Overloading ----------------
 private operator fun Ship.times(i: Int): MutableList<Ship> {
-    val list = mutableListOf<Ship>()
-    repeat(i) { list.add(this) }
-    return list
+    val ship = this
+    return mutableListOf<Ship>().apply {
+        repeat(i) { add(ship) }
+    }
 }
 
 private operator fun String.times(size: Int): String = this.repeat(size)
