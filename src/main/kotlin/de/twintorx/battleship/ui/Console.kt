@@ -28,7 +28,6 @@ object Console {
         Writer.print("\n${PlayerMessage.WAITING_FOR_PLACEMENT}\n")
     }
 
-
     // prints boards and message for shoot/receive shot
     fun printShotUpdate(gameBoard: GameBoard, trackBoard: TrackBoard, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int, message: String) {
         printBoards(true, inGame = true, gameBoard = gameBoard, trackBoard = trackBoard, enemyHP = enemyHP, ownHP = ownHP, remEnemyShips = remEnemyShips, remOwnShips = remOwnShips)
@@ -89,7 +88,6 @@ object Console {
         }
     }
 
-
     fun eraseLastLines(lines: Int) {
         Writer.eraseLast(lines)
 
@@ -117,7 +115,6 @@ object Console {
 
     private fun defaultValues(inGame: Boolean, playerMessage: PlayerMessage, color: Color = Color.WHITE, counter: String = ""): String =
             if (inGame) "$playerMessage ${color.paint(counter)}" else ""
-
 }
 
 // ---------------- Extensions and Overloading ----------------

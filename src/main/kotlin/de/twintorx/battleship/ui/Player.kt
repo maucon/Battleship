@@ -225,7 +225,6 @@ class Player {
         updateGameBoard(client.waitForIncomingShot())
     }
 
-
     private fun waitForRestart() {
         Console.printWaitRestart()
     }
