@@ -4,10 +4,12 @@ import de.twintorx.battleship.game.cell.Cell
 import de.twintorx.battleship.game.cell.Mark
 import de.twintorx.battleship.ui.Color
 import java.awt.Point
+import java.io.Serializable
 
 open class TrackBoard(
         val size: Int = 10
-) {
+): Serializable {
+
     protected val grid = Grid(size)
     protected val lastPoint = Point(-1, -1)
 
