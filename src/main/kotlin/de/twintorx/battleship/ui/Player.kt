@@ -12,6 +12,7 @@ import de.twintorx.battleship.ui.io.PlayerMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.awt.Point
+import kotlin.random.Random
 
 class Player {
     private lateinit var client: Client
@@ -96,17 +97,50 @@ class Player {
         while (true) {
             val placement = Console.input("${PlayerMessage.POSITION_SHIP}\n") { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
-            val startCol = placement[1].toInt() - 97 // 'a'.toInt()
-            val startLine = placement.substring(2).toInt() - 1
 
-            val points = hashSetOf<Point>().apply {
-                when (placement[0] == 'h') {
-                    true -> (startCol until startCol + ship.size).forEach { add(Point(it, startLine)) }
-                    else -> (startLine until startLine + ship.size).forEach { add(Point(startCol, it)) }
-                }
-            }
+            val points = generateShipPoints(
+                    placement[0],
+                    placement[1].toInt() - 97,
+                    placement.substring(2).toInt() - 1,
+                    ship
+            )
 
             if (gameBoard.addShip(ship, points)) return else Console.eraseLastLines(3)
+        }
+    }
+
+    private fun placeRandomShip() {
+        val points = mutableListOf<Point>().apply {
+            (0 until trackBoard.size).forEach { x ->
+                (0..trackBoard.size).forEach { y ->
+                    add(Point(x, y))
+                }
+            }
+            shuffle()
+        }
+        val iterator = points.iterator()
+        Ship.getStandardShipSet().flatMap { it.value }.forEach {
+            while (iterator.hasNext()) {
+                val point = iterator.next()
+                val shipPoints = generateShipPoints(
+                        if (Random.nextBoolean()) 'h' else 'v',
+                        point.x,
+                        point.y,
+                        it
+                )
+                if (gameBoard.addShip(it, shipPoints)){
+                    // TODO
+                } else {
+                    // TODO
+                }
+            }
+        }
+    }
+
+    private fun generateShipPoints(direction: Char, x: Int, y: Int, ship: Ship) = hashSetOf<Point>().apply {
+        when (direction == 'h') {
+            true -> (x until x + ship.size).forEach { add(Point(it, y)) }
+            else -> (y until y + ship.size).forEach { add(Point(x, it)) }
         }
     }
 
