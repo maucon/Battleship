@@ -118,7 +118,7 @@ class Player {
     private fun placeShipsRandom() {
         val points = mutableListOf<Point>().apply {
             (0 until trackBoard.size).forEach { x ->
-                (0..trackBoard.size).forEach { y ->
+                (0 until trackBoard.size).forEach { y ->
                     add(Point(x, y))
                 }
             }
