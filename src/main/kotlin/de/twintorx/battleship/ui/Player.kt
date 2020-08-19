@@ -60,8 +60,8 @@ class Player {
     private fun prepare() {
         val ships = Ship.getStandardShipSet()
 
+        // place ships manually
         if (Console.clearConsole().run { Console.input("${PlayerMessage.PLACE_OPTIONS}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y" }) {
-
             Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
 
             while (ships.isNotEmpty()) {
@@ -75,18 +75,20 @@ class Player {
 
                 Console.eraseLastLines(ships.size + 2)
 
-                with(ships[option]!!) {
-                    placeShip(this[0]).run {
-                        Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
-                    }
-                    removeAt(0)
+                ships[option]?.let {
+                    placeShip(it[0])
 
-                    if (isEmpty()) {
+                    Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
+
+                    it.removeAt(0)
+
+                    if (it.isEmpty()) {
                         ships.remove(option)
                     }
                 }
             }
         } else {
+            // place ships random
             placeShipsRandom()
             Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
         }
@@ -96,7 +98,11 @@ class Player {
         if (client.sendReadyGetTurn().also {
                     Console.printBoards(clearConsole = true, isInGame = true, gameBoard = gameBoard, trackBoard = trackBoard,
                             enemyHP = remainingEnemyHitPoints, ownHP = remainingOwnHitPoints, remEnemyShips = remainingEnemyShips, remOwnShips = remainingOwnShips)
-                }) shoot() else waitForTurn()
+                }) {
+            shoot()
+        } else {
+            waitForTurn()
+        }
     }
 
     private fun placeShip(ship: Ship) {
@@ -117,13 +123,14 @@ class Player {
 
     private fun placeShipsRandom() {
         val points = mutableListOf<Point>().apply {
-            (0 until trackBoard.size).forEach { x ->
-                (0 until trackBoard.size).forEach { y ->
+            repeat(trackBoard.size) { x ->
+                repeat(trackBoard.size) { y ->
                     add(Point(x, y))
                 }
             }
             shuffle()
         }
+
         var iterator = points.iterator()
         Ship.getStandardShipSet().flatMap { it.value }.forEach {
             while (iterator.hasNext()) {
