@@ -37,7 +37,7 @@ class Client {
     }
 
     fun sendBoardGetBoard(board: GameBoard): GameBoard {
-        socket.write(Package(board))
+        socket.write(Package(board.apply { resetLastPoint() }))
         return doSafe { socket.read() }.body as GameBoard
     }
 

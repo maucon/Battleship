@@ -58,4 +58,6 @@ class GameBoard(
 
         return Move.NO_HIT
     }
+
+    fun resetLastPoint() = lastPoint.move(-1, -1)
 }
