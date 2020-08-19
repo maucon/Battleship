@@ -8,18 +8,18 @@ import de.twintorx.battleship.ui.io.Writer
 
 object Console {
 
-    fun printBoards(inGame: Boolean, gameBoard: GameBoard, trackBoard: TrackBoard, rehp: Int, rohp: Int, res: Int, ros: Int) {
+    fun printBoards(inGame: Boolean, gameBoard: GameBoard, trackBoard: TrackBoard, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int) {
         printAvailableShips()
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
-        printBoardWithStats(gameBoard, trackBoard, inGame, rehp, rohp, res, ros)
+        printBoardWithStats(gameBoard, trackBoard, inGame, enemyHP, ownHP, remEnemyShips, remOwnShips)
     }
 
-    fun printWinScreen(won: Boolean, gameBoard: GameBoard, enemyBoard: GameBoard, rehp: Int, rohp: Int, res: Int, ros: Int) {
+    fun printWinScreen(won: Boolean, gameBoard: GameBoard, enemyBoard: GameBoard, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int) {
         Writer.clearConsole()
 
         printAvailableShips()
         Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (gameBoard.size * 3)}${" " * 9}${PlayerMessage.ENEMY_BOARD}")
-        printBoardWithStats(gameBoard, enemyBoard, true, rehp, rohp, res, ros)
+        printBoardWithStats(gameBoard, enemyBoard, true, enemyHP, ownHP, remEnemyShips, remOwnShips)
 
         Writer.print(if (won) "\n${PlayerMessage.WIN}\n" else "\n${PlayerMessage.LOSE}\n")
     }
@@ -29,11 +29,11 @@ object Console {
         Writer.println(Ship.values().joinToString("   ") { "${it.color.paint(it.type)}(Size:${it.size})" })
     }
 
-    private fun printBoardWithStats(board1: GameBoard, board2: TrackBoard, inGame: Boolean, rehp: Int, rohp: Int, res: Int, ros: Int) {
-        val remainingEnemyHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.RED, rehp.toString())
-        val remainingOwnHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.GREEN, rohp.toString())
-        val remainingEnemyShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.RED, res.toString())
-        val remainingOwnShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.GREEN, ros.toString())
+    private fun printBoardWithStats(board1: GameBoard, board2: TrackBoard, inGame: Boolean, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int) {
+        val remainingEnemyHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.RED, enemyHP.toString())
+        val remainingOwnHP = defaultValues(inGame, PlayerMessage.REMAINING_HIT_POINTS, Color.GREEN, ownHP.toString())
+        val remainingEnemyShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.RED, remEnemyShips.toString())
+        val remainingOwnShips = defaultValues(inGame, PlayerMessage.REMAINING_SHIPS, Color.GREEN, remOwnShips.toString())
 
         (board1.getLines() zip board2.getLines()).withIndex().forEach { (index, value) ->
             when (index) {
