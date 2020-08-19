@@ -118,22 +118,30 @@ class Player {
             }
             shuffle()
         }
-        val iterator = points.iterator()
+        var iterator = points.iterator()
         Ship.getStandardShipSet().flatMap { it.value }.forEach {
             while (iterator.hasNext()) {
                 val point = iterator.next()
-                val shipPoints = generateShipPoints(
-                        if (Random.nextBoolean()) 'h' else 'v',
+                val direction = Random.nextBoolean()
+                var shipPoints = generateShipPoints(
+                        if (direction) 'h' else 'v',
                         point.x,
                         point.y,
                         it
                 )
-                if (gameBoard.addShip(it, shipPoints)){
-                    // TODO
+                if (gameBoard.addShip(it, shipPoints)) {
+                    points.removeAll(shipPoints) // TODO check if work because obj. comparison
                 } else {
-                    // TODO
+                    shipPoints = generateShipPoints(
+                            if (direction) 'v' else 'h',
+                            point.x,
+                            point.y,
+                            it
+                    )
+                    if (gameBoard.addShip(it, shipPoints)) points.removeAll(shipPoints)
                 }
             }
+            iterator = points.iterator()
         }
     }
 
