@@ -11,6 +11,7 @@ enum class PlayerMessage(
     PORT(Color.YELLOW.paint("Please enter a custom port or leave blank for default:")),
     PLACE_OPTIONS(Color.YELLOW.paint("Do you want to place your ships manually? [Y]/[N]\n[N] -> Your ships will be placed random!")),
     PLACE_SHIPS(Color.YELLOW.paint("Please place your ships:")),
+    UNDO_OPTION("[6] Undo last ship"),
     POSITION_SHIP(Color.YELLOW.paint("Please enter the ship position!\n[h]orizontal/[v]ertical + column[A-J] + line[1-10] -> (e.g: ha1) :")),
     SHOOT(Color.YELLOW.paint("Which cell do you want to shoot at ? ~ column[A-J] + line[1-10] ~ (e.g: a1) :")),
 
