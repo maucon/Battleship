@@ -23,8 +23,7 @@ class GameBoard(
         return true
     }
 
-    fun removeShip(ship: Ship, coordinates: HashSet<Point>): Boolean {
-        // TODO check if valid coordinates?
+    fun removeShip(coordinates: HashSet<Point>): Boolean {
         coordinates.forEach {
             if (grid[it.x, it.y].mark != Mark.SHIP) return false
         }
