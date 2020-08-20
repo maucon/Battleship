@@ -78,7 +78,7 @@ class Player {
 
                 if (option == 6 && shipStack.isNotEmpty()) {
                     val pair = shipStack[shipStack.size - 1]
-                    if (gameBoard.removeShip(pair.first, pair.second)) {
+                    if (gameBoard.removeShip(pair.second)) {
                         shipStack.removeAt(shipStack.size - 1)
                         ships[pair.first.ordinal + 1]?.add(pair.first)
                         Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
