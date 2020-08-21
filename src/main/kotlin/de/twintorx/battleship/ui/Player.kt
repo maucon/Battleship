@@ -58,7 +58,7 @@ class Player {
     }
 
     private fun prepare() {
-        val ships = Ship.getStandardShipSet()
+        var ships = Ship.getStandardShipSet()
 
         // place ships manually
         if (Console.clearConsole().run { Console.input("${PlayerMessage.PLACE_OPTIONS}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y" }) {
@@ -71,16 +71,21 @@ class Player {
                         "[${it.key}] ${it.value.size}x$this${" " * (11 - length)}(Size:${it.value[0].size})\n"
                     }
                 }.joinToString("") + if (shipStack.isNotEmpty()) "${PlayerMessage.UNDO_OPTION}\n" else "") {
-                    InputRegex.SELECT_SHIP.matches(it) && (ships.containsKey(it.toInt()) || (it.toInt() == 6 && shipStack.isNotEmpty()))
+                    (InputRegex.SELECT_SHIP.matches(it) && (ships.containsKey(it.toInt())) || (it.toInt() == 6 && shipStack.isNotEmpty()))
                 }.toInt()
-
                 Console.eraseLastLines(ships.size + 2)
 
                 if (option == 6 && shipStack.isNotEmpty()) {
                     val pair = shipStack[shipStack.size - 1]
                     if (gameBoard.removeShip(pair.second)) {
                         shipStack.removeAt(shipStack.size - 1)
-                        ships[pair.first.ordinal + 1]?.add(pair.first)
+                        val slot = pair.first.ordinal + 1
+                        if (ships[slot] == null) {
+                            ships[slot] = mutableListOf(pair.first)
+                            ships = ships.toSortedMap()
+                        } else {
+                            ships[slot]?.add(pair.first)
+                        }
                         Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
                     }
                 } else {
@@ -118,11 +123,9 @@ class Player {
     }
 
     private fun placeShip(ship: Ship): Pair<Ship, HashSet<Point>>? {
-        // TODO add data to shipstack
         while (true) {
             val placement = Console.input("${PlayerMessage.POSITION_SHIP}\n") { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
-
             val points = generateShipPoints(
                     placement[0] == 'h',
                     placement[1].toInt() - 97,
