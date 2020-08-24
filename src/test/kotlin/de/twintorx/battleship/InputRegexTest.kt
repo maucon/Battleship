@@ -42,9 +42,10 @@ class InputRegexTest {
         assertTrue(InputRegex.SELECT_SHIP.matches("1"))
         assertTrue(InputRegex.SELECT_SHIP.matches("3"))
         assertTrue(InputRegex.SELECT_SHIP.matches("5"))
+        assertTrue(InputRegex.SELECT_SHIP.matches("6"))
 
         assertFalse(InputRegex.SELECT_SHIP.matches("0"))
-        assertFalse(InputRegex.SELECT_SHIP.matches("6"))
+        assertFalse(InputRegex.SELECT_SHIP.matches("7"))
         assertFalse(InputRegex.SELECT_SHIP.matches("a"))
         assertFalse(InputRegex.SELECT_SHIP.matches("1a"))
     }
