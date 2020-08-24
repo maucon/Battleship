@@ -62,7 +62,9 @@ class Player {
 
         // place ships manually
         if (Console.clearConsole().run { Console.input("${PlayerMessage.PLACE_OPTIONS}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y" }) {
+
             Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
+
             val shipStack = mutableListOf<Pair<Ship, HashSet<Point>>>()
             while (ships.isNotEmpty()) {
                 Console.printChooseShip()
