@@ -67,7 +67,9 @@ class Player {
 
             val shipStack = mutableListOf<Pair<Ship, HashSet<Point>>>()
             while (ships.isNotEmpty()) {
+
                 Console.printChooseShip()
+
                 val option = Console.input(ships.map {
                     with(it.value[0].type) {
                         "[${it.key}] ${it.value.size}x$this${" " * (11 - length)}(Size:${it.value[0].size})\n"
@@ -75,18 +77,22 @@ class Player {
                 }.joinToString("") + if (shipStack.isNotEmpty()) "${PlayerMessage.UNDO_OPTION}\n" else "") {
                     InputRegex.SELECT_SHIP.matches(it) && ((ships.containsKey(it.toInt())) || (it.toInt() == 6 && shipStack.isNotEmpty()))
                 }.toInt()
+
                 Console.eraseLastLines(ships.size + 2)
 
                 if (option == 6 && shipStack.isNotEmpty()) {
-                    val pair = shipStack[shipStack.size - 1]
-                    if (gameBoard.removeShip(pair.second)) {
-                        shipStack.remove(pair)
-                        val slot = pair.first.ordinal + 1
-                        if (ships[slot] == null) {
-                            ships[slot] = mutableListOf(pair.first)
-                            ships = ships.toSortedMap()
-                        } else {
-                            ships[slot]?.add(pair.first)
+                    val (ship, points) = shipStack[shipStack.size - 1]
+
+                    if (gameBoard.removeShip(points)) {
+                        shipStack.removeAt(shipStack.size - 1)
+
+                        with(ship.ordinal + 1) {
+                            if (ships[this] == null) {
+                                ships[this] = mutableListOf(ship)
+                                ships = ships.toSortedMap()
+                            } else {
+                                ships[this]?.add(ship)
+                            }
                         }
                         Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
                     }
@@ -135,9 +141,11 @@ class Player {
                     ship
             )
 
-            if (gameBoard.addShip(ship, points)) return Pair(ship, points) else {
+            return if (gameBoard.addShip(ship, points))
+                Pair(ship, points)
+            else {
                 Console.eraseLastLines(3)
-                return null
+                null
             }
         }
     }
