@@ -87,11 +87,9 @@ class Player {
                         shipStack.removeAt(shipStack.size - 1)
 
                         with(ship.ordinal + 1) {
-                            if (ships[this] == null) {
+                            ships[this]?.add(ship) ?: run {
                                 ships[this] = mutableListOf(ship)
                                 ships = ships.toSortedMap()
-                            } else {
-                                ships[this]?.add(ship)
                             }
                         }
                         Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
