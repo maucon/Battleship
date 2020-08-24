@@ -58,32 +58,55 @@ class Player {
     }
 
     private fun prepare() {
-        val ships = Ship.getStandardShipSet()
+        var ships = Ship.getStandardShipSet()
 
         // place ships manually
         if (Console.clearConsole().run { Console.input("${PlayerMessage.PLACE_OPTIONS}\n") { InputRegex.YES_OR_NO.matches(it) }.toLowerCase() == "y" }) {
+
             Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
 
+            val shipStack = mutableListOf<Pair<Ship, HashSet<Point>>>()
             while (ships.isNotEmpty()) {
+
                 Console.printChooseShip()
+
                 val option = Console.input(ships.map {
-                    val name = it.value[0].type
-                    "[${it.key}] ${it.value.size}x$name${" " * (11 - name.length)}(Size:${it.value[0].size})\n"
-                }.joinToString("")) {
-                    InputRegex.SELECT_SHIP.matches(it) && ships.containsKey(it.toInt())
+                    with(it.value[0].type) {
+                        "[${it.key}] ${it.value.size}x$this${" " * (11 - length)}(Size:${it.value[0].size})\n"
+                    }
+                }.joinToString("") + if (shipStack.isNotEmpty()) "${PlayerMessage.UNDO_OPTION}\n" else "") {
+                    InputRegex.SELECT_SHIP.matches(it) && ((ships.containsKey(it.toInt())) || (it.toInt() == 6 && shipStack.isNotEmpty()))
                 }.toInt()
 
                 Console.eraseLastLines(ships.size + 2)
 
-                ships[option]?.let {
-                    placeShip(it[0])
+                if (option == 6 && shipStack.isNotEmpty()) {
+                    val (ship, points) = shipStack[shipStack.size - 1]
 
-                    Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
+                    if (gameBoard.removeShip(points)) {
+                        shipStack.removeAt(shipStack.size - 1)
 
-                    it.removeAt(0)
+                        with(ship.ordinal + 1) {
+                            ships[this]?.add(ship) ?: run {
+                                ships[this] = mutableListOf(ship)
+                                ships = ships.toSortedMap()
+                            }
+                        }
+                        Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
+                    }
+                } else {
+                    ships[option]?.let {
+                        val addedPair = placeShip(it[0])
+                        if (addedPair != null) {
+                            shipStack.add(addedPair)
+                        }
+                        Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
 
-                    if (it.isEmpty()) {
-                        ships.remove(option)
+                        it.removeAt(0)
+
+                        if (it.isEmpty()) {
+                            ships.remove(option)
+                        }
                     }
                 }
             }
@@ -105,11 +128,10 @@ class Player {
         }
     }
 
-    private fun placeShip(ship: Ship) {
+    private fun placeShip(ship: Ship): Pair<Ship, HashSet<Point>>? {
         while (true) {
             val placement = Console.input("${PlayerMessage.POSITION_SHIP}\n") { InputRegex.PLACE_SHIP.matches(it) }
                     .toLowerCase()
-
             val points = generateShipPoints(
                     placement[0] == 'h',
                     placement[1].toInt() - 97,
@@ -117,7 +139,12 @@ class Player {
                     ship
             )
 
-            if (gameBoard.addShip(ship, points)) return else Console.eraseLastLines(3)
+            return if (gameBoard.addShip(ship, points))
+                Pair(ship, points)
+            else {
+                Console.eraseLastLines(3)
+                null
+            }
         }
     }
 
@@ -131,8 +158,8 @@ class Player {
             shuffle()
         }
 
-        var iterator = points.iterator()
         Ship.getStandardShipSet().flatMap { it.value }.forEach {
+            val iterator = points.iterator()
             while (iterator.hasNext()) {
                 val point = iterator.next()
                 val direction = Random.nextBoolean()
@@ -141,15 +168,14 @@ class Player {
                 if (gameBoard.addShip(it, shipPoints)) {
                     points.removeAll(shipPoints)
                     break
-                } else {
-                    shipPoints = generateShipPoints(!direction, point.x, point.y, it)
-                    if (gameBoard.addShip(it, shipPoints)) {
-                        points.removeAll(shipPoints)
-                        break
-                    }
+                }
+
+                shipPoints = generateShipPoints(!direction, point.x, point.y, it)
+                if (gameBoard.addShip(it, shipPoints)) {
+                    points.removeAll(shipPoints)
+                    break
                 }
             }
-            iterator = points.iterator()
         }
     }
 
