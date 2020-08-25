@@ -51,7 +51,7 @@ open class TrackBoard(
 
         table.removeAt(table.size - 1)
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }}")
+        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }} ")
 
         return table
     }

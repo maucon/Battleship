@@ -65,8 +65,11 @@ object Console {
     }
 
     private fun printAvailableShips() {
-        Writer.println("\n${PlayerMessage.AVAILABLE_SHIPS}")
-        Writer.println(Ship.values().joinToString("   ") { "${it.color.paint(it.type)}(Size:${it.size})" })
+        Writer.println("${PlayerMessage.AVAILABLE_SHIPS}")
+        Writer.println(Ship.getStandardShipSet().values.joinToString("   ") { ships ->
+            "${ships.size}x${ships[0].color.paint(ships[0].type)}(Size:${ships[0].size})"
+        }
+        )
     }
 
     private fun printBoardWithStats(board1: GameBoard, board2: TrackBoard, isInGame: Boolean, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int) {
