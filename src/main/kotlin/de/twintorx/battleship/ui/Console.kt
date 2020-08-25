@@ -37,7 +37,7 @@ object Console {
     fun printBoards(clearConsole: Boolean, isInGame: Boolean, gameBoard: GameBoard, trackBoard: TrackBoard, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int) {
         if (clearConsole) clearConsole()
         printAvailableShips()
-        Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 7}${PlayerMessage.TRACK_BOARD}")
+        Writer.println("\n${" " * 4}${PlayerMessage.GAME_BOARD}${" " * (trackBoard.size * 3)}${" " * 9}${PlayerMessage.TRACK_BOARD}")
         printBoardWithStats(gameBoard, trackBoard, isInGame, enemyHP, ownHP, remEnemyShips, remOwnShips)
     }
 
