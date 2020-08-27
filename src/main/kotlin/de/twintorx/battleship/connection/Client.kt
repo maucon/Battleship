@@ -13,7 +13,7 @@ class Client {
 
     fun tryConnect(address: String = "localhost", port: Int = 9999) = try {
         socket = ClientSocket(address, port)
-        socket.read()
+        doSafeRead { socket.read() }
 
         true
     } catch (ignored: Exception) {
@@ -21,27 +21,35 @@ class Client {
     }
 
     fun sendReadyGetTurn(): Boolean {
-        socket.write(Package()) // Sending server ready signal
-        return doSafe { socket.read() }.body as Boolean // true -> your turn: false -> opponents turn
+        doSafeWrite { socket.write(Package()) }// Sending server ready signal
+        return doSafeRead { socket.read() }.body as Boolean // true -> your turn: false -> opponents turn
     }
 
-    fun waitForIncomingShot() = doSafe { socket.read() }.body as Point
+    fun waitForIncomingShot() = doSafeRead { socket.read() }.body as Point
 
     fun sendShotAnswer(move: Move) {
-        socket.write(Package(move.ordinal))
+        doSafeWrite { socket.write(Package(move.ordinal)) }
     }
 
     fun sendShot(coordinates: Point): Move {
-        socket.write(Package(coordinates))
-        return Move.values()[doSafe { socket.read() }.body as Int]
+        doSafeWrite { socket.write(Package(coordinates)) }
+        return Move.values()[doSafeRead { socket.read() }.body as Int]
     }
 
     fun sendBoardGetBoard(board: GameBoard): GameBoard {
-        socket.write(Package(board.apply { resetLastPoint() }))
-        return doSafe { socket.read() }.body as GameBoard
+        doSafeWrite { socket.write(Package(board.apply { resetLastPoint() })) }
+        return doSafeRead { socket.read() }.body as GameBoard
     }
 
-    private fun doSafe(method: () -> (Package)) = try {
+    private fun doSafeRead(method: () -> (Package)) = try {
+        method()
+    } catch (e: Exception) {
+        Writer.print("\n${PlayerMessage.GAME_ABORT}")
+        disconnect()
+        exitProcess(1)
+    }
+
+    private fun doSafeWrite(method: () -> Unit) = try {
         method()
     } catch (e: Exception) {
         Writer.print("\n${PlayerMessage.GAME_ABORT}")

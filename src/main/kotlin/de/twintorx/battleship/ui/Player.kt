@@ -113,7 +113,7 @@ class Player {
         } else {
             // place ships random
             placeShipsRandom()
-            Console.printPlaceShips(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
+            Console.printRandomPlacement(gameBoard, trackBoard, remainingEnemyHitPoints, remainingOwnHitPoints, remainingEnemyShips, remainingOwnShips)
         }
 
         Console.printWaitingForPlacement()

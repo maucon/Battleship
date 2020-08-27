@@ -24,6 +24,12 @@ object Console {
                 enemyHP = enemyHP, ownHP = ownHP, remEnemyShips = remEnemyShips, remOwnShips = remOwnShips)
     }
 
+    fun printRandomPlacement(gameBoard: GameBoard, trackBoard: TrackBoard, enemyHP: Int, ownHP: Int, remEnemyShips: Int, remOwnShips: Int){
+        Writer.clearConsole()
+        printBoards(clearConsole = false, isInGame = false, gameBoard = gameBoard, trackBoard = trackBoard,
+                enemyHP = enemyHP, ownHP = ownHP, remEnemyShips = remEnemyShips, remOwnShips = remOwnShips)
+    }
+
     fun printWaitingForPlacement() {
         Writer.print("\n${PlayerMessage.WAITING_FOR_PLACEMENT}\n")
     }
