@@ -1,20 +1,28 @@
 package de.twintorx.battleship.game.board
 
+import de.twintorx.battleship.game.cell.Cell
+import de.twintorx.battleship.game.cell.Mark
+import de.twintorx.battleship.ui.Color
+import java.awt.Point
+import java.io.Serializable
+
 open class TrackBoard(
         val size: Int = 10
-) {
-    protected val grid: Grid = Grid(size)
+): Serializable {
 
-    fun mark(x: Int, y: Int, cell: Cell): Boolean {
-        //fail when mark as water or ship or cell is already marked
-        if (cell == Cell.WATER
-                || cell.isShip()
-                || grid[x, y] == Cell.HIT_NOTHING
-                || grid[x, y] == Cell.HIT_SHIP)
-            return false
+    protected val grid = Grid(size)
+    protected val lastPoint = Point(-1, -1)
 
-        grid[x, y] = cell
-        return true
+    fun mark(x: Int, y: Int, mark: Mark): Boolean {
+        //fail when mark as water or ship ; or cell is already marked
+        return if (grid[x, y].mark == Mark.HIT_NOTHING
+                || grid[x, y].mark == Mark.HIT_SHIP)
+            false
+        else {
+            grid[x, y] = Cell(mark)
+            lastPoint.move(x, y)
+            true
+        }
     }
 
     fun getLines(): MutableList<String> {
@@ -29,19 +37,24 @@ open class TrackBoard(
             val indexPadding = sizeLength - index.toString().length
 
             table.add("${" " * indexPadding}$index │" +
-                    "${it.value.joinToString("│") { cell ->
-                        " $cell "
+                    "${it.value.withIndex().map { (xIndex, value) ->
+                        val markValue = value.mark.value
+                        if (xIndex == lastPoint.x && index - 1 == lastPoint.y) Color.CYAN.paint(markValue)
+                        else if (value.mark == Mark.SHIP) value.ship!!.color.paint(markValue)
+                        else if (value.mark == Mark.HIT_SHIP) Color.RED.paint(markValue)
+                        else markValue
+                    }.joinToString("│") { str ->
+                        " $str "
                     }}│")
             table.add(div)
         }
 
         table.removeAt(table.size - 1)
         table.add(" $space└${"───┴" * len}───┘")
-        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }}")
+        table.add("   $space${(65..(64 + size)).joinToString("  ") { it.toChar() + " " }} ")
 
         return table
     }
-
 }
 
 // ---------------- Extensions and Overloading ----------------
